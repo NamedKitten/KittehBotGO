@@ -1,0 +1,13 @@
+[submodule "gopath/src/github.com/go-redis/redis"]
+	path = gopath/src/github.com/go-redis/redis
+	url = https://github.com/go-redis/redis
+[submodule "gopath/src/github.com/gorilla/websocket"]
+	path = gopath/src/github.com/gorilla/websocket
+	url = https://github.com/gorilla/websocket
+[submodule "gopath/src/golang.org/x/crypto"]
+	path = gopath/src/golang.org/x/crypto
+	url = https://github.com/golang/crypto.git
+[submodule "gopath/src/github.com/bwmarrin/discordgo"]
+	path = gopath/src/github.com/bwmarrin/discordgo
+	url = https://github.com/bwmarrin/discordgo
+	branch = develop
