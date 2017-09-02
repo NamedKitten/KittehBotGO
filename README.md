@@ -20,9 +20,9 @@ git clone https://github.com/NamedKitten/KittehBotGO.git --recursive --recurse-s
 ```
 
 Then change directory to the `KittehBotGO` dir.
-Next make sure to run `export GOPATH=$PWD/lib`.
+Next make sure to run `export GOPATH=$PWD/gopath`.
 It makes sure you use the required included librarys.
-Then you can run `go build src/main.cpp` and if it gives no error then move onto the Usage section.
+Then you can run `go build src/main.go` and if it gives no error then move onto the Usage section.
 
 
 ### Usage
