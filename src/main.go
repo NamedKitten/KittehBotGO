@@ -83,6 +83,7 @@ func main() {
 
 	dg.Token = "Bot " + token
 	dg.LogLevel = 1
+	dg.SyncEvents = false
 
 	prefix, err := redisclient.Get("prefix").Result()
 	if err != nil {

@@ -2,19 +2,12 @@ package commands
 
 import (
 	"github.com/bwmarrin/discordgo"
+	"fmt"
+	"sort"
 	"log"
 	"strings"
+	"time"
 )
-
-type Context struct {
-	Args       []string
-	Content    string
-	ChannelID  string
-	GuildID    string
-	Type       discordgo.ChannelType
-	HasPrefix  bool
-	HasMention bool
-}
 
 type CommandFunction func(*discordgo.Session, *discordgo.MessageCreate, *Context)
 
@@ -29,10 +22,67 @@ type Commands struct {
 	Prefix   string
 }
 
+
+type Context struct {
+	Args       []string
+	Content    string
+	ChannelID  string
+	GuildID    string
+	Type       discordgo.ChannelType
+	HasPrefix  bool
+	HasMention bool
+	Commands   *Commands
+
+}
+
+func HelpCommand(session *discordgo.Session, message *discordgo.MessageCreate, ctx *Context) {
+	com := ctx.Commands
+	prefix := com.Prefix
+
+	maxlen := 0
+	keys := make([]string, 0, len(com.Commands))
+	cmds := make(map[string]*Command)
+
+	for _, command := range com.Commands {
+		fmt.Println(command.Name)
+		nameLen := len(command.Name)
+		if nameLen > maxlen {
+			maxlen = nameLen
+		}
+		cmds[command.Name] = command
+		keys = append(keys, command.Name)
+	}
+
+	sort.Strings(keys)
+
+	header := "KittehBotGO!"
+	resp := "```md\n"
+	resp += header + "\n" + strings.Repeat("-", len(header)) + "\n\n"
+
+	for _, key := range keys {
+		command := cmds[key]
+
+		resp += fmt.Sprintf("<%s>\n", prefix + command.Name +  strings.Repeat(" ", maxlen +1 - len(command.Name)) + command.ShortHelp)
+	}
+
+	resp += "```\n"
+
+	session.ChannelMessageSend(message.ChannelID, resp)
+
+	return
+}
+
 func New() *Commands {
 	c := &Commands{}
+	ch := Command{}
+	ch.Name = "help"
+	ch.ShortHelp = "Display this message."
+	ch.Function = HelpCommand
+	c.Commands = append(c.Commands, &ch)
+
 	return c
 }
+
 
 func (com *Commands) RegisterCommand(Name, ShortHelp string, Function CommandFunction) {
 	c := Command{}
@@ -45,8 +95,6 @@ func (com *Commands) RegisterCommand(Name, ShortHelp string, Function CommandFun
 func (com *Commands) GetCommand(msg string) (*Command, []string) {
 
 	args := strings.Fields(msg)
-	log.Println(args)
-	log.Print(msg)
 	if len(args) == 0 {
 		return nil, nil
 	}
@@ -89,6 +137,7 @@ func (com *Commands) OnMessageCreate(session *discordgo.Session, message *discor
 		ChannelID: message.ChannelID,
 		GuildID:   channel.GuildID,
 		Type:      channel.Type,
+		Commands: com,
 	}
 
 	for _, __ := range message.Mentions {
@@ -98,7 +147,6 @@ func (com *Commands) OnMessageCreate(session *discordgo.Session, message *discor
 
 	if len(com.Prefix) > 0 {
 		if strings.HasPrefix(ctx.Content, com.Prefix) {
-			log.Print(ctx.Content)
 			ctx.HasPrefix = true
 			ctx.Content = strings.TrimPrefix(ctx.Content, com.Prefix)
 		}
@@ -110,10 +158,13 @@ func (com *Commands) OnMessageCreate(session *discordgo.Session, message *discor
 
 	command, args := com.GetCommand(ctx.Content)
 	if command != nil {
-		log.Print(ctx.Content)
 		ctx.Content = strings.TrimPrefix(ctx.Content, command.Name)
 		ctx.Args = args
+		start := time.Now()
 		command.Function(session, message, ctx)
+		elapsed := time.Since(start)
+		log.Print("Command: " + command.Name + "took " + elapsed.String() + ".")
+
 		return
 	}
 }
