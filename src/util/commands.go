@@ -3,6 +3,7 @@ package commands
 import (
 	"fmt"
 	"github.com/bwmarrin/discordgo"
+	"github.com/go-redis/redis"
 	"log"
 	"sort"
 	"strings"
@@ -19,7 +20,7 @@ type Command struct {
 
 type Commands struct {
 	Commands []*Command
-	Prefix   string
+	Redis    *redis.Client
 }
 
 type Context struct {
@@ -35,7 +36,7 @@ type Context struct {
 
 func HelpCommand(session *discordgo.Session, message *discordgo.MessageCreate, ctx *Context) {
 	com := ctx.Commands
-	prefix := com.Prefix
+	prefix, _ := com.Redis.Get("prefix").Result()
 
 	maxlen := 0
 	keys := make([]string, 0, len(com.Commands))
@@ -70,14 +71,10 @@ func HelpCommand(session *discordgo.Session, message *discordgo.MessageCreate, c
 	return
 }
 
-func New() *Commands {
+func New(r *redis.Client) *Commands {
 	c := &Commands{}
-	ch := Command{}
-	ch.Name = "help"
-	ch.ShortHelp = "Display this message."
-	ch.Function = HelpCommand
-	c.Commands = append(c.Commands, &ch)
-
+	c.RegisterCommand("help", "Provides command help.", HelpCommand)
+	c.Redis = r
 	return c
 }
 
@@ -142,10 +139,12 @@ func (com *Commands) OnMessageCreate(session *discordgo.Session, message *discor
 		ctx.HasMention = true
 	}
 
-	if len(com.Prefix) > 0 {
-		if strings.HasPrefix(ctx.Content, com.Prefix) {
+	prefix, _ := com.Redis.Get("prefix").Result()
+
+	if len(prefix) > 0 {
+		if strings.HasPrefix(ctx.Content, prefix) {
 			ctx.HasPrefix = true
-			ctx.Content = strings.TrimPrefix(ctx.Content, com.Prefix)
+			ctx.Content = strings.TrimPrefix(ctx.Content, prefix)
 		}
 	}
 

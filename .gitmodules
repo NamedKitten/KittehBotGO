@@ -11,3 +11,6 @@
 	path = gopath/src/github.com/bwmarrin/discordgo
 	url = https://github.com/bwmarrin/discordgo
 	branch = develop
+[submodule "gopath/src/github.com/dustin/go-humanize"]
+	path = gopath/src/github.com/dustin/go-humanize
+	url = https://github.com/dustin/go-humanize

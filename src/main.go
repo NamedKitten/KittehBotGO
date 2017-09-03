@@ -11,13 +11,13 @@ import (
 	"github.com/go-redis/redis"
 	"os"
 	"os/signal"
+	"strings"
 	"syscall"
 	"time"
 )
 
 var redisclient *redis.Client
 var dg, _ = discordgo.New()
-var CommandHandler = commands.New()
 
 func setup() {
 	reader := bufio.NewReader(os.Stdin)
@@ -39,7 +39,7 @@ func setup() {
 	}
 
 	redisclient.Set("prefix", prefix, 0)
-	redisclient.Set("token", token, 0)
+	redisclient.Set("token", strings.TrimSpace(token), 0)
 	fmt.Println("The bot is now setup.")
 }
 
@@ -79,6 +79,7 @@ func init() {
 }
 
 func main() {
+	var CommandHandler = commands.New(redisclient)
 	fmt.Println("Getting token...")
 	token, err := redisclient.Get("token").Result()
 	if err != nil {
@@ -90,17 +91,11 @@ func main() {
 	dg.LogLevel = 1
 	dg.SyncEvents = false
 
-	prefix, err := redisclient.Get("prefix").Result()
-	if err != nil {
-		fmt.Println("Prefix not found, please run with -runSetup to enter setup.")
-		panic(err)
-	}
-
 	dg.AddHandler(CommandHandler.OnMessageCreate)
-	CommandHandler.Prefix = prefix
 	CommandHandler.RegisterCommand("ping", "Ping!", BotCommands.PingCommand)
 	CommandHandler.RegisterCommand("about", "Give info about bot.", BotCommands.AboutCommand)
 	CommandHandler.RegisterCommand("echo", "Echo echo echo...", BotCommands.EchoCommand)
+	CommandHandler.RegisterCommand("userinfo", "Gives info about a user.", BotCommands.UserinfoCommand)
 
 	err = dg.Open()
 	if err != nil {
