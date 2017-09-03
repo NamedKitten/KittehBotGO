@@ -5,14 +5,32 @@ import (
 	"../util"
 	"fmt"
 	"github.com/bwmarrin/discordgo"
+	"github.com/dustin/go-humanize"
 	"runtime"
+	"time"
 )
 
-func AboutCommand(s *discordgo.Session, m *discordgo.MessageCreate, ctx *commands.Context) {
-	fields := make([]*discordgo.MessageEmbedField, 0, 3)
+var startTime = time.Now()
+
+func getDurationString(duration time.Duration) string {
+	return fmt.Sprintf(
+		"%0.2d:%02d:%02d",
+		int(duration.Hours()),
+		int(duration.Minutes())%60,
+		int(duration.Seconds())%60,
+	)
+}
+
+func AboutCommand(s *discordgo.Session, m *discordgo.MessageCreate, ctx *commands.Context) (error) {
+	stats := runtime.MemStats{}
+	runtime.ReadMemStats(&stats)
+	fields := make([]*discordgo.MessageEmbedField, 0, 5)
 	fields = append(fields, &discordgo.MessageEmbedField{Name: "**KittehBotGo Version**:", Value: config.VERSION, Inline: true})
 	fields = append(fields, &discordgo.MessageEmbedField{Name: "**Go Version**:", Value: runtime.Version(), Inline: true})
 	fields = append(fields, &discordgo.MessageEmbedField{Name: "**DiscordGo Version**:", Value: discordgo.VERSION, Inline: true})
+	fields = append(fields, &discordgo.MessageEmbedField{Name: "**Memory used**:", Value:	fmt.Sprintf("%s / %s (%s garbage collected)\n", humanize.Bytes(stats.Alloc), humanize.Bytes(stats.Sys), humanize.Bytes(stats.TotalAlloc)), Inline: true})
+	fields = append(fields, &discordgo.MessageEmbedField{Name: "**Uptime**:", Value:	getDurationString(time.Now().Sub(startTime)), Inline: true})
+	fields = append(fields, &discordgo.MessageEmbedField{Name: "**Goroutines**:", Value: fmt.Sprintf("%d", runtime.NumGoroutine()), Inline: true})
 
 	s.ChannelMessageSendEmbed(m.ChannelID, &discordgo.MessageEmbed{
 		Type: "rich",
@@ -25,4 +43,5 @@ func AboutCommand(s *discordgo.Session, m *discordgo.MessageCreate, ctx *command
 			Text: "Thanks for using KittehBotGO!",
 		},
 	})
+	return nil
 }

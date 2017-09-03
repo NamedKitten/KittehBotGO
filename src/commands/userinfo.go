@@ -7,12 +7,13 @@ import (
 	"github.com/dustin/go-humanize"
 	"strconv"
 	"time"
+	"github.com/go-errors/errors"
 )
 
-func UserinfoCommand(s *discordgo.Session, m *discordgo.MessageCreate, ctx *commands.Context) {
+func UserinfoCommand(s *discordgo.Session, m *discordgo.MessageCreate, ctx *commands.Context) (error) {
 	channel, err := s.State.Channel(m.ChannelID)
 	if err != nil {
-		panic(err)
+		return errors.Wrap(err, 1)
 	}
 	var member *discordgo.Member
 	if ctx.HasMention {
@@ -77,5 +78,6 @@ func UserinfoCommand(s *discordgo.Session, m *discordgo.MessageCreate, ctx *comm
 			Text: "Thanks for using KittehBotGO!",
 		},
 	})
+	return nil
 
 }

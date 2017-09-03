@@ -14,3 +14,6 @@
 [submodule "gopath/src/github.com/dustin/go-humanize"]
 	path = gopath/src/github.com/dustin/go-humanize
 	url = https://github.com/dustin/go-humanize
+[submodule "gopath/src/github.com/go-errors/errors"]
+	path = gopath/src/github.com/go-errors/errors
+	url = https://github.com/go-errors/errors
