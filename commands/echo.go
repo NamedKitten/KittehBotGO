@@ -1,9 +1,9 @@
 package BotCommands
 
 import (
-	"../../src/util"
+	"github.com/NamedKitten/KittehBotGo/util"
 	"fmt"
-	"github.com/bwmarrin/discordgo"
+	"gopkg.in/bwmarrin/discordgo.develop"
 	"github.com/go-errors/errors"
 )
 

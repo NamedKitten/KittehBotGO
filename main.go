@@ -1,13 +1,13 @@
 package main
 
 import (
-	"../src/commands"
-	"../src/config"
-	"../src/util"
+	"github.com/NamedKitten/KittehBotGo/commands"
+	"github.com/NamedKitten/KittehBotGo/config"
+	"github.com/NamedKitten/KittehBotGo/util"
 	"bufio"
 	"flag"
 	"fmt"
-	"github.com/bwmarrin/discordgo"
+	"gopkg.in/bwmarrin/discordgo.develop"
 	"github.com/go-redis/redis"
 	"os"
 	"os/signal"
@@ -20,12 +20,14 @@ import (
 
 var redisclient *redis.Client
 var dg, _ = discordgo.New()
+/*
 var memAllocMapX []float64
 var memAllocMapY []float64
 var memSysMapX []float64
 var memSysMapY []float64
 var memTotalAllocMapX []float64
 var memTotalAllocMapY []float64
+*/
 
 func setup() {
 	reader := bufio.NewReader(os.Stdin)
@@ -50,7 +52,7 @@ func setup() {
 	redisclient.Set("token", strings.TrimSpace(token), 0)
 	fmt.Println("The bot is now setup.")
 }
-
+/*
 func saveMemMap() {
 	graph := chart.Chart{
 		XAxis: chart.XAxis{
@@ -87,6 +89,7 @@ func saveMemMap() {
 	_ := graph.Render(chart.PNG, buffer)
 	ioutil.WriteFile("out.png", buffer, 0644)
 }
+*/
 
 func init() {
 	redisIP := flag.String("redisIP", "localhost", "IP for redis server.")
@@ -154,7 +157,7 @@ func main() {
 	signal.Notify(sc, syscall.SIGINT, syscall.SIGTERM, os.Interrupt, os.Kill)
 	<-sc
 
-	saveMemMap()
+	//saveMemMap()
 
 	// Cleanly close down the Discord session.
  b}

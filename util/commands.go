@@ -2,7 +2,7 @@ package commands
 
 import (
 	"fmt"
-	"github.com/bwmarrin/discordgo"
+	"gopkg.in/bwmarrin/discordgo.develop"
 	"github.com/go-redis/redis"
 	"log"
 	"sort"

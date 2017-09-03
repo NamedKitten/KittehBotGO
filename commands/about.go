@@ -1,10 +1,10 @@
 package BotCommands
 
 import (
-	"../config"
-	"../util"
+	"github.com/NamedKitten/KittehBotGo/config"
+	"github.com/NamedKitten/KittehBotGo/util"
 	"fmt"
-	"github.com/bwmarrin/discordgo"
+	"gopkg.in/bwmarrin/discordgo.develop"
 	"github.com/dustin/go-humanize"
 	"runtime"
 	"time"
