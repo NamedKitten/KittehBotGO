@@ -2,6 +2,7 @@ package main
 
 import (
 	"../src/commands"
+	"../src/config"
 	"../src/util"
 	"bufio"
 	"flag"
@@ -47,10 +48,14 @@ func init() {
 	redisPort := flag.Int("redisPort", 6379, "Port for redis server.")
 	redisPassword := flag.String("redisPassword", "", "Password for redis server.")
 	redisDB := flag.Int("redisDB", 0, "DB ID for redis server.")
-
+	version := flag.Bool("version", false, "Print version and exit.")
 	runSetup := flag.Bool("runSetup", false, "Run setup?")
 
 	flag.Parse()
+
+	if *version {
+		fmt.Println(config.VERSION)
+	}
 
 	redisclient = redis.NewClient(&redis.Options{
 		Addr:         fmt.Sprintf("%s:%d", *redisIP, *redisPort),

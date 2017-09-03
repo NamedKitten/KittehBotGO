@@ -1,10 +1,10 @@
 package commands
 
 import (
-	"github.com/bwmarrin/discordgo"
 	"fmt"
-	"sort"
+	"github.com/bwmarrin/discordgo"
 	"log"
+	"sort"
 	"strings"
 	"time"
 )
@@ -22,7 +22,6 @@ type Commands struct {
 	Prefix   string
 }
 
-
 type Context struct {
 	Args       []string
 	Content    string
@@ -32,7 +31,6 @@ type Context struct {
 	HasPrefix  bool
 	HasMention bool
 	Commands   *Commands
-
 }
 
 func HelpCommand(session *discordgo.Session, message *discordgo.MessageCreate, ctx *Context) {
@@ -62,7 +60,7 @@ func HelpCommand(session *discordgo.Session, message *discordgo.MessageCreate, c
 	for _, key := range keys {
 		command := cmds[key]
 
-		resp += fmt.Sprintf("<%s>\n", prefix + command.Name +  strings.Repeat(" ", maxlen +1 - len(command.Name)) + command.ShortHelp)
+		resp += fmt.Sprintf("<%s>\n", prefix+command.Name+strings.Repeat(" ", maxlen+1-len(command.Name))+command.ShortHelp)
 	}
 
 	resp += "```\n"
@@ -82,7 +80,6 @@ func New() *Commands {
 
 	return c
 }
-
 
 func (com *Commands) RegisterCommand(Name, ShortHelp string, Function CommandFunction) {
 	c := Command{}
@@ -137,7 +134,7 @@ func (com *Commands) OnMessageCreate(session *discordgo.Session, message *discor
 		ChannelID: message.ChannelID,
 		GuildID:   channel.GuildID,
 		Type:      channel.Type,
-		Commands: com,
+		Commands:  com,
 	}
 
 	for _, __ := range message.Mentions {
