@@ -44,10 +44,6 @@ We provide binary packages for these following systems:
     - arm7
 - DragonFly BSD
     - amd64
-    - i386
-    - arm5
-    - arm6
-    - arm7
 
 The releases are located [here](https://github.com/NamedKitten/KittehBotGo/releases).
 
