@@ -24,6 +24,13 @@ Next make sure to run `export GOPATH=$PWD/gopath`.
 It makes sure you use the required included librarys.
 Then you can run `go build src/main.go` and if it gives no error then move onto the Usage section.
 
+#### Windows
+
+**No.**
+
+#### Mac
+
+**No.**
 
 ### Usage
 
