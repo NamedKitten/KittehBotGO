@@ -2,7 +2,7 @@ package BotCommands
 
 import (
 	"github.com/NamedKitten/KittehBotGo/util"
-	"gopkg.in/bwmarrin/discordgo.develop"
+	"github.com/bwmarrin/discordgo/tree/develop"
 	"time"
 	"github.com/go-errors/errors"
 )

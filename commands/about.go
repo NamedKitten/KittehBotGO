@@ -4,7 +4,7 @@ import (
 	"github.com/NamedKitten/KittehBotGo/config"
 	"github.com/NamedKitten/KittehBotGo/util"
 	"fmt"
-	"gopkg.in/bwmarrin/discordgo.develop"
+	"github.com/bwmarrin/discordgo/tree/develop"
 	"github.com/dustin/go-humanize"
 	"runtime"
 	"time"
