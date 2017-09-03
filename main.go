@@ -7,7 +7,7 @@ import (
 	"bufio"
 	"flag"
 	"fmt"
-	"github.com/bwmarrin/discordgo/tree/develop"
+	"github.com/bwmarrin/discordgo"
 	"github.com/go-redis/redis"
 	"os"
 	"os/signal"

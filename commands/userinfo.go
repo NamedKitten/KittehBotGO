@@ -3,7 +3,7 @@ package BotCommands
 import (
 	"github.com/NamedKitten/KittehBotGo/util"
 	"fmt"
-	"github.com/bwmarrin/discordgo/tree/develop"
+	"github.com/bwmarrin/discordgo"
 	"github.com/dustin/go-humanize"
 	"strconv"
 	"time"
