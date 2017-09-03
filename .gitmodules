@@ -17,3 +17,10 @@
 [submodule "gopath/src/github.com/go-errors/errors"]
 	path = gopath/src/github.com/go-errors/errors
 	url = https://github.com/go-errors/errors
+[submodule "gopath/src/github.com/wcharczuk/go-chart"]
+	path = gopath/src/github.com/wcharczuk/go-chart
+	url = https://github.com/wcharczuk/go-chart
+
+[submodule "gopath/src/github.com/blendlabs/go-util"]
+	path = gopath/src/github.com/blendlabs/go-util
+	url = https://github.com/blendlabs/go-util
