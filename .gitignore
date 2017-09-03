@@ -3,3 +3,4 @@ build
 gopath/pkg
 gopath/bin
 
+vendor

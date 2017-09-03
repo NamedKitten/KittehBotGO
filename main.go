@@ -15,7 +15,7 @@ import (
 	"syscall"
 	"time"
 	//"github.com/wcharczuk/go-chart"
-	"io/ioutil"
+	//"io/ioutil"
 )
 
 var redisclient *redis.Client
@@ -160,4 +160,5 @@ func main() {
 	//saveMemMap()
 
 	// Cleanly close down the Discord session.
- b}
+	dg.Close()
+ }
