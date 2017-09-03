@@ -7,7 +7,51 @@ This is the GO port of my discord bot.
 You need a redis server on the host.
 Make sure that you set "prefix" to the bots prefix and "token" to the token.
 
-### Building from source
+### Installing from binary packages.
+
+We provide binary packages for these following systems:
+
+- Linux
+    - amd64
+    - i386
+    - arm5
+    - arm6
+    - arm7
+    - arm64
+    - mips
+    - mipsle
+    - mips64
+    - mips64le
+    - ppc64
+    - ppc64le
+- OpenBSD
+    - amd64
+    - i386
+    - arm5
+    - arm6
+    - arm7
+- FreeBSD
+    - amd64
+    - i386
+    - arm5
+    - arm6
+    - arm7
+- NetBSD
+    - amd64
+    - i386
+    - arm5
+    - arm6
+    - arm7
+- DragonFly BSD
+    - amd64
+    - i386
+    - arm5
+    - arm6
+    - arm7
+
+The releases are located [here](https://github.com/NamedKitten/KittehBotGo/releases).
+
+### Installing from source.
 
 #### Linux/BSD/Others
 
@@ -20,8 +64,11 @@ git clone https://github.com/NamedKitten/KittehBotGO.git --recursive --recurse-s
 ```
 
 Then change directory to the `KittehBotGO` dir.
+
 Next make sure to run `export GOPATH=$PWD/gopath`.
+
 It makes sure you use the required included librarys.
+
 Then you can run `go build src/main.go` and if it gives no error then move onto the Usage section.
 
 #### Windows
