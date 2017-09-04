@@ -5,7 +5,7 @@
   branch = "master"
   name = "github.com/NamedKitten/KittehBotGo"
   packages = ["commands","config","util"]
-  revision = "4c4ae55a4b70020d41c1a0cc31dec25112d0a309"
+  revision = "d39f6bd605ef018cb3eabc0fe737d79026f558cf"
 
 [[projects]]
   branch = "develop"

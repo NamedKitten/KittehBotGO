@@ -1,0 +1,26 @@
+[submodule "gopath/src/github.com/go-redis/redis"]
+	path = gopath/src/github.com/go-redis/redis
+	url = https://github.com/go-redis/redis
+[submodule "gopath/src/github.com/gorilla/websocket"]
+	path = gopath/src/github.com/gorilla/websocket
+	url = https://github.com/gorilla/websocket
+[submodule "gopath/src/golang.org/x/crypto"]
+	path = gopath/src/golang.org/x/crypto
+	url = https://github.com/golang/crypto.git
+[submodule "gopath/src/github.com/bwmarrin/discordgo"]
+	path = gopath/src/github.com/bwmarrin/discordgo
+	url = https://github.com/bwmarrin/discordgo
+	branch = develop
+[submodule "gopath/src/github.com/dustin/go-humanize"]
+	path = gopath/src/github.com/dustin/go-humanize
+	url = https://github.com/dustin/go-humanize
+[submodule "gopath/src/github.com/go-errors/errors"]
+	path = gopath/src/github.com/go-errors/errors
+	url = https://github.com/go-errors/errors
+[submodule "gopath/src/github.com/wcharczuk/go-chart"]
+	path = gopath/src/github.com/wcharczuk/go-chart
+	url = https://github.com/wcharczuk/go-chart
+
+[submodule "gopath/src/github.com/blendlabs/go-util"]
+	path = gopath/src/github.com/blendlabs/go-util
+	url = https://github.com/blendlabs/go-util

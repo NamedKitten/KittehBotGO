@@ -2,5 +2,3 @@ main
 build
 gopath/pkg
 gopath/bin
-
-vendor
