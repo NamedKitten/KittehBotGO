@@ -1,12 +1,12 @@
 package main
 
 import (
-	"github.com/NamedKitten/KittehBotGo/commands"
-	"github.com/NamedKitten/KittehBotGo/config"
-	"github.com/NamedKitten/KittehBotGo/util"
 	"bufio"
 	"flag"
 	"fmt"
+	"github.com/NamedKitten/KittehBotGo/commands"
+	"github.com/NamedKitten/KittehBotGo/config"
+	"github.com/NamedKitten/KittehBotGo/util"
 	"github.com/bwmarrin/discordgo"
 	"github.com/go-redis/redis"
 	"os"
@@ -14,20 +14,10 @@ import (
 	"strings"
 	"syscall"
 	"time"
-	//"github.com/wcharczuk/go-chart"
-	//"io/ioutil"
 )
 
 var redisclient *redis.Client
 var dg, _ = discordgo.New()
-/*
-var memAllocMapX []float64
-var memAllocMapY []float64
-var memSysMapX []float64
-var memSysMapY []float64
-var memTotalAllocMapX []float64
-var memTotalAllocMapY []float64
-*/
 
 func setup() {
 	reader := bufio.NewReader(os.Stdin)
@@ -52,44 +42,6 @@ func setup() {
 	redisclient.Set("token", strings.TrimSpace(token), 0)
 	fmt.Println("The bot is now setup.")
 }
-/*
-func saveMemMap() {
-	graph := chart.Chart{
-		XAxis: chart.XAxis{
-			Style: chart.Style{Show: true},
-		},
-		YAxis: chart.YAxis{
-			Style: chart.Style{Show: true},
-		},
-		Background: chart.Style{
-			Padding: chart.Box{
-				Top:  20,
-				Left: 20,
-			},
-		},
-		Series: []chart.Series{
-			chart.ContinuousSeries{
-				Name:    "MemAlloc",
-				XValues: memAllocMapX,
-				YValues: memAllocMapY,
-			},
-			chart.ContinuousSeries{
-				Name:    "MemSys",
-				XValues: memSysMapX,
-				YValues: memSysMapY,
-			},
-			chart.ContinuousSeries{
-				Name:    "MemTotalAlloc",
-				XValues: memTotalAllocMapX,
-				YValues: memTotalAllocMapY,
-			},
-		},
-	}
-	buffer := bytes.NewBuffer([]byte{})
-	_ := graph.Render(chart.PNG, buffer)
-	ioutil.WriteFile("out.png", buffer, 0644)
-}
-*/
 
 func init() {
 	redisIP := flag.String("redisIP", "localhost", "IP for redis server.")
@@ -151,6 +103,10 @@ func main() {
 		return
 	}
 
+	//go func() {
+	//    log.Println(http.ListenAndServe("localhost:6060", nil))
+	//}()
+
 	// Wait here until CTRL-C or other term signal is received.
 	fmt.Println("Bot is now running.  Press CTRL-C to exit.")
 	sc := make(chan os.Signal, 1)
@@ -161,4 +117,4 @@ func main() {
 
 	// Cleanly close down the Discord session.
 	dg.Close()
- }
+}

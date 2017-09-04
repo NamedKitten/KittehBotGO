@@ -3,11 +3,11 @@ package BotCommands
 import (
 	"github.com/NamedKitten/KittehBotGo/util"
 	"github.com/bwmarrin/discordgo"
-	"time"
 	"github.com/go-errors/errors"
+	"time"
 )
 
-func PingCommand(s *discordgo.Session, m *discordgo.MessageCreate, ctx *commands.Context) (error) {
+func PingCommand(s *discordgo.Session, m *discordgo.MessageCreate, ctx *commands.Context) error {
 	start := time.Now()
 	message, err := s.ChannelMessageSend(m.ChannelID, "...")
 	elapsed := time.Since(start)

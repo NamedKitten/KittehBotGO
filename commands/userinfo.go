@@ -1,16 +1,16 @@
 package BotCommands
 
 import (
-	"github.com/NamedKitten/KittehBotGo/util"
 	"fmt"
+	"github.com/NamedKitten/KittehBotGo/util"
 	"github.com/bwmarrin/discordgo"
 	"github.com/dustin/go-humanize"
+	"github.com/go-errors/errors"
 	"strconv"
 	"time"
-	"github.com/go-errors/errors"
 )
 
-func UserinfoCommand(s *discordgo.Session, m *discordgo.MessageCreate, ctx *commands.Context) (error) {
+func UserinfoCommand(s *discordgo.Session, m *discordgo.MessageCreate, ctx *commands.Context) error {
 	channel, err := s.State.Channel(m.ChannelID)
 	if err != nil {
 		return errors.Wrap(err, 1)
@@ -55,14 +55,13 @@ func UserinfoCommand(s *discordgo.Session, m *discordgo.MessageCreate, ctx *comm
 	fmt.Println(zone)
 	joined, _ := discordgo.Timestamp(member.JoinedAt).Parse()
 	userSnowflake, _ := strconv.ParseInt(member.User.ID, 10, 64)
-	joinedDiscord := time.Unix((((userSnowflake >> 22) + 1420070400000) / 1000) - int64(zone), 0)
+	joinedDiscord := time.Unix((((userSnowflake>>22)+1420070400000)/1000)-int64(zone), 0)
 	fmt.Println(joinedDiscord)
 	fields := make([]*discordgo.MessageEmbedField, 0, 2)
-	fields = append(fields, &discordgo.MessageEmbedField{Name: "**Join dates**:", Value:
-		 fmt.Sprintf("**This server**: %s\n**Discord**: %s",
-		 humanize.Time(joined),
-		 humanize.Time(joinedDiscord),
-		 )})
+	fields = append(fields, &discordgo.MessageEmbedField{Name: "**Join dates**:", Value: fmt.Sprintf("**This server**: %s\n**Discord**: %s",
+		humanize.Time(joined),
+		humanize.Time(joinedDiscord),
+	)})
 	s.ChannelMessageSendEmbed(m.ChannelID, &discordgo.MessageEmbed{
 		Type: "rich",
 		Author: &discordgo.MessageEmbedAuthor{

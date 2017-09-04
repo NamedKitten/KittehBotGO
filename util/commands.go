@@ -3,15 +3,15 @@ package commands
 import (
 	"fmt"
 	"github.com/bwmarrin/discordgo"
+	"github.com/go-errors/errors"
 	"github.com/go-redis/redis"
 	"log"
 	"sort"
 	"strings"
 	"time"
-	"github.com/go-errors/errors"
 )
 
-type CommandFunction func(*discordgo.Session, *discordgo.MessageCreate, *Context) (error)
+type CommandFunction func(*discordgo.Session, *discordgo.MessageCreate, *Context) error
 
 type Command struct {
 	Name      string
@@ -35,7 +35,7 @@ type Context struct {
 	Commands   *Commands
 }
 
-func HelpCommand(session *discordgo.Session, message *discordgo.MessageCreate, ctx *Context) (error) {
+func HelpCommand(session *discordgo.Session, message *discordgo.MessageCreate, ctx *Context) error {
 	com := ctx.Commands
 	prefix, _ := com.Redis.Get("prefix").Result()
 
@@ -160,7 +160,7 @@ func (com *Commands) OnMessageCreate(session *discordgo.Session, message *discor
 		start := time.Now()
 		ret := command.Function(session, message, ctx)
 		if ret != nil {
-			session.ChannelMessageSend(message.ChannelID, "````go\n" + ret.(*errors.Error).ErrorStack() + "\n```")
+			session.ChannelMessageSend(message.ChannelID, "````go\n"+ret.(*errors.Error).ErrorStack()+"\n```")
 		}
 		elapsed := time.Since(start)
 		log.Print("Command: " + command.Name + "took " + elapsed.String() + ".")

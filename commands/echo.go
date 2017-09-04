@@ -1,13 +1,13 @@
 package BotCommands
 
 import (
-	"github.com/NamedKitten/KittehBotGo/util"
 	"fmt"
+	"github.com/NamedKitten/KittehBotGo/util"
 	"github.com/bwmarrin/discordgo"
 	"github.com/go-errors/errors"
 )
 
-func EchoCommand(s *discordgo.Session, m *discordgo.MessageCreate, ctx *commands.Context) (error) {
+func EchoCommand(s *discordgo.Session, m *discordgo.MessageCreate, ctx *commands.Context) error {
 	content := ctx.Content
 	channel, err := s.State.Channel(m.ChannelID)
 	if err != nil {
