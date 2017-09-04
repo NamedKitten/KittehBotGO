@@ -51,34 +51,25 @@ The releases are located [here](https://github.com/NamedKitten/KittehBotGo/relea
 
 #### Linux/BSD/Others
 
-Make sure to install the required golang and git packages.
+Make sure to install golang v1.8 or above.
 
-First clone the repo using the command:
-
-```sh
-git clone https://github.com/NamedKitten/KittehBotGO.git --recursive --recurse-submodules
-```
-
-Then change directory to the `KittehBotGO` dir.
+Then create a `gopath` dir.    
 
 Next make sure to run `export GOPATH=$PWD/gopath`.
 
-It makes sure you use the required included librarys.
+Then run `go get -u github.com/golang/dep/cmd/dep` to install dep to allow you to download KittehBotGO's required libraries.
 
-Then you can run `go build src/main.go` and if it gives no error then move onto the Usage section.
+Then navagate to `$GOPATH/src/github.com/NamedKitten/KittehBotGO` and run `$GOPATH/bin/dep ensure` to download the needed dependencies.
 
-#### Windows
+Then you can navagate to `$GOPATH/bin` and run `go install github.com/NamedKitten/KittehBotGo`.
 
-**No.**
+If you got no errors and there is a `KittehBotGo` file in the current directory then you have successfully compiled the bot.
 
-#### Mac
-
-**No.**
 
 ### Usage
 
 ```
-./main --help
+./KittehBotGo   --help
 Usage of ./main:
   -redisDB int
     	DB ID for redis server.
