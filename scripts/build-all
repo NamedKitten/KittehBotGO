@@ -2,11 +2,10 @@
 
 export CGO_ENABLED=0
 
-PLATFORMS="linux/amd64 linux/386 linux/ppc64 linux/ppc64le linux/mips64 linux/mips64le linux/mips linux/mipsle"
+PLATFORMS="linux/amd64 linux/386"
 PLATFORMS="$PLATFORMS freebsd/amd64 freebsd/386"
 PLATFORMS="$PLATFORMS netbsd/amd64 netbsd/386 "
 PLATFORMS="$PLATFORMS openbsd/amd64 openbsd/386"
-PLATFORMS="$PLATFORMS dragonfly/amd64"
 
 PLATFORMS_ARM="linux freebsd netbsd openbsd"
 
@@ -26,23 +25,23 @@ for PLATFORM in $PLATFORMS; do
   GOOS=${PLATFORM%/*}
   GOARCH=${PLATFORM#*/}
   BIN_FILENAME="${OUTPUT}-${GOOS}-${GOARCH}"
-  CMD="GOOS=${GOOS} GOARCH=${GOARCH} go build -p 7 -v -ldflags '-extldflags \"-static\"' -o ${BIN_FILENAME} $@ && $STRIP ${BIN_FILENAME} "
+  CMD="GOOS=${GOOS} GOARCH=${GOARCH} go build -p 7 -v -ldflags '-s -w -extldflags \"-static\"' -o ${BIN_FILENAME} $@ && $STRIP ${BIN_FILENAME} "
   echo "${CMD}"
   eval $CMD || FAILURES="${FAILURES} ${PLATFORM}"
 done
 
 # ARM builds
 if [[ $PLATFORMS_ARM == *"linux"* ]]; then
-  CMD="GOOS=linux GOARCH=arm64 go build -p 7 -v -ldflags '-extldflags \"-static\"' -o ${OUTPUT}-linux-arm64 $@ && $STRIP ${OUTPUT}-linux-arm64"
+  CMD="GOOS=linux GOARCH=arm64 go build -p 7 -v -ldflags '-s -w -extldflags \"-static\"' -o ${OUTPUT}-linux-arm64 $@ && $STRIP ${OUTPUT}-linux-arm64"
   echo "${CMD}"
   eval $CMD || FAILURES="${FAILURES} ${PLATFORM}"
 fi
 for GOOS in $PLATFORMS_ARM; do
   GOARCH="arm"
   # build for each ARM version
-  for GOARM in 7 6 5; do
+  for GOARM in 7 6; do
     BIN_FILENAME="${OUTPUT}-${GOOS}-${GOARCH}${GOARM}"
-    CMD="GOARM=${GOARM} GOOS=${GOOS} GOARCH=${GOARCH} go build -p 7 -v -ldflags '-extldflags \"-static\"' -o ${BIN_FILENAME} $@ && $STRIP ${BIN_FILENAME}"
+    CMD="GOARM=${GOARM} GOOS=${GOOS} GOARCH=${GOARCH} go build -p 7 -v -ldflags '-s -w -extldflags \"-static\"' -o ${BIN_FILENAME} $@ && $STRIP ${BIN_FILENAME}"
     echo "${CMD}"
     eval "${CMD}" || FAILURES="${FAILURES} ${GOOS}/${GOARCH}${GOARM}"
   done

@@ -14,36 +14,24 @@ We provide binary packages for these following systems:
 - Linux
     - amd64
     - i386
-    - arm5
     - arm6
     - arm7
     - arm64
-    - mips
-    - mipsle
-    - mips64
-    - mips64le
-    - ppc64
-    - ppc64le
 - OpenBSD
     - amd64
     - i386
-    - arm5
     - arm6
     - arm7
 - FreeBSD
     - amd64
     - i386
-    - arm5
     - arm6
     - arm7
 - NetBSD
     - amd64
     - i386
-    - arm5
     - arm6
     - arm7
-- DragonFly BSD
-    - amd64
 
 The releases are located [here](https://github.com/NamedKitten/KittehBotGo/releases).
 
