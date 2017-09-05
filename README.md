@@ -61,6 +61,11 @@ Then run `go get -u github.com/golang/dep/cmd/dep` to install dep to allow you t
 
 Then navagate to `$GOPATH/src/github.com/NamedKitten/KittehBotGO` and run `$GOPATH/bin/dep ensure` to download the needed dependencies.
 
+Then run `go get -u github.com/jteeuwen/go-bindata` to install go-bindata.
+go-bindata is used to store the assets for the built in dashboard inside the binary so that you don't neeed a folder full of assets wherever the bots executable is.
+
+Next run `go generate` as this generates the file which the bot reads which contains all the assets.
+
 Then you can navagate to `$GOPATH/bin` and run `go install github.com/NamedKitten/KittehBotGo`.
 
 If you got no errors and there is a `KittehBotGo` file in the current directory then you have successfully compiled the bot.
@@ -69,8 +74,8 @@ If you got no errors and there is a `KittehBotGo` file in the current directory 
 ### Usage
 
 ```
-./KittehBotGo   --help
-Usage of ./main:
+./KittehBotGo -h
+Usage of ./KittehBotGo:
   -redisDB int
     	DB ID for redis server.
   -redisIP string
@@ -79,8 +84,13 @@ Usage of ./main:
     	Password for redis server.
   -redisPort int
     	Port for redis server. (default 6379)
+  -runDashboard
+    	Run dashboard? (default true)
   -runSetup
     	Run setup?
+  -version
+    	Print version and exit.
+
 ```
 
 Make sure to use the correct redis settings.

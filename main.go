@@ -1,5 +1,7 @@
 package main
 
+//go:generate $GOPATH/bin/go-bindata -pkg main -o static.go static/...
+
 import (
 	"bufio"
 	"flag"
@@ -8,9 +10,12 @@ import (
 	"github.com/NamedKitten/KittehBotGo/config"
 	"github.com/NamedKitten/KittehBotGo/util"
 	"github.com/bwmarrin/discordgo"
+	"github.com/elazarl/go-bindata-assetfs"
 	"github.com/go-redis/redis"
+	"net/http"
 	"os"
 	"os/signal"
+	"runtime"
 	"strings"
 	"syscall"
 	"time"
@@ -50,6 +55,7 @@ func init() {
 	redisDB := flag.Int("redisDB", 0, "DB ID for redis server.")
 	version := flag.Bool("version", false, "Print version and exit.")
 	runSetup := flag.Bool("runSetup", false, "Run setup?")
+	flag.Bool("runDashboard", true, "Run dashboard?")
 
 	flag.Parse()
 
@@ -103,9 +109,27 @@ func main() {
 		return
 	}
 
-	//go func() {
-	//    log.Println(http.ListenAndServe("localhost:6060", nil))
-	//}()
+	if flag.Lookup("runDashboard").Value.(flag.Getter).Get().(bool) {
+		go func() {
+			http.Handle("/", http.FileServer(&assetfs.AssetFS{Asset: Asset, AssetDir: AssetDir, AssetInfo: AssetInfo, Prefix: "static"}))
+			http.HandleFunc("/getdata", func(w http.ResponseWriter, r *http.Request) {
+
+				stats := runtime.MemStats{}
+				runtime.ReadMemStats(&stats)
+				using := float64(stats.Alloc) / 1024 / 1024
+				alloc := float64(stats.Sys) / 1024 / 1024
+				cleaned := float64(stats.TotalAlloc) / 1024 / 1024
+
+				fmt.Fprintf(w, "%g\n%g\n%g", using, alloc, cleaned)
+
+			})
+			err := http.ListenAndServe("127.0.0.1:9000", nil)
+			if err != nil {
+				fmt.Println("Error starting http server:", err)
+				os.Exit(1)
+			}
+		}()
+	}
 
 	// Wait here until CTRL-C or other term signal is received.
 	fmt.Println("Bot is now running.  Press CTRL-C to exit.")

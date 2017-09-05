@@ -15,6 +15,12 @@
 
 [[projects]]
   branch = "master"
+  name = "github.com/elazarl/go-bindata-assetfs"
+  packages = ["."]
+  revision = "30f82fa23fd844bd5bb1e5f216db87fd77b5eb43"
+
+[[projects]]
+  branch = "master"
   name = "github.com/go-errors/errors"
   packages = ["."]
   revision = "8fa88b06e5974e97fbf9899a7f86a344bfd1f105"
@@ -40,6 +46,6 @@
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "986ded3899f2b17f68ab8024299c66a9af21a472ebde4ddd9f5f44cce8b5c11d"
+  inputs-digest = "d821b370363e59e5a2155b6785fdfe127dac7c418ae4450e35ca7c64556358b1"
   solver-name = "gps-cdcl"
   solver-version = 1

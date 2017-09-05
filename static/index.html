@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+
+	<title>Dashboard</title>
+
+	<link href="assets/fonts/font-roboto.css" rel="stylesheet">
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.3/css/bootstrap.min.css" integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ" crossorigin="anonymous">
+<link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+<link href="assets/style.css" rel="stylesheet">
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.3/js/bootstrap.min.js" integrity="sha384-vBWWzlZJ8ea9aCX4pEW3rVHjgjt7zpkNpZk+02D9phzyeVkE+jo0ieGizqPLForn" crossorigin="anonymous"></script>
+<script src="http://canvasjs.com/assets/script/canvasjs.min.js"></script>
+	<script src="assets/graphs.js"></script>
+	<style>
+
+	#memStats,
+	#memUsage {
+	  height: 250px;
+
+	}
+	.container-fluid {
+		padding-right: left;
+	}
+	</style>
+
+</head>
+
+<body>
+	<!--
+	<nav class="navbar navbar-fixed-top" id="header">
+		<div class="container-fluid">
+			<div class="navbar-header">
+
+				<div class="brand">
+					<a href="web-analytics-real-time.html">
+						<span class="hidden-xs-down m-r-3">Dashboard</span>
+					</a>
+				</div>
+
+			</div>
+		</div>
+	</nav>
+-->
+
+
+	<div class="page-content-toggle" id="page-content-wrapper">
+		<div class="container-fluid">
+			<!-- 2nd row -->
+			<div class="row">
+				<div class="col-md-12">
+					<div class="card card-block">
+						<h4 class="card-title m-b-2">Memory usage</h4>
+						<div id="memUsage"></div>
+					</div>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-md-12">
+					<div class="card card-block">
+						<h4 class="card-title">Memory stats</h4>
+						<div id="memStats"></div>
+					</div>
+				</div>
+			</div>
+
+		</div>
+
+	</div>
+</body>
+
+</html>
