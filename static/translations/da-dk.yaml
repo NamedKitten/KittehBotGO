@@ -1,0 +1,100 @@
+- id: command_about_about  
+  translation: "Om {{.Person}}"
+
+- id: command_about_dversion  
+  translation: "DiscordGo Version"
+
+- id: command_about_gversion  
+  translation: "Go Version"
+
+- id: command_about_kversion  
+  translation: "KittehBotGo Version"
+
+- id: command_about_memused  
+  translation: "Hukommelse Brugt"
+
+- id: command_about_servers
+  translation: "Servere"
+
+- id: command_about_thanks 
+  translation: "Tak for at bruge KittehBotGo!"
+
+- id: command_about_uptime
+  translation: "Oppetid"
+
+- id: command_about_help
+  translation: "Giver information om botten"
+
+- id: command_help_help 
+  translation: "Giver hjælp til kommandoer"
+  
+- id: command_language_help     
+  translation: "Bruges til at ændre bottens sprog"
+
+- id: command_language_success
+  translation: "Sproget er blevet ændret"
+
+- id: command_about_garbage
+  translation: "skrald samlet"
+
+- id: command_echo_help
+  translation: "Gentager hvad du siger"
+
+- id: command_userinfo_help
+  translation: "Giver info om en person"
+
+- id: command_motd_help
+  translation: "Dagens meddelse"
+
+- id: command_motd_ownererror
+  translation: "Du skal være bot ejeren for at bruge denne kommando."
+
+- id: command_motd_channel
+  translation: "Kanalen for dagens meddelse er blevet ændret til <#{{.ChannelID}}>."
+
+- id: command_motd_set
+  translation: "Dagens meddelse er blevet ændret."
+
+- id: command_motd_unsetwarning
+  translation: "Dagens meddelse er ikke blevet sat. Brug `{{.Prefix}}motd set` for at sætte en meddelse."
+
+- id: command_ping_help
+  translation: "Beregner hvor lang tid det tager at sende en besked"
+
+- id: command_ping_result
+  translation: "Ping! Det tog `{{.Elapsed}}` at sende beskeden."
+
+- id: command_goodbot_help
+  translation: "Kald mig en god bot"
+
+- id: command_goodbot_thanks
+  translation:
+    one: "Tak! {{.Count}} person har kaldt mig en god bot."
+    other: "Tak! {{.Count}} personer har kaldt mig mig en god bot."
+
+- id: command_jseval_help
+  translation: "Evaluerer JavaScript"
+
+- id: command_jseval_input
+  translation: "Input"
+
+- id: command_jseval_output
+  translation: "Resultat"
+
+- id: command_jseval_ownererror
+  translation: "Du skal være bot ejeren for at bruge denne kommando."
+
+- id: command_luaeval_help
+  translation: "Evaluerer Lua"
+
+- id: command_luaeval_input
+  translation: "Input"
+
+- id: command_luaeval_output
+  translation: "Resultat"
+
+- id: command_luaeval_done
+  translation: "Færdig!"
+
+- id: command_luaeval_ownererror
+  translation: "Du skal være bot ejeren for at bruge denne kommando."
