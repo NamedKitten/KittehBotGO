@@ -64,9 +64,6 @@
 - id: command_ping_result
   translation: "Ping! Tiden det tok for å sende melding: `{{.Elapsed}}`."
 
-- id: command_goodbot_help
-  translation: "Kall meg en god bot"
-
 - id: command_goodbot_thanks
   translation:
     one: "Takk! {{.Count}} person har kalt meg en god bot."

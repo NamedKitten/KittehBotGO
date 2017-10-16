@@ -72,9 +72,6 @@
     one: "Thanks! {{.Count}} person has called me a good bot."
     other: "Thanks! {{.Count}} people have called me a good bot."
 
-- id: command_goodbot_help
-  translation: "Call me a good bot"
-
 - id: command_jseval_help
   translation: "Evaluates JavaScript"
 

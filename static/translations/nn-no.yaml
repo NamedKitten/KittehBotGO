@@ -72,9 +72,6 @@
     one: "Takk! {{.Count}} person har kalla meg ein god bot."
     other: "Takk! {{.Count}} personar har kalla meg ein god bot."
 
-- id: command_goodbot_help
-  translation: "Kall meg ein god bot"
-
 - id: command_jseval_help
   translation: "Evaluerer JavaScript"
 
