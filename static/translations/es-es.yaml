@@ -1,0 +1,38 @@
+- id: command_about_about  
+  translation: "Acerca de {{.Person}}"
+
+- id: command_about_dversion  
+  translation: "Versión de DiscordGo"
+
+- id: command_about_gversion  
+  translation: "Versión de Go"
+
+- id: command_about_kversion  
+  translation: "Versión de KittehBotGo"
+
+- id: command_about_memused  
+  translation: "Memoria Usada"
+
+- id: command_about_servers
+  translation: "Servidores"
+
+- id: command_about_thanks 
+  translation: "¡Gracias por usar KittehBotGo!"
+
+- id: command_about_uptime
+  translation: "Tiempo activo"
+
+- id: command_about_help
+  translation: "Proporciona informacion acerca del bot"
+
+- id: command_help_help 
+  translation: "Proporciona ayuda con los comandos"
+  
+- id: command_language_help    
+  translation: "Usado para cambiar lenguaje del bot"
+
+- id: command_language_success
+  translation: "Se ha asignado lenguaje"
+
+- id: command_about_garbage
+  translation: "Basura recolectada"

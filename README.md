@@ -35,10 +35,10 @@ Next make sure to run `export GOPATH=$PWD/gopath`.
 
 Then run `go get -u github.com/golang/dep/cmd/dep` to download, install and compile dep to allow you to download KittehBotGO's required libraries.
 
-Then run `go get -u github.com/jteeuwen/go-bindata` to download go-bindata.
+Then run `go get -u github.com/tmthrgd/go-bindata` to download go-bindata.
 go-bindata is used to store the assets for the built in dashboard inside the binary so that you don't neeed a folder full of assets wherever the bots executable is.
 
-After that run `go install github.com/jteeuwen/go-bindata/go-bindata` to install and compile go-bindata.
+After that run `go install github.com/tmthrgd/go-bindata/go-bindata` to install and compile go-bindata.
 
 Next run `go get -u github.com/NamedKitten/KittehBotGo` to download the bot's source.
 

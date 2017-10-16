@@ -1,0 +1,103 @@
+- id: command_about_about  
+  translation: "About {{.Person}}"
+
+- id: command_about_dversion  
+  translation: "DiscordGo Version"
+
+- id: command_about_gversion  
+  translation: "Go Version"
+
+- id: command_about_kversion  
+  translation: "KittehBotGo Version"
+
+- id: command_about_memused  
+  translation: "Memory Used"
+
+- id: command_about_servers
+  translation: "Servers"
+
+- id: command_about_thanks 
+  translation: "Thanks for using KittehBotGo!"
+
+- id: command_about_uptime
+  translation: "Uptime"
+
+- id: command_about_help
+  translation: "Gives information about the bot"
+
+- id: command_help_help 
+  translation: "Provides command help"
+  
+- id: command_language_help     
+  translation: "Used to change bot's language"
+
+- id: command_language_success
+  translation: "Language has been set"
+
+- id: command_about_garbage
+  translation: "garbage collected"
+
+- id: command_echo_help
+  translation: "Repeats what you say"
+
+- id: command_userinfo_help
+  translation: "Gives info about a user"
+
+- id: command_motd_help
+  translation: "Message of the day"
+
+- id: command_motd_ownererror
+  translation: "You need to be the owner to use this command."
+
+- id: command_motd_channel
+  translation: "MOTD channel has been set to <#{{.ChannelID}}>."
+
+- id: command_motd_set
+  translation: "MOTD has been set."
+
+- id: command_motd_unsetwarning
+  translation: "MOTD has not been set. Use `{{.Prefix}}motd set` to set it."
+
+- id: command_ping_help
+  translation: "Calculates time taken to send message"
+
+- id: command_ping_result
+  translation: "Ping! Time taken to send message: `{{.Elapsed}}`."
+
+- id: command_goodbot_help
+  translation: "Call me a good bot"
+
+- id: command_goodbot_thanks
+  translation:
+    one: "Thanks! {{.Count}} person has called me a good bot."
+    other: "Thanks! {{.Count}} people have called me a good bot."
+
+- id: command_goodbot_help
+  translation: "Call me a good bot"
+
+- id: command_jseval_help
+  translation: "Evaluates JavaScript"
+
+- id: command_jseval_input
+  translation: "Input"
+
+- id: command_jseval_output
+  translation: "Output"
+
+- id: command_jseval_ownererror
+  translation: "You need to be the owner to use this command."
+
+- id: command_luaeval_help
+  translation: "Evaluates Lua"
+
+- id: command_luaeval_input
+  translation: "Input"
+
+- id: command_luaeval_output
+  translation: "Output"
+
+- id: command_luaeval_done
+  translation: "Done!"
+
+- id: command_luaeval_ownererror
+  translation: "You need to be the owner to use this command."

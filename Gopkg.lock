@@ -2,22 +2,34 @@
 
 
 [[projects]]
+  name = "github.com/PuerkitoBio/goquery"
+  packages = ["."]
+  revision = "e1271ee34c6a305e38566ecd27ae374944907ee9"
+  version = "v1.1.0"
+
+[[projects]]
+  branch = "master"
+  name = "github.com/Shopify/go-lua"
+  packages = ["."]
+  revision = "88a6f168eee0ba102d7d20c5281056a5dd3d7550"
+
+[[projects]]
+  branch = "master"
+  name = "github.com/andybalholm/cascadia"
+  packages = ["."]
+  revision = "349dd0209470eabd9514242c688c403c0926d266"
+
+[[projects]]
   branch = "develop"
   name = "github.com/bwmarrin/discordgo"
   packages = ["."]
-  revision = "06b35cfe248ad7ee3cbfa77e8dcab8f2bc61f9bf"
+  revision = "fd8721a5220e9bbe689cb6040b30fa26a5c7e7fc"
 
 [[projects]]
   branch = "master"
   name = "github.com/dustin/go-humanize"
   packages = ["."]
   revision = "79e699ccd02f240a1f1fbbdcee7e64c1c12e41aa"
-
-[[projects]]
-  branch = "master"
-  name = "github.com/elazarl/go-bindata-assetfs"
-  packages = ["."]
-  revision = "30f82fa23fd844bd5bb1e5f216db87fd77b5eb43"
 
 [[projects]]
   branch = "master"
@@ -32,10 +44,88 @@
   revision = "ddbd81ea6c66514fe1f857af890276fcac7921ce"
 
 [[projects]]
+  branch = "master"
+  name = "github.com/googollee/go-engine.io"
+  packages = [".","message","parser","polling","transport","websocket"]
+  revision = "80ae0e43aca17b4c5a6834999d0f2eaa16b9afda"
+
+[[projects]]
+  branch = "master"
+  name = "github.com/googollee/go-socket.io"
+  packages = ["."]
+  revision = "5447e71f36d394766bf855d5714a487596809f0d"
+
+[[projects]]
   name = "github.com/gorilla/websocket"
   packages = ["."]
   revision = "ea4d1f681babbce9545c9c5f3d5194a789c89f5b"
   version = "v1.2.0"
+
+[[projects]]
+  name = "github.com/nicksnyder/go-i18n"
+  packages = ["i18n","i18n/bundle","i18n/language","i18n/translation"]
+  revision = "ca33e78c8a430e2df435b02f63a3944fa8e9ea11"
+  version = "v1.9.0"
+
+[[projects]]
+  branch = "master"
+  name = "github.com/nishanths/go-xkcd"
+  packages = ["."]
+  revision = "9497d909de390b9a8dd0d88975cf0ce7d0b4d688"
+
+[[projects]]
+  name = "github.com/pelletier/go-toml"
+  packages = ["."]
+  revision = "16398bac157da96aa88f98a2df640c7f32af1da2"
+  version = "v1.0.1"
+
+[[projects]]
+  branch = "master"
+  name = "github.com/robertkrimen/otto"
+  packages = [".","ast","dbg","file","parser","registry","token"]
+  revision = "a813c59b1b4471ff7ecd3b533bac2f7e7d178784"
+
+[[projects]]
+  branch = "master"
+  name = "github.com/tidwall/btree"
+  packages = ["."]
+  revision = "9876f1454cf0993a53d74c27196993e345f50dd1"
+
+[[projects]]
+  branch = "master"
+  name = "github.com/tidwall/buntdb"
+  packages = ["."]
+  revision = "b67b1b8c1658cb01502801c14e33c61e6c4cbb95"
+
+[[projects]]
+  name = "github.com/tidwall/gjson"
+  packages = ["."]
+  revision = "be96719f990978a867f52c48f29d43f6b591da28"
+  version = "v1.0.0"
+
+[[projects]]
+  branch = "master"
+  name = "github.com/tidwall/grect"
+  packages = ["."]
+  revision = "ba9a043346eba55344e40d66a5e74cfda3a9d293"
+
+[[projects]]
+  branch = "master"
+  name = "github.com/tidwall/match"
+  packages = ["."]
+  revision = "173748da739a410c5b0b813b956f89ff94730b4c"
+
+[[projects]]
+  branch = "master"
+  name = "github.com/tidwall/redcon"
+  packages = ["."]
+  revision = "e095da84ca2b75a8d6c6fe9fa5ad3cece7a60bbc"
+
+[[projects]]
+  branch = "master"
+  name = "github.com/tidwall/rtree"
+  packages = ["."]
+  revision = "d4a8a3d30d5729f85edfba1745241f3a621d0359"
 
 [[projects]]
   branch = "master"
@@ -43,9 +133,27 @@
   packages = ["nacl/secretbox","poly1305","salsa20/salsa"]
   revision = "81e90905daefcd6fd217b62423c0908922eadb30"
 
+[[projects]]
+  branch = "master"
+  name = "golang.org/x/net"
+  packages = ["context","html","html/atom","webdav","webdav/internal/xml"]
+  revision = "a04bdaca5b32abe1c069418fb7088ae607de5bd0"
+
+[[projects]]
+  name = "gopkg.in/sourcemap.v1"
+  packages = [".","base64vlq"]
+  revision = "6e83acea0053641eff084973fee085f0c193c61a"
+  version = "v1.0.5"
+
+[[projects]]
+  branch = "v2"
+  name = "gopkg.in/yaml.v2"
+  packages = ["."]
+  revision = "eb3733d160e74a9c7e442f435eb3bea458e1d19f"
+
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "d821b370363e59e5a2155b6785fdfe127dac7c418ae4450e35ca7c64556358b1"
+  inputs-digest = "dbf8e3c44d1eec89bdddb042c578c604b6a0bc57884e26eeb82d1d99ee5e55a7"
   solver-name = "gps-cdcl"
   solver-version = 1
