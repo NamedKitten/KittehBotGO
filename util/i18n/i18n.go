@@ -20,6 +20,16 @@ func init() {
 		panic(err)
 	}
 	i18n.ParseTranslationFileBytes("es-es.yaml", file)
+	file, err = static.ReadFile("translations/nb-no.yaml")
+	if (err != nil) {
+		panic(err)
+	}
+	i18n.ParseTranslationFileBytes("nb-no.yaml", file)
+	file, err = static.ReadFile("translations/nn-no.yaml")
+	if (err != nil) {
+		panic(err)
+	}
+	i18n.ParseTranslationFileBytes("nn-no.yaml", file)
 	//fmt.Println("Initialising map.")
 	//Translations = make(map[string]map[string]string) 
 }
