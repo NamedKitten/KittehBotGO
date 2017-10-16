@@ -20,7 +20,7 @@ func EchoCommand(s *discordgo.Session, m *discordgo.MessageCreate, ctx *commands
 		Color:       s.State.UserColor(m.Author.ID, m.ChannelID),
 		Description: strings.Join(ctx.Args[0:], " "),
 		Footer: &discordgo.MessageEmbedFooter{
-			Text: "Thanks for using KittehBotGO!",
+			Text: ctx.T("command_about_thanks"),
 		},
 	})
 	return nil
