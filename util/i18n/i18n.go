@@ -5,31 +5,15 @@ import 	"github.com/nicksnyder/go-i18n/i18n"
 import 	"github.com/NamedKitten/KittehBotGo/util/static"
 
 func init() {
-	file, err := static.ReadFile("translations/en-gb.yaml")
-	if (err != nil) {
-		panic(err)
+	files, _ := static.WalkDirs("translations/", false)
+	for _, filename := range files {
+		file, err := static.ReadFile(filename)
+		if (err != nil) {
+			panic(err)
+		}
+		i18n.ParseTranslationFileBytes(filename, file)
+		
 	}
-	i18n.ParseTranslationFileBytes("en-gb.yaml", file)
-	file, err = static.ReadFile("translations/fr-fr.yaml")
-	if (err != nil) {
-		panic(err)
-	}
-	i18n.ParseTranslationFileBytes("fr-fr.yaml", file)
-	file, err = static.ReadFile("translations/es-es.yaml")
-	if (err != nil) {
-		panic(err)
-	}
-	i18n.ParseTranslationFileBytes("es-es.yaml", file)
-	file, err = static.ReadFile("translations/nb-no.yaml")
-	if (err != nil) {
-		panic(err)
-	}
-	i18n.ParseTranslationFileBytes("nb-no.yaml", file)
-	file, err = static.ReadFile("translations/nn-no.yaml")
-	if (err != nil) {
-		panic(err)
-	}
-	i18n.ParseTranslationFileBytes("nn-no.yaml", file)
 	//fmt.Println("Initialising map.")
 	//Translations = make(map[string]map[string]string) 
 }
