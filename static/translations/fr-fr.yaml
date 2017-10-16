@@ -36,3 +36,65 @@
 
 - id:  command_about_garbage
   translation: "Mémoire nettoyée"
+
+- id: command_echo_help
+  translation: "Répète ce que vous dites"
+
+- id: command_userinfo_help
+  translation: "Donne des infos sur un utilisateur"
+
+- id: command_motd_help
+  translation: "Message du jour"
+
+- id: command_motd_ownererror
+  translation: "Vous devez être le propriétaire du bot pour utiliser cette commande."
+
+- id: command_motd_channel
+  translation: "Le salon du MOTD a été réglé pour être le salon <#{{.ChannelID}}>."
+
+- id: command_motd_set
+  translation: "Le MOTD a bien été modifié."
+
+- id: command_motd_unsetwarning
+  translation: "Aucun MOTD n'est présent. Utilisez `{{.Prefix}}motd set` pour en mettre un."
+
+- id: command_ping_help
+  translation: "Calcule le temps pris pour envoyer un message"
+
+- id: command_ping_result
+  translation: "Ping ! Temps pris pour envoyer le message : `{{.Elapsed}}`."
+
+- id: command_goodbot_help
+  translation: "Dites que je suis un bon bot !"
+
+- id: command_goodbot_thanks
+  translation:
+    one: "Merchi ! {{.Count}} personnes m'ont appelé un bon bot."
+    other: "%erchi ! {{.Count}} humains m'ont appelé un bon bot."
+
+- id: command_jseval_help
+  translation: "Évalue et exécute du javascript"
+
+- id: command_jseval_input
+  translation: "Entrée"
+
+- id: command_jseval_output
+  translation: "Sortie"
+
+- id: command_jseval_ownererror
+  translation: "Vous devez être le propriétaire pour utiliser cette commande."
+
+- id: command_luaeval_help
+  translation: "Évalue et exécute du Lua"
+
+- id: command_luaeval_input
+  translation: "Entrée"
+
+- id: command_luaeval_output
+  translation: "Sortie"
+
+- id: command_luaeval_done
+  translation: "Fini !"
+
+- id: command_luaeval_ownererror
+  translation: "Vous devez être le propriétaire pour utiliser cette commande."
