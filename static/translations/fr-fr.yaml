@@ -43,6 +43,42 @@
 - id: command_userinfo_help
   translation: "Donne des infos sur un utilisateur"
 
+- id: command_userinfo_none
+  translation: "Aucune info"
+
+- id: command_userinfo_offline
+  translation: "Hors ligne"
+
+- id: command_userinfo_online
+  translation: "En ligne"
+
+- id: command_userinfo_idle
+  translation: "Absent"
+
+- id: command_userinfo_donotdisturb
+  translation: "Ne pas déranger"
+
+- id: command_userinfo_playing
+  translation: "Jour à {{.Game}}"
+
+- id: command_userinfo_streaming
+  translation: "Streaming {{.Game}}"
+
+- id: command_userinfo_joindates
+  translation: "Date de venue"
+
+- id: command_userinfo_thisserver
+  translation: "Ce serveur"
+
+- id: command_userinfo_displayname
+  translation: "Pseudo"
+
+- id: command_userinfo_avatar
+  translation: "Avatar"
+
+- id: command_userinfo_game
+  translation: "Jeu"
+
 - id: command_motd_help
   translation: "Message du jour"
 
@@ -87,14 +123,8 @@
 - id: command_luaeval_help
   translation: "Évalue et exécute du Lua"
 
-- id: command_luaeval_input
-  translation: "Entrée"
-
-- id: command_luaeval_output
-  translation: "Sortie"
-
 - id: command_luaeval_done
   translation: "Fini !"
-
-- id: command_luaeval_ownererror
-  translation: "Vous devez être le propriétaire pour utiliser cette commande."
+  
+- id: command_xkcd_help
+  translation: "Récupère la dernière planche de xkcd"
