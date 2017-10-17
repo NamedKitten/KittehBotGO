@@ -8,14 +8,8 @@ import (
 	"github.com/go-redis/redis"
 )
 
-type EventFunc func(*Bot, *discordgo.Session, interface{})
 
-type Bot struct {
-	Redis   *redis.Client
-	Discord *discordgo.Session
-}
-
-func New(redis *redis.Client) *Bot {
+func Start(redis *redis.Client)  {
 	Discord, _ := discordgo.New()
 	commands.Setup(redis, Discord)
 
@@ -25,7 +19,7 @@ func New(redis *redis.Client) *Bot {
 	Discord.State.MaxMessageCount = 1
 	Discord.LogLevel = 1
 	Discord.SyncEvents = true
-	Discord.Compress = false
+	Discord.Compress = true
 
 	Discord.AddHandler(commands.OnMessageCreate)
 	commands.RegisterCommand("ping", BotCommands.PingCommand)
@@ -40,21 +34,16 @@ func New(redis *redis.Client) *Bot {
 	commands.RegisterCommand("language", BotCommands.LanguageCommand)
 	Discord.AddHandler(BotCommands.MotdEvent)
 
-	return &Bot{Redis: redis, Discord: Discord}
-}
-
-func (bot *Bot) Start() {
 	fmt.Println("Getting token...")
-	token, err := bot.Redis.Get("token").Result()
+	token, err := commands.Redis.Get("token").Result()
 	if err != nil {
 		fmt.Println("Token not found, please run with -runSetup to enter setup.")
 		panic(err)
 	}
-	bot.Discord.Token = "Bot " + token
+	Discord.Token = "Bot " + token
 
-	err = bot.Discord.Open()
+	err = Discord.Open()
 	if err != nil {
 		panic(err)
 	}
-
 }

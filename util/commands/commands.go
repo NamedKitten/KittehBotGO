@@ -7,24 +7,17 @@ import (
 	"github.com/nicksnyder/go-i18n/i18n"
 	"log"
 	"runtime/debug"
-	"sort"
 	"strings"
 )
+type CommandFunction func(*discordgo.Session, *discordgo.MessageCreate, *Context) error
 
 var Redis *redis.Client
-var Commands map[string]*Command
+var Commands map[string]CommandFunction
 var HelpCache string
 var Discord *discordgo.Session
 
 func init() {
-	Commands = make(map[string]*Command)
-}
-
-type CommandFunction func(*discordgo.Session, *discordgo.MessageCreate, *Context) error
-
-type Command struct {
-	Name     string
-	Function CommandFunction
+	Commands = make(map[string]CommandFunction)
 }
 
 type Context struct {
@@ -46,29 +39,19 @@ func HelpCommand(session *discordgo.Session, message *discordgo.MessageCreate, c
 		prefix, _ := Redis.Get("prefix").Result()
 
 		maxlen := 0
-		keys := make([]string, 0, len(com))
-		cmds := make(map[string]*Command)
 
-		for _, command := range com {
-			fmt.Println(command.Name)
-			nameLen := len(command.Name)
-			if nameLen > maxlen {
-				maxlen = nameLen
+		for name, _ := range com {
+			if len(name) > maxlen {
+				maxlen = len(name)
 			}
-			cmds[command.Name] = command
-			keys = append(keys, command.Name)
 		}
-
-		sort.Strings(keys)
 
 		header := "KittehBotGO!"
 		resp := "```md\n"
 		resp += header + "\n" + strings.Repeat("-", len(header)) + "\n\n"
 
-		for _, key := range keys {
-			command := cmds[key]
-
-			resp += fmt.Sprintf("<%s>\n", prefix+command.Name+strings.Repeat(" ", maxlen+1-len(command.Name))+ctx.T("command_"+command.Name+"_help"))
+		for name, _ := range com {
+			resp += fmt.Sprintf("<%s>\n", prefix+name+strings.Repeat(" ", maxlen+1-len(name))+ctx.T("command_"+name+"_help"))
 		}
 
 		resp += "```\n"
@@ -78,7 +61,7 @@ func HelpCommand(session *discordgo.Session, message *discordgo.MessageCreate, c
 	session.ChannelMessageSend(message.ChannelID, HelpCache)
 
 	return nil
-}
+}        
 
 func Setup(r *redis.Client, d *discordgo.Session) {
 	RegisterCommand("help", HelpCommand)
@@ -86,21 +69,16 @@ func Setup(r *redis.Client, d *discordgo.Session) {
 }
 
 func RegisterCommand(Name string, Function CommandFunction) {
-	c := Command{}
-	c.Name = Name
-	c.Function = Function
-	Commands[Name] = &c
+	Commands[Name] = Function
 }
 
-func GetCommand(msg string) (*Command, []string) {
+func GetCommand(msg string) (CommandFunction, string, []string) {
 
 	args := strings.Fields(msg)
 	if len(args) == 0 {
-		return nil, nil
+		return nil, "", nil
 	}
-	if command, init := Commands[args[0]]; init {
-		return command, args[1:]
-	}
+	return Commands[args[0]], args[0], args[0:]
 
 	/*
 		for _, commandin := range com.Commands {
@@ -112,7 +90,6 @@ func GetCommand(msg string) (*Command, []string) {
 		}
 	*/
 
-	return nil, nil
 }
 
 func OnMessageCreate(session *discordgo.Session, message *discordgo.MessageCreate) {
@@ -147,7 +124,7 @@ func OnMessageCreate(session *discordgo.Session, message *discordgo.MessageCreat
 
 			message.Content = strings.TrimPrefix(message.Content, prefix)
 
-			command, args := GetCommand(message.Content)
+			command, name, args := GetCommand(message.Content)
 			if command != nil {
 
 				language, err := Redis.Get("language_" + channel.GuildID).Result()
@@ -159,7 +136,7 @@ func OnMessageCreate(session *discordgo.Session, message *discordgo.MessageCreat
 				T, _ := i18n.Tfunc(language)
 
 				ctx := &Context{
-					Content:   strings.TrimPrefix(message.Content, prefix+command.Name),
+					Content:   strings.TrimPrefix(message.Content, prefix+name),
 					ChannelID: message.ChannelID,
 					GuildID:   channel.GuildID,
 					Type:      channel.Type,
@@ -173,7 +150,7 @@ func OnMessageCreate(session *discordgo.Session, message *discordgo.MessageCreat
 
 				//start := time.Now()
 				/*ret := */
-				go command.Function(session, message, ctx)
+				go command(session, message, ctx)
 				//if ret != nil {
 				//	session.ChannelMessageSend(message.ChannelID, "````go\n"+ret.(*errors.Error).ErrorStack()+"\n```")
 				//}

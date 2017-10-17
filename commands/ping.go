@@ -4,7 +4,7 @@ import (
 	"github.com/NamedKitten/KittehBotGo/util/commands"
 	"github.com/bwmarrin/discordgo"
 	"github.com/go-errors/errors"
-	//"runtime/debug"
+	// "runtime/debug"
 	"time"
 )
 

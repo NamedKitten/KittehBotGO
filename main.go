@@ -106,8 +106,7 @@ func init() {
 }
 
 func main() {
-	bot := bot.New(RedisClient)
-	bot.Start()
+	bot.Start(RedisClient)
 	//log.Println(bot)
 	if flag.Lookup("runDashboard").Value.(flag.Getter).Get().(bool) {
 		go func() {
@@ -184,5 +183,5 @@ func main() {
 	//saveMemMap()
 
 	// Cleanly close down the Discord session.
-	bot.Discord.Close()
+	//bot.Discord.Close()
 }
