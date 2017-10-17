@@ -4,12 +4,11 @@ import (
 	"fmt"
 	"github.com/bwmarrin/discordgo"
 	"github.com/go-redis/redis"
+	"github.com/nicksnyder/go-i18n/i18n"
 	"log"
 	"runtime/debug"
 	"sort"
 	"strings"
- 	"github.com/nicksnyder/go-i18n/i18n"
-	
 )
 
 type CommandFunction func(*discordgo.Session, *discordgo.MessageCreate, *Context) error
@@ -68,7 +67,7 @@ func HelpCommand(session *discordgo.Session, message *discordgo.MessageCreate, c
 		for _, key := range keys {
 			command := cmds[key]
 
-			resp += fmt.Sprintf("<%s>\n", prefix+command.Name+strings.Repeat(" ", maxlen+1-len(command.Name))+ctx.T("command_" + command.Name + "_help"))
+			resp += fmt.Sprintf("<%s>\n", prefix+command.Name+strings.Repeat(" ", maxlen+1-len(command.Name))+ctx.T("command_"+command.Name+"_help"))
 		}
 
 		resp += "```\n"
@@ -120,7 +119,7 @@ func (com *Commands) GetCommand(msg string) (*Command, []string) {
 
 func (com *Commands) OnMessageCreate(session *discordgo.Session, message *discordgo.MessageCreate) {
 	//defer debug.FreeOSMemory()
-	 
+
 	var err error
 
 	if message.Author.ID == session.State.User.ID {
@@ -149,13 +148,13 @@ func (com *Commands) OnMessageCreate(session *discordgo.Session, message *discor
 			origMessage := message.Content
 
 			message.Content = strings.TrimPrefix(message.Content, prefix)
-		
+
 			command, args := com.GetCommand(message.Content)
 			if command != nil {
- 
+
 				language, err := com.Redis.Get("language_" + channel.GuildID).Result()
-				if (err != nil) {
-					com.Redis.Set("language_" + channel.GuildID, "en-GB", 0)
+				if err != nil {
+					com.Redis.Set("language_"+channel.GuildID, "en-GB", 0)
 					language = "en-GB"
 				}
 
@@ -169,29 +168,30 @@ func (com *Commands) OnMessageCreate(session *discordgo.Session, message *discor
 					Commands:  com,
 					HasPrefix: true,
 					Args:      args,
-					T:		   T,                      
+					T:         T,
 				}
 				if len(message.Mentions) > 0 {
 					ctx.HasMention = true
 				}
 
 				//start := time.Now()
-				/*ret := */go command.Function(session, message, ctx)
+				/*ret := */
+				go command.Function(session, message, ctx)
 				//if ret != nil {
 				//	session.ChannelMessageSend(message.ChannelID, "````go\n"+ret.(*errors.Error).ErrorStack()+"\n```")
 				//}
-				//elapsed := time.Since(start)  
+				//elapsed := time.Since(start)
 				//log.Print("Command: " + command.Name + " took " + elapsed.String() + ".")
-				guild, err := session.State.Guild(channel.GuildID) 
-				if (err != nil) {
+				guild, err := session.State.Guild(channel.GuildID)
+				if err != nil {
 					log.Printf("Can't find guild...")
 					return
-				} 
+				}
 				member, memerr := session.State.Member(channel.GuildID, message.Author.ID)
-				if (memerr != nil) {
+				if memerr != nil {
 					log.Printf("Can't find member...")
 					return
-				} 
+				}
 				log.Printf("User %s used command \"%s\" in channel \"#%s\" (%s) and guild \"%s\" (%s)", member.User.Username, origMessage, channel.Name, channel.ID, guild.Name, channel.GuildID)
 				//debug.FreeOSMemory()
 

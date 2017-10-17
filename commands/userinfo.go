@@ -25,26 +25,24 @@ func UserinfoCommand(s *discordgo.Session, m *discordgo.MessageCreate, ctx *comm
 	var status string
 	presence, error := s.State.Presence(ctx.GuildID, m.Author.ID)
 	if error != nil {
-		status = "Offline"
-		game = "None"
+		status = ctx.T("command_userinfo_offline")
+		game = ctx.T("command_userinfo_none")
 	} else {
-		if presence.Game == nil {
-			game = "None"
-		} else if presence.Game.Type == 0 {
-			game = "Playing " + presence.Game.Name
+		if presence.Game.Type == 0 {
+			game = ctx.T("command_userinfo_playing", struct{ Game string }{Game: presence.Game.Name})
 		} else if presence.Game.Type == 1 {
-			game = "Streaming " + presence.Game.Name
+			game = ctx.T("command_userinfo_streaming", struct{ Game string }{Game: presence.Game.Name})
 		}
 
 		if presence.Status == "dnd" {
-			status = "Do Not Disturb"
+			status = ctx.T("command_userinfo_donotdisturb")
 		} else if presence.Status == discordgo.StatusOnline {
-			status = "Online"
+			status = ctx.T("command_userinfo_online")
 		} else if presence.Status == discordgo.StatusIdle {
-			status = "Idle"
-		} else {
-			status = "Offline"
-		}
+			status = ctx.T("command_userinfo_idle")
+		} // else {
+		//	status = "Offline"
+		//}
 		print(status)
 	}
 
@@ -54,23 +52,24 @@ func UserinfoCommand(s *discordgo.Session, m *discordgo.MessageCreate, ctx *comm
 	userSnowflake, _ := strconv.ParseInt(member.User.ID, 10, 64)
 	joinedDiscord := time.Unix((((userSnowflake>>22)+1420070400000)/1000)+int64(zone), 0)
 	fields := make([]*discordgo.MessageEmbedField, 0, 2)
-	fields = append(fields, &discordgo.MessageEmbedField{Name: "**Join dates**:", Value: fmt.Sprintf("**This server**: %s\n**Discord**: %s",
+	fields = append(fields, &discordgo.MessageEmbedField{Name: "**" + ctx.T("command_userinfo_joindates") + "**:", Value: fmt.Sprintf("**"+ctx.T("command_userinfo_thisserver")+"**: %s\n**Discord**: %s",
 		humanize.Time(joined),
 		humanize.Time(joinedDiscord),
 	)})
+	//TODO: multilingual version of gohumanize
 	s.ChannelMessageSendEmbed(m.ChannelID, &discordgo.MessageEmbed{
 		Type: "rich",
 		Author: &discordgo.MessageEmbedAuthor{
 			Name:    m.Author.Username,
 			IconURL: m.Author.AvatarURL("512"),
 		},
-		Description: fmt.Sprintf("**Display name**: %s\n**ID**: %s\n[**Avatar**](%s)\n**Game**: %s", member.User.Username, member.User.ID, member.User.AvatarURL(""), game),
+		Description: fmt.Sprintf("**"+ctx.T("command_userinfo_displayname")+"**: %s\n**ID**: %s\n[**"+ctx.T("command_userinfo_avatar")+"**](%s)\n**"+ctx.T("command_userinfo_game")+"**: %s", member.User.Username, member.User.ID, member.User.AvatarURL(""), game),
 		Thumbnail: &discordgo.MessageEmbedThumbnail{
 			URL: member.User.AvatarURL("512"),
 		},
 		Fields: fields,
 		Footer: &discordgo.MessageEmbedFooter{
-			Text: "Thanks for using KittehBotGO!",
+			Text: ctx.T("command_about_thanks"),
 		},
 	})
 	return nil

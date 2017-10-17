@@ -19,7 +19,7 @@ type Bot struct {
 func New(redis *redis.Client) *Bot {
 	CommandHandler := commands.New(redis)
 	Discord, _ := discordgo.New()
- 	Discord.State.TrackEmojis = false
+	Discord.State.TrackEmojis = false
 	Discord.State.TrackVoice = false
 	//Discord.State.TrackChannels = false
 	Discord.State.MaxMessageCount = 1
@@ -39,9 +39,9 @@ func New(redis *redis.Client) *Bot {
 	CommandHandler.RegisterCommand("luaeval", "Eval lua.", BotCommands.LuaEvalCommand)
 	CommandHandler.RegisterCommand("jseval", "Eval js.", BotCommands.JSEvalCommand)
 	CommandHandler.RegisterCommand("language", "Set language.", BotCommands.LanguageCommand)
-	
+
 	Discord.AddHandler(CommandHandler.MotdEvent)
-	
+
 	return &Bot{CommandHandler: CommandHandler, Redis: redis, Discord: Discord}
 }
 

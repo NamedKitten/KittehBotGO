@@ -10,6 +10,7 @@ import (
 	"runtime/debug"
 	"time"
 )
+
 var startTime = time.Now()
 
 func getDurationString(duration time.Duration) string {
@@ -31,13 +32,13 @@ func AboutCommand(s *discordgo.Session, m *discordgo.MessageCreate, ctx *command
 	fields = append(fields, &discordgo.MessageEmbedField{Name: "**" + ctx.T("command_about_kversion") + "**:", Value: config.VERSION, Inline: true})
 	fields = append(fields, &discordgo.MessageEmbedField{Name: "**" + ctx.T("command_about_gversion") + "**:", Value: runtime.Version(), Inline: true})
 	fields = append(fields, &discordgo.MessageEmbedField{Name: "**" + ctx.T("command_about_dversion") + "**:", Value: discordgo.VERSION, Inline: true})
-	fields = append(fields, &discordgo.MessageEmbedField{Name: "**" + ctx.T ("command_about_memused") + "**:", Value: fmt.Sprintf("%s / %s (%s %s)\n", humanize.Bytes(stats.Alloc), humanize.Bytes(stats.Sys), humanize.Bytes(stats.TotalAlloc), ctx.T("command_about_garbage")), Inline: true})
+	fields = append(fields, &discordgo.MessageEmbedField{Name: "**" + ctx.T("command_about_memused") + "**:", Value: fmt.Sprintf("%s / %s (%s %s)\n", humanize.Bytes(stats.Alloc), humanize.Bytes(stats.Sys), humanize.Bytes(stats.TotalAlloc), ctx.T("command_about_garbage")), Inline: true})
 	fields = append(fields, &discordgo.MessageEmbedField{Name: "**" + ctx.T("command_about_uptime") + "**:", Value: getDurationString(time.Now().Sub(startTime)), Inline: true})
 	fields = append(fields, &discordgo.MessageEmbedField{Name: "**Goroutines**:", Value: fmt.Sprintf("%d", runtime.NumGoroutine()), Inline: true})
 	fields = append(fields, &discordgo.MessageEmbedField{Name: "**" + ctx.T("command_about_servers") + "**:", Value: fmt.Sprintf("%d", len(s.State.Guilds)), Inline: true})
 
 	for _, server := range s.State.Guilds {
-		fmt.Println(server.Name) 
+		fmt.Println(server.Name)
 	}
 
 	s.ChannelMessageSendEmbed(m.ChannelID, &discordgo.MessageEmbed{
@@ -48,7 +49,7 @@ func AboutCommand(s *discordgo.Session, m *discordgo.MessageCreate, ctx *command
 		},
 		Fields: fields,
 		Footer: &discordgo.MessageEmbedFooter{
-			Text: ctx.T("command_about_thanks"),  //"Thanks for using KittehBotGO!",
+			Text: ctx.T("command_about_thanks"), //"Thanks for using KittehBotGO!",
 		},
 	})
 	return nil

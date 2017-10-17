@@ -43,6 +43,42 @@
 - id: command_userinfo_help
   translation: "Gives info about a user"
 
+- id: command_userinfo_none
+  translation: "None"
+
+- id: command_userinfo_offline
+  translation: "Offline"
+
+- id: command_userinfo_online
+  translation: "Online"
+
+- id: command_userinfo_idle
+  translation: "Idle"
+
+- id: command_userinfo_donotdisturb
+  translation: "Do Not Disturb"
+
+- id: command_userinfo_playing
+  translation: "Playing {{.Game}}"
+
+- id: command_userinfo_streaming
+  translation: "Streaming {{.Game}}"
+
+- id: command_userinfo_joindates
+  translation: "Join Dates"
+
+- id: command_userinfo_thisserver
+  translation: "This Server"
+
+- id: command_userinfo_displayname
+  translation: "Display Name"
+
+- id: command_userinfo_avatar
+  translation: "Avatar"
+
+- id: command_userinfo_game
+  translation: "Game"
+
 - id: command_motd_help
   translation: "Message of the day"
 
@@ -87,14 +123,8 @@
 - id: command_luaeval_help
   translation: "Evaluates Lua"
 
-- id: command_luaeval_input
-  translation: "Input"
-
-- id: command_luaeval_output
-  translation: "Output"
-
 - id: command_luaeval_done
   translation: "Done!"
 
-- id: command_luaeval_ownererror
-  translation: "You need to be the owner to use this command."
+- id: command_xkcd_help
+  translation: "Fetch the latest xkcd comic"

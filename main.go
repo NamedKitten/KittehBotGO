@@ -8,12 +8,13 @@ import (
 	"fmt"
 	"github.com/NamedKitten/KittehBotGo/config"
 	"github.com/NamedKitten/KittehBotGo/util/bot"
-	"github.com/NamedKitten/KittehBotGo/util/static"
 	"github.com/NamedKitten/KittehBotGo/util/internaldb"
-    	//"github.com/elazarl/go-bindata-assetfs"
+	"github.com/NamedKitten/KittehBotGo/util/static"
+	//"github.com/elazarl/go-bindata-assetfs"
 	"github.com/go-redis/redis"
 	//_ "net/http/pprof"
 	//_ "golang.org/x/mobile/app"
+	_ "github.com/NamedKitten/KittehBotGo/util/i18n"
 	"github.com/googollee/go-socket.io"
 	"log"
 	"net/http"
@@ -24,9 +25,7 @@ import (
 	"strings"
 	"sync"
 	"syscall"
-	"time"  
-	_ 	"github.com/NamedKitten/KittehBotGo/util/i18n"
-	
+	"time"
 )
 
 var RedisClient *redis.Client

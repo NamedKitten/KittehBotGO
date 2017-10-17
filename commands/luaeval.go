@@ -19,7 +19,7 @@ func LuaEvalCommand(s *discordgo.Session, m *discordgo.MessageCreate, ctx *comma
 	application, _ := s.Application("@me")
 
 	if application.Owner.ID != m.Author.ID {
-		go s.ChannelMessageSend(m.ChannelID, ctx.T("command_luaeval_ownererror"))
+		go s.ChannelMessageSend(m.ChannelID, ctx.T("command_jseval_ownererror"))
 		return nil
 	}
 
@@ -28,8 +28,8 @@ func LuaEvalCommand(s *discordgo.Session, m *discordgo.MessageCreate, ctx *comma
 		stuff := strings.Join(ctx.Args[0:], " ")
 
 		err := lua.DoString(l, stuff)
-		if err != nil {			
-			go s.ChannelMessageSend(m.ChannelID, fmt.Sprintf("$s:\n```lua\n%s\n```\nOutput:\n```lua\n%s\n```", stuff, err))
+		if err != nil {
+			go s.ChannelMessageSend(m.ChannelID, fmt.Sprintf("%s:\n```lua\n%s\n```\n%s:\n```lua\n%s\n```", ctx.T("command_jseval_input"), stuff, ctx.T("command_jseval_output"), err))
 
 		} else {
 			go s.ChannelMessageSend(m.ChannelID, ctx.T("command_luaeval_done"))
