@@ -11,14 +11,14 @@ import (
 type EventFunc func(*Bot, *discordgo.Session, interface{})
 
 type Bot struct {
-	Redis          *redis.Client
-	CommandHandler *commands.Commands
-	Discord        *discordgo.Session
+	Redis   *redis.Client
+	Discord *discordgo.Session
 }
 
 func New(redis *redis.Client) *Bot {
-	CommandHandler := commands.New(redis)
 	Discord, _ := discordgo.New()
+	commands.Setup(redis, Discord)
+
 	Discord.State.TrackEmojis = false
 	Discord.State.TrackVoice = false
 	//Discord.State.TrackChannels = false
@@ -27,22 +27,20 @@ func New(redis *redis.Client) *Bot {
 	Discord.SyncEvents = true
 	Discord.Compress = false
 
-	Discord.AddHandler(CommandHandler.OnMessageCreate)
-	CommandHandler.RegisterCommand("ping", "Ping!", BotCommands.PingCommand)
-	CommandHandler.RegisterCommand("about", "Give info about bot.", BotCommands.AboutCommand)
-	CommandHandler.RegisterCommand("echo", "Echo echo echo...", BotCommands.EchoCommand)
-	CommandHandler.RegisterCommand("userinfo", "Gives info about a user.", BotCommands.UserinfoCommand)
-	//CommandHandler.RegisterCommand("weeb", "Does weeb stuff.", BotCommands.WeebCommand)
-	CommandHandler.RegisterCommand("motd", "Message of the day.", BotCommands.MotdCommand)
-	CommandHandler.RegisterCommand("goodbot", "Call me a good bot.", BotCommands.GoodBotCommand)
-	CommandHandler.RegisterCommand("xkcd", "Get a xkcd.", BotCommands.XkcdCommand)
-	CommandHandler.RegisterCommand("luaeval", "Eval lua.", BotCommands.LuaEvalCommand)
-	CommandHandler.RegisterCommand("jseval", "Eval js.", BotCommands.JSEvalCommand)
-	CommandHandler.RegisterCommand("language", "Set language.", BotCommands.LanguageCommand)
+	Discord.AddHandler(commands.OnMessageCreate)
+	commands.RegisterCommand("ping", BotCommands.PingCommand)
+	commands.RegisterCommand("about", BotCommands.AboutCommand)
+	commands.RegisterCommand("echo", BotCommands.EchoCommand)
+	commands.RegisterCommand("userinfo", BotCommands.UserinfoCommand)
+	commands.RegisterCommand("motd", BotCommands.MotdCommand)
+	commands.RegisterCommand("goodbot", BotCommands.GoodBotCommand)
+	commands.RegisterCommand("xkcd", BotCommands.XkcdCommand)
+	commands.RegisterCommand("luaeval", BotCommands.LuaEvalCommand)
+	commands.RegisterCommand("jseval", BotCommands.JSEvalCommand)
+	commands.RegisterCommand("language", BotCommands.LanguageCommand)
+	Discord.AddHandler(BotCommands.MotdEvent)
 
-	Discord.AddHandler(CommandHandler.MotdEvent)
-
-	return &Bot{CommandHandler: CommandHandler, Redis: redis, Discord: Discord}
+	return &Bot{Redis: redis, Discord: Discord}
 }
 
 func (bot *Bot) Start() {

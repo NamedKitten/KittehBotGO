@@ -14,7 +14,7 @@ func LanguageCommand(s *discordgo.Session, m *discordgo.MessageCreate, ctx *comm
 			//	s.ChannelMessageSend(m.ChannelID, "You need to be the owner to use this command.")
 			//	return nil
 			//} else {
-			ctx.Commands.Redis.Set("language_"+ctx.GuildID, ctx.Args[1], 0)
+			commands.Redis.Set("language_"+ctx.GuildID, ctx.Args[1], 0)
 			s.ChannelMessageSend(m.ChannelID, ctx.T("command_language_success"))
 			//}
 		}

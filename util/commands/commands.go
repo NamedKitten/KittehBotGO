@@ -11,18 +11,20 @@ import (
 	"strings"
 )
 
+var Redis *redis.Client
+var Commands map[string]*Command
+var HelpCache string
+var Discord *discordgo.Session
+
+func init() {
+	Commands = make(map[string]*Command)
+}
+
 type CommandFunction func(*discordgo.Session, *discordgo.MessageCreate, *Context) error
 
 type Command struct {
-	Name      string
-	ShortHelp string
-	Function  CommandFunction
-}
-
-type Commands struct {
-	Commands  map[string]*Command
-	Redis     *redis.Client
-	HelpCache string
+	Name     string
+	Function CommandFunction
 }
 
 type Context struct {
@@ -34,21 +36,20 @@ type Context struct {
 	Type       discordgo.ChannelType
 	HasPrefix  bool
 	HasMention bool
-	Commands   *Commands
 }
 
 func HelpCommand(session *discordgo.Session, message *discordgo.MessageCreate, ctx *Context) error {
 	defer debug.FreeOSMemory()
 
-	com := ctx.Commands
+	com := Commands
 	if true {
-		prefix, _ := com.Redis.Get("prefix").Result()
+		prefix, _ := Redis.Get("prefix").Result()
 
 		maxlen := 0
-		keys := make([]string, 0, len(com.Commands))
+		keys := make([]string, 0, len(com))
 		cmds := make(map[string]*Command)
 
-		for _, command := range com.Commands {
+		for _, command := range com {
 			fmt.Println(command.Name)
 			nameLen := len(command.Name)
 			if nameLen > maxlen {
@@ -71,36 +72,33 @@ func HelpCommand(session *discordgo.Session, message *discordgo.MessageCreate, c
 		}
 
 		resp += "```\n"
-		com.HelpCache = resp
+		HelpCache = resp
 	}
 
-	session.ChannelMessageSend(message.ChannelID, com.HelpCache)
+	session.ChannelMessageSend(message.ChannelID, HelpCache)
 
 	return nil
 }
 
-func New(r *redis.Client) *Commands {
-	c := &Commands{Commands: make(map[string]*Command)}
-	c.RegisterCommand("help", "Provides command help.", HelpCommand)
-	c.Redis = r
-	return c
+func Setup(r *redis.Client, d *discordgo.Session) {
+	RegisterCommand("help", HelpCommand)
+	Redis = r
 }
 
-func (com *Commands) RegisterCommand(Name, ShortHelp string, Function CommandFunction) {
+func RegisterCommand(Name string, Function CommandFunction) {
 	c := Command{}
 	c.Name = Name
-	c.ShortHelp = ShortHelp
 	c.Function = Function
-	com.Commands[Name] = &c
+	Commands[Name] = &c
 }
 
-func (com *Commands) GetCommand(msg string) (*Command, []string) {
+func GetCommand(msg string) (*Command, []string) {
 
 	args := strings.Fields(msg)
 	if len(args) == 0 {
 		return nil, nil
 	}
-	if command, init := com.Commands[args[0]]; init {
+	if command, init := Commands[args[0]]; init {
 		return command, args[1:]
 	}
 
@@ -117,7 +115,7 @@ func (com *Commands) GetCommand(msg string) (*Command, []string) {
 	return nil, nil
 }
 
-func (com *Commands) OnMessageCreate(session *discordgo.Session, message *discordgo.MessageCreate) {
+func OnMessageCreate(session *discordgo.Session, message *discordgo.MessageCreate) {
 	//defer debug.FreeOSMemory()
 
 	var err error
@@ -140,7 +138,7 @@ func (com *Commands) OnMessageCreate(session *discordgo.Session, message *discor
 		}
 	}
 
-	prefix, _ := com.Redis.Get("prefix").Result()
+	prefix, _ := Redis.Get("prefix").Result()
 
 	if len(prefix) > 0 {
 
@@ -149,12 +147,12 @@ func (com *Commands) OnMessageCreate(session *discordgo.Session, message *discor
 
 			message.Content = strings.TrimPrefix(message.Content, prefix)
 
-			command, args := com.GetCommand(message.Content)
+			command, args := GetCommand(message.Content)
 			if command != nil {
 
-				language, err := com.Redis.Get("language_" + channel.GuildID).Result()
+				language, err := Redis.Get("language_" + channel.GuildID).Result()
 				if err != nil {
-					com.Redis.Set("language_"+channel.GuildID, "en-GB", 0)
+					Redis.Set("language_"+channel.GuildID, "en-GB", 0)
 					language = "en-GB"
 				}
 
@@ -165,7 +163,6 @@ func (com *Commands) OnMessageCreate(session *discordgo.Session, message *discor
 					ChannelID: message.ChannelID,
 					GuildID:   channel.GuildID,
 					Type:      channel.Type,
-					Commands:  com,
 					HasPrefix: true,
 					Args:      args,
 					T:         T,
@@ -200,17 +197,6 @@ func (com *Commands) OnMessageCreate(session *discordgo.Session, message *discor
 		}
 	}
 	return
-}
-
-func (com *Commands) MotdEvent(s *discordgo.Session, m *discordgo.GuildMemberAdd) {
-	motd, err := com.Redis.Get("motd_" + m.GuildID).Result()
-	motdchannel, channelerr := com.Redis.Get("motd_" + m.GuildID + "_channel").Result()
-
-	if err != nil || channelerr != nil {
-		return
-	} else {
-		go s.ChannelMessageSend(motdchannel, motd)
-	}
 }
 
 /*
