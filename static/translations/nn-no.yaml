@@ -43,6 +43,42 @@
 - id: command_userinfo_help
   translation: "Gir info om ein brukar"
 
+- id: command_userinfo_none
+  translation: "Ingen"
+
+- id: command_userinfo_offline
+  translation: "Logga av"
+
+- id: command_userinfo_online
+  translation: "Logga på"
+
+- id: command_userinfo_idle
+  translation: "Ledig"
+
+- id: command_userinfo_donotdisturb
+  translation: "Ikkje forstyrr"
+
+- id: command_userinfo_playing
+  translation: "Spelar {{.Game}}"
+
+- id: command_userinfo_streaming
+  translation: "Strøymer {{.Game}}"
+
+- id: command_userinfo_joindates
+  translation: "Datoar blitt med"
+
+- id: command_userinfo_thisserver
+  translation: "Denne serveren"
+
+- id: command_userinfo_displayname
+  translation: "Visningsnamn"
+
+- id: command_userinfo_avatar
+  translation: "Avatar"
+
+- id: command_userinfo_game
+  translation: "Spel"
+
 - id: command_motd_help
   translation: "Dagens melding"
 
@@ -96,5 +132,5 @@
 - id: command_luaeval_done
   translation: "Ferdig!"
 
-- id: command_luaeval_ownererror
-  translation: "Du må vere eigaren for å bruke denne kommandoen."
+- id: command_xkcd_help
+  translation: "Hent den nyaste xkcd-teikneserien"
