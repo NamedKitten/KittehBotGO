@@ -43,6 +43,42 @@
 - id: command_userinfo_help
   translation: "Gir info om en bruker"
 
+- id: command_userinfo_none
+  translation: "Ingen"
+
+- id: command_userinfo_offline
+  translation: "Logget av"
+
+- id: command_userinfo_online
+  translation: "Logget på"
+
+- id: command_userinfo_idle
+  translation: "Ledig"
+
+- id: command_userinfo_donotdisturb
+  translation: "Ikke forstytt"
+
+- id: command_userinfo_playing
+  translation: "Spiller {{.Game}}"
+
+- id: command_userinfo_streaming
+  translation: "Strømmer {{.Game}}"
+
+- id: command_userinfo_joindates
+  translation: "Datoer blitt med"
+
+- id: command_userinfo_thisserver
+  translation: "Denne serveren"
+
+- id: command_userinfo_displayname
+  translation: "Visningsnavn"
+
+- id: command_userinfo_avatar
+  translation: "Avatar"
+
+- id: command_userinfo_game
+  translation: "Spill"
+
 - id: command_motd_help
   translation: "Dagens melding"
 
@@ -64,13 +100,13 @@
 - id: command_ping_result
   translation: "Ping! Tiden det tok for å sende melding: `{{.Elapsed}}`."
 
+- id: command_goodbot_help
+  translation: "Kall meg en god bot"
+
 - id: command_goodbot_thanks
   translation:
     one: "Takk! {{.Count}} person har kalt meg en god bot."
     other: "Takk! {{.Count}} personer har kalt meg en god bot."
-
-- id: command_goodbot_help
-  translation: "Kall meg en god bot"
 
 - id: command_jseval_help
   translation: "Evaluerer JavaScript"
@@ -96,5 +132,5 @@
 - id: command_luaeval_done
   translation: "Ferdig!"
 
-- id: command_luaeval_ownererror
-  translation: "Du må være eieren for å bruke denne kommandoen."
+- id: command_xkcd_help
+  translation: "Hent den nyeste xkcd-tegneserien"
