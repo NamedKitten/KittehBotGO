@@ -106,7 +106,7 @@
 - id: command_goodbot_thanks
   translation:
     one: "Merchi ! {{.Count}} personnes m'ont appelé un bon bot."
-    other: "%erchi ! {{.Count}} humains m'ont appelé un bon bot."
+    other: "Merchi ! {{.Count}} humains m'ont appelé un bon bot."
 
 - id: command_jseval_help
   translation: "Évalue et exécute du javascript"
