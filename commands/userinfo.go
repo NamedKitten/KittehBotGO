@@ -11,6 +11,10 @@ import (
 	"time"
 )
 
+func init() {
+	commands.RegisterCommand("userinfo", UserinfoCommand)
+}
+
 func UserinfoCommand(s *discordgo.Session, m *discordgo.MessageCreate, ctx *commands.Context) error {
 	//channel, err := s.State.Channel(m.ChannelID)
 	//if err != nil {

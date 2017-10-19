@@ -12,6 +12,9 @@ import (
 
 var l = lua.NewState()
 
+func init() {
+	commands.RegisterCommand("luaeval", LuaEvalCommand)
+}
 func LuaEvalCommand(s *discordgo.Session, m *discordgo.MessageCreate, ctx *commands.Context) error {
 	defer debug.FreeOSMemory()
 	lua.OpenLibraries(l)

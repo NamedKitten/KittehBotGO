@@ -12,6 +12,9 @@ import (
 
 var vm = otto.New()
 
+func init() {
+	commands.RegisterCommand("jseval", JSEvalCommand)
+}
 func JSEvalCommand(s *discordgo.Session, m *discordgo.MessageCreate, ctx *commands.Context) error {
 	defer debug.FreeOSMemory()
 

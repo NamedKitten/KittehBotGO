@@ -9,6 +9,9 @@ import (
 	//"github.com/go-errors/errors"
 )
 
+func init() {
+	commands.RegisterCommand("goodbot", GoodBotCommand)
+}
 func GoodBotCommand(s *discordgo.Session, m *discordgo.MessageCreate, ctx *commands.Context) error {
 	defer debug.FreeOSMemory()
 

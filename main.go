@@ -6,8 +6,10 @@ import (
 	"bufio"
 	"flag"
 	"fmt"
+	_ "github.com/NamedKitten/KittehBotGo/commands"
 	"github.com/NamedKitten/KittehBotGo/config"
 	"github.com/NamedKitten/KittehBotGo/util/bot"
+	"github.com/NamedKitten/KittehBotGo/util/commands"
 	"github.com/NamedKitten/KittehBotGo/util/internaldb"
 	"github.com/NamedKitten/KittehBotGo/util/static"
 	//"github.com/elazarl/go-bindata-assetfs"
@@ -185,5 +187,5 @@ func main() {
 	//saveMemMap()
 
 	// Cleanly close down the Discord session.
-	//bot.Discord.Close()
+	commands.Discord.Close()
 }

@@ -12,6 +12,9 @@ import (
 
 var client = xkcd.NewClient()
 
+func init() {
+	commands.RegisterCommand("xkcd", XkcdCommand)
+}
 func XkcdCommand(s *discordgo.Session, m *discordgo.MessageCreate, ctx *commands.Context) error {
 	defer debug.FreeOSMemory()
 

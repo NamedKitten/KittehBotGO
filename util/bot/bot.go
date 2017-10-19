@@ -2,7 +2,6 @@ package bot
 
 import (
 	"fmt"
-	"github.com/NamedKitten/KittehBotGo/commands"
 	"github.com/NamedKitten/KittehBotGo/util/commands"
 	//"github.com/bwmarrin/discordgo"
 	"github.com/go-redis/redis"
@@ -18,14 +17,6 @@ func Start(redis *redis.Client) {
 	commands.Discord.LogLevel = 1
 	commands.Discord.SyncEvents = true
 	commands.Discord.Compress = true
-	commands.RegisterCommand("userinfo", BotCommands.UserinfoCommand)
-
-	commands.RegisterCommand("goodbot", BotCommands.GoodBotCommand)
-	commands.RegisterCommand("xkcd", BotCommands.XkcdCommand)
-	commands.RegisterCommand("luaeval", BotCommands.LuaEvalCommand)
-	commands.RegisterCommand("jseval", BotCommands.JSEvalCommand)
-	commands.RegisterCommand("language", BotCommands.LanguageCommand)
-
 	fmt.Println("Getting token...")
 	token, err := commands.Redis.Get("token").Result()
 	if err != nil {

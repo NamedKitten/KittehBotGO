@@ -6,6 +6,10 @@ import (
 	"runtime/debug"
 )
 
+func init() {
+	commands.RegisterCommand("language", LanguageCommand)
+}
+
 func LanguageCommand(s *discordgo.Session, m *discordgo.MessageCreate, ctx *commands.Context) error {
 	defer debug.FreeOSMemory()
 	if len(ctx.Args) > 1 {
