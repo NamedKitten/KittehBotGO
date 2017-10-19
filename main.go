@@ -61,7 +61,7 @@ func setup() {
 }
 
 func init() {
-	runtime.GOMAXPROCS(runtime.NumCPU() + 4)
+	//runtime.GOMAXPROCS(runtime.NumCPU() + 4)
 	//debug.SetGCPercent(1)
 
 	updateInterval := flag.Int("updateInterval", 100, "How often the dashboard gets updated in miliseconds.")
