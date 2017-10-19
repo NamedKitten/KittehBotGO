@@ -8,6 +8,12 @@ import (
 	"strings"
 )
 
+var Password string = ""
+
+type Conn struct {
+	IsAuthenticated bool
+}
+
 func Start(file string, port int) {
 	db, _ := buntdb.Open(file)
 	addr := fmt.Sprintf("0.0.0.0:%d", port)
@@ -45,14 +51,26 @@ func Start(file string, port int) {
 				conn.Close()
 				return
 			case "auth":
-				go log.Println("InternalDB: Auth not implemented.")
-				// We don't currently support auth however,
-				// We could take the password set in args,
-				// And then make it require that password,
-				// That will stop unauthorised users from connecting on the network.
-				conn.WriteString("OK")
+				if Password == "" {
+					conn.WriteString("OK")
+					return
+				}
+				if len(cmd.Args) != 2 {
+					conn.WriteError("ERR wrong number of arguments for '" + string(cmd.Args[0]) + "' command")
+					return
+				}
+				if string(cmd.Args[1]) == Password {
+					conn.WriteString("OK")
+					conn.SetContext(true)
+				} else {
+					conn.WriteError("ERR invalid password")
+				}
 				return
 			case "set":
+				if conn.Context() != true {
+					conn.WriteError("NOAUTH Authentication required.")
+					return
+				}
 				if len(cmd.Args) != 3 {
 					conn.WriteError("ERR wrong number of arguments for '" + string(cmd.Args[0]) + "' command")
 					return
@@ -68,6 +86,10 @@ func Start(file string, port int) {
 					conn.WriteString("OK")
 				}
 			case "get":
+				if conn.Context() != true {
+					conn.WriteError("NOAUTH Authentication required.")
+					return
+				}
 				if len(cmd.Args) != 2 {
 					conn.WriteError("ERR wrong number of arguments for '" + string(cmd.Args[0]) + "' command")
 					return
@@ -86,6 +108,10 @@ func Start(file string, port int) {
 				}
 
 			case "del":
+				if conn.Context() != true {
+					conn.WriteError("(error) NOAUTH Authentication required.")
+					return
+				}
 				if len(cmd.Args) != 2 {
 					conn.WriteError("ERR wrong number of arguments for '" + string(cmd.Args[0]) + "' command")
 					return
@@ -102,13 +128,12 @@ func Start(file string, port int) {
 			}
 		},
 		func(conn redcon.Conn) bool {
-			// use this function to accept or deny the connection.
+			go conn.SetContext(false)
 			go log.Printf("InternalDB: Accept %s", conn.RemoteAddr())
 			return true
 		},
 		func(conn redcon.Conn, err error) {
-			// this is called when the connection has been closed
-			// log.Printf("closed: %s, err: %v", conn.RemoteAddr(), err)
+			log.Printf("InternalDB: Disconnect %s, err: %v", conn.RemoteAddr(), err)
 		},
 	)
 	if err != nil {

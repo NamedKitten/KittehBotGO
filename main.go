@@ -70,10 +70,10 @@ func init() {
 	version := flag.Bool("version", false, "Print version and exit.")
 	runSetup := flag.Bool("runSetup", false, "Run setup?")
 	internalDBFile := flag.String("internalDBFile", "", "File to save data to for internal redis server.")
-
 	flag.Bool("runDashboard", true, "Run dashboard?")
 
 	flag.Parse()
+	redisPass := *redisPassword
 	UpdateInterval = *updateInterval
 	if *version {
 		fmt.Println(config.VERSION)
@@ -81,12 +81,13 @@ func init() {
 	}
 
 	if *internalDBFile != "" {
+		database.Password = redisPass
 		go database.Start(*internalDBFile, *redisPort)
 	}
 
 	RedisClient = redis.NewClient(&redis.Options{
 		Addr:         fmt.Sprintf("%s:%d", *redisIP, *redisPort),
-		Password:     *redisPassword,
+		Password:     redisPass,
 		DB:           *redisDB,
 		DialTimeout:  10 * time.Second,
 		ReadTimeout:  30 * time.Second,
@@ -95,7 +96,8 @@ func init() {
 		PoolTimeout:  30 * time.Second,
 	})
 	pong, err := RedisClient.Ping().Result()
-	if err != nil || pong != "PONG" {
+	if pong != "PONG" {
+		print(pong)
 		fmt.Println("Couldn't connect to redis...")
 		panic(err)
 	}
