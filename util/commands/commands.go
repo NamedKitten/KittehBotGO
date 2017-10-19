@@ -9,6 +9,7 @@ import (
 	"runtime/debug"
 	"strings"
 )
+
 type CommandFunction func(*discordgo.Session, *discordgo.MessageCreate, *Context) error
 
 var Redis *redis.Client
@@ -18,6 +19,9 @@ var Discord *discordgo.Session
 
 func init() {
 	Commands = make(map[string]CommandFunction)
+	Discord, _ = discordgo.New()
+	Discord.AddHandler(OnMessageCreate)
+	RegisterCommand("help", HelpCommand)
 }
 
 type Context struct {
@@ -40,7 +44,7 @@ func HelpCommand(session *discordgo.Session, message *discordgo.MessageCreate, c
 
 		maxlen := 0
 
-		for name, _ := range com {
+		for name := range com {
 			if len(name) > maxlen {
 				maxlen = len(name)
 			}
@@ -50,7 +54,7 @@ func HelpCommand(session *discordgo.Session, message *discordgo.MessageCreate, c
 		resp := "```md\n"
 		resp += header + "\n" + strings.Repeat("-", len(header)) + "\n\n"
 
-		for name, _ := range com {
+		for name := range com {
 			resp += fmt.Sprintf("<%s>\n", prefix+name+strings.Repeat(" ", maxlen+1-len(name))+ctx.T("command_"+name+"_help"))
 		}
 
@@ -61,10 +65,9 @@ func HelpCommand(session *discordgo.Session, message *discordgo.MessageCreate, c
 	session.ChannelMessageSend(message.ChannelID, HelpCache)
 
 	return nil
-}        
+}
 
-func Setup(r *redis.Client, d *discordgo.Session) {
-	RegisterCommand("help", HelpCommand)
+func Setup(r *redis.Client) {
 	Redis = r
 }
 
@@ -78,7 +81,7 @@ func GetCommand(msg string) (CommandFunction, string, []string) {
 	if len(args) == 0 {
 		return nil, "", nil
 	}
-	return Commands[args[0]], args[0], args[0:]
+	return Commands[args[0]], args[0], args[1:]
 
 	/*
 		for _, commandin := range com.Commands {
@@ -150,7 +153,7 @@ func OnMessageCreate(session *discordgo.Session, message *discordgo.MessageCreat
 
 				//start := time.Now()
 				/*ret := */
-				go command(session, message, ctx)
+				command(session, message, ctx)
 				//if ret != nil {
 				//	session.ChannelMessageSend(message.ChannelID, "````go\n"+ret.(*errors.Error).ErrorStack()+"\n```")
 				//}

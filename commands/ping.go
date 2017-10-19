@@ -8,6 +8,10 @@ import (
 	"time"
 )
 
+func init() {
+	commands.RegisterCommand("ping", PingCommand)
+}
+
 func PingCommand(s *discordgo.Session, m *discordgo.MessageCreate, ctx *commands.Context) error {
 	//defer debug.FreeOSMemory()
 	start := time.Now()

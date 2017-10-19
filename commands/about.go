@@ -11,6 +11,10 @@ import (
 	"time"
 )
 
+func init() {
+	commands.RegisterCommand("about", AboutCommand)
+}
+
 var startTime = time.Now()
 
 func getDurationString(duration time.Duration) string {

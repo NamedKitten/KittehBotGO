@@ -69,8 +69,7 @@ func init() {
 	redisDB := flag.Int("redisDB", 0, "DB ID for redis server.")
 	version := flag.Bool("version", false, "Print version and exit.")
 	runSetup := flag.Bool("runSetup", false, "Run setup?")
-	useInternalDB := flag.Bool("useInternalDB", false, "Use built in redis?")
-	internalDBFile := flag.String("internalDBFile", "", "File to save data to for internal redis server   .")
+	internalDBFile := flag.String("internalDBFile", "", "File to save data to for internal redis server.")
 
 	flag.Bool("runDashboard", true, "Run dashboard?")
 
@@ -78,9 +77,10 @@ func init() {
 	UpdateInterval = *updateInterval
 	if *version {
 		fmt.Println(config.VERSION)
+		panic(1)
 	}
 
-	if *useInternalDB {
+	if *internalDBFile != "" {
 		go database.Start(*internalDBFile, *redisPort)
 	}
 

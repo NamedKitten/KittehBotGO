@@ -6,6 +6,7 @@ import (
 	"github.com/bwmarrin/discordgo"
 	"github.com/dustin/go-humanize"
 	//"github.com/go-errors/errors"
+	//"github.com/NamedKitten/KittehBotGo/util/i18n"
 	"strconv"
 	"time"
 )
@@ -28,7 +29,9 @@ func UserinfoCommand(s *discordgo.Session, m *discordgo.MessageCreate, ctx *comm
 		status = ctx.T("command_userinfo_offline")
 		game = ctx.T("command_userinfo_none")
 	} else {
-		if presence.Game.Type == 0 {
+		if presence.Game == nil {
+			game = "None"
+		} else if presence.Game.Type == 0 {
 			game = ctx.T("command_userinfo_playing", struct{ Game string }{Game: presence.Game.Name})
 		} else if presence.Game.Type == 1 {
 			game = ctx.T("command_userinfo_streaming", struct{ Game string }{Game: presence.Game.Name})

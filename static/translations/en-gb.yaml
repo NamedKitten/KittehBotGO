@@ -128,3 +128,31 @@
 
 - id: command_xkcd_help
   translation: "Fetch the latest xkcd comic"
+
+- id: humanize_now
+  translation: "now"
+
+- id: humanize_second_ago
+  translation:
+    one: "{{.Count}} second ago"
+    other: "{{.Count}} seconds ago"
+
+- id: humanize_minute_ago
+  translation:
+    one: "{{.Count}} minute ago"
+    other: "{{.Count}} minutes ago"
+
+- id: humanize_hour_ago
+  translation:
+    one: "{{.Count}} hour ago"
+    other: "{{.Count}} hours ago"
+
+- id: humanize_day_ago
+  translation:
+    one: "{{.Count}} day ago"
+    other: "{{.Count}} days ago"
+
+- id: humanize_year_ago
+  translation:
+    one: "{{.Count}} year ago"
+    other: "{{.Count}} years ago"

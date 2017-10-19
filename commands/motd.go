@@ -8,6 +8,11 @@ import (
 	//"github.com/go-errors/errors"
 )
 
+func init() {
+	commands.RegisterCommand("motd", MotdCommand)
+	commands.Discord.AddHandler(MotdEvent)
+}
+
 func MotdCommand(s *discordgo.Session, m *discordgo.MessageCreate, ctx *commands.Context) error {
 	defer debug.FreeOSMemory()
 	prefix, _ := commands.Redis.Get("prefix").Result()

@@ -16,21 +16,42 @@ func Start(file string, port int) {
 		func(conn redcon.Conn, cmd redcon.Command) {
 			switch strings.ToLower(string(cmd.Args[0])) {
 			default:
-				conn.WriteError("ERR unknown command '" + string(cmd.Args[0]) + "'")
+				buff := ""
+				for index, arg := range cmd.Args {
+					buff += string(arg)
+					if index+1 != len(cmd.Args) {
+						buff += " "
+					}
+				}
+				conn.WriteError("ERR unknown command '" + buff + "'")
 			case "detach":
 				hconn := conn.Detach()
-				log.Printf("connection has been detached")
+				log.Println("Connection has been detached.")
 				go func() {
 					defer hconn.Close()
 					hconn.WriteString("OK")
 					hconn.Flush()
 				}()
 				return
+			case "select":
+				log.Println("DB select not implemented.")
+				conn.WriteString("OK")
+				return
 			case "ping":
 				conn.WriteString("PONG")
+				return
 			case "quit":
 				conn.WriteString("OK")
 				conn.Close()
+				return
+			case "auth":
+				log.Println("Auth not implemented.")
+				// We don't currently support auth however,
+				// We could take the password set in args,
+				// And then make it require that password,
+				// That will stop unauthorised users from connecting on the network.
+				conn.WriteString("OK")
+				return
 			case "set":
 				if len(cmd.Args) != 3 {
 					conn.WriteError("ERR wrong number of arguments for '" + string(cmd.Args[0]) + "' command")

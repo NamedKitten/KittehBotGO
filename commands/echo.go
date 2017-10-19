@@ -9,6 +9,10 @@ import (
 	//"github.com/go-errors/errors"
 )
 
+func init() {
+	commands.RegisterCommand("echo", EchoCommand)
+}
+
 func EchoCommand(s *discordgo.Session, m *discordgo.MessageCreate, ctx *commands.Context) error {
 	defer debug.FreeOSMemory()
 	go s.ChannelMessageSendEmbed(m.ChannelID, &discordgo.MessageEmbed{
