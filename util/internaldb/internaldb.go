@@ -10,8 +10,8 @@ import (
 
 func Start(file string, port int) {
 	db, _ := buntdb.Open(file)
-	addr := fmt.Sprintf(":%d", port)
-	go log.Printf("started server at %s", addr)
+	addr := fmt.Sprintf("0.0.0.0:%d", port)
+	go log.Printf("InternalDB: Started server at %s", addr)
 	err := redcon.ListenAndServe(addr,
 		func(conn redcon.Conn, cmd redcon.Command) {
 			switch strings.ToLower(string(cmd.Args[0])) {
@@ -26,7 +26,7 @@ func Start(file string, port int) {
 				conn.WriteError("ERR unknown command '" + buff + "'")
 			case "detach":
 				hconn := conn.Detach()
-				log.Println("Connection has been detached.")
+				go log.Println("InternalDB: Cnnection has been detached.")
 				go func() {
 					defer hconn.Close()
 					hconn.WriteString("OK")
@@ -34,7 +34,7 @@ func Start(file string, port int) {
 				}()
 				return
 			case "select":
-				log.Println("DB select not implemented.")
+				go log.Println("DB select not implemented.")
 				conn.WriteString("OK")
 				return
 			case "ping":
@@ -45,7 +45,7 @@ func Start(file string, port int) {
 				conn.Close()
 				return
 			case "auth":
-				log.Println("Auth not implemented.")
+				go log.Println("InternalDB: Auth not implemented.")
 				// We don't currently support auth however,
 				// We could take the password set in args,
 				// And then make it require that password,
@@ -103,7 +103,7 @@ func Start(file string, port int) {
 		},
 		func(conn redcon.Conn) bool {
 			// use this function to accept or deny the connection.
-			// log.Printf("accept: %s", conn.RemoteAddr())
+			go log.Printf("InternalDB: Accept %s", conn.RemoteAddr())
 			return true
 		},
 		func(conn redcon.Conn, err error) {
