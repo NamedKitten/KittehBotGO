@@ -59,7 +59,8 @@ func UserinfoCommand(s *discordgo.Session, m *discordgo.MessageCreate, ctx *comm
 	userSnowflake, _ := strconv.ParseInt(member.User.ID, 10, 64)
 	joinedDiscord := time.Unix((((userSnowflake>>22)+1420070400000)/1000)+int64(zone), 0)
 	fields := make([]*discordgo.MessageEmbedField, 0, 2)
-	fields = append(fields, &discordgo.MessageEmbedField{Name: "**" + ctx.T("command_userinfo_joindates") + "**:", Value: fmt.Sprintf("**"+ctx.T("command_userinfo_thisserver")+"**: %s\n**Discord**: %s",
+	fields = append(fields, &discordgo.MessageEmbedField{Name: "**" + ctx.T("command_userinfo_joindates") + "**:", Value: fmt.Sprintf("**%s**: %s\n**Discord**: %s",
+		ctx.T("command_userinfo_thisserver"), 
 		humanize.Time(joined),
 		humanize.Time(joinedDiscord),
 	)})
@@ -70,7 +71,14 @@ func UserinfoCommand(s *discordgo.Session, m *discordgo.MessageCreate, ctx *comm
 			Name:    m.Author.Username,
 			IconURL: m.Author.AvatarURL("512"),
 		},
-		Description: fmt.Sprintf("**"+ctx.T("command_userinfo_displayname")+"**: %s\n**ID**: %s\n[**"+ctx.T("command_userinfo_avatar")+"**](%s)\n**"+ctx.T("command_userinfo_game")+"**: %s", member.User.Username, member.User.ID, member.User.AvatarURL(""), game),
+		Description: fmt.Sprintf("**%s**: %s\n**ID**: %s\n[**%s**](%s)\n**%s**: %s",
+		ctx.T("command_userinfo_displayname"),
+		member.User.Username,
+		member.User.ID,
+		ctx.T("command_userinfo_avatar"),
+		member.User.AvatarURL(""),
+		ctx.T("command_userinfo_game"),
+		game),
 		Thumbnail: &discordgo.MessageEmbedThumbnail{
 			URL: member.User.AvatarURL("512"),
 		},
