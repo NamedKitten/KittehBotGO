@@ -17,6 +17,7 @@ Features
 - Simple interface. One function `ListenAndServe` and two types `Conn` & `Command`
 - Support for pipelining and telnet commands
 - Works with Redis clients such as [redigo](https://github.com/garyburd/redigo), [redis-py](https://github.com/andymccurdy/redis-py), [node_redis](https://github.com/NodeRedis/node_redis), and [jedis](https://github.com/xetorthio/jedis)
+- [TLS Support](#tls-example)
 
 Installing
 ----------
@@ -123,6 +124,17 @@ func main() {
 }
 ```
 
+TLS Example
+-----------
+
+Redcon has full TLS support through the `ListenAndServeTLS` function.
+
+The [same example](example/tls/clone.go) is also provided for serving Redcon over TLS. 
+
+```sh
+go run example/tls/clone.go
+```
+
 Benchmarks
 ----------
 
@@ -168,4 +180,3 @@ Josh Baker [@tidwall](http://twitter.com/tidwall)
 License
 -------
 Redcon source code is available under the MIT [License](/LICENSE).
-

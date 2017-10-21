@@ -11,13 +11,13 @@
   branch = "develop"
   name = "github.com/bwmarrin/discordgo"
   packages = ["."]
-  revision = "fd8721a5220e9bbe689cb6040b30fa26a5c7e7fc"
+  revision = "28dc6f6f338f2345b4534dbb2225f0955a4bdebc"
 
 [[projects]]
   branch = "master"
   name = "github.com/dustin/go-humanize"
   packages = ["."]
-  revision = "79e699ccd02f240a1f1fbbdcee7e64c1c12e41aa"
+  revision = "77ed807830b4df581417e7f89eb81d4872832b72"
 
 [[projects]]
   branch = "master"
@@ -26,10 +26,10 @@
   revision = "8fa88b06e5974e97fbf9899a7f86a344bfd1f105"
 
 [[projects]]
-  branch = "master"
   name = "github.com/go-redis/redis"
   packages = [".","internal","internal/consistenthash","internal/hashtag","internal/pool","internal/proto"]
-  revision = "ddbd81ea6c66514fe1f857af890276fcac7921ce"
+  revision = "35248155a505a84811be81a2aab1c423317447be"
+  version = "v6.7.2"
 
 [[projects]]
   branch = "master"
@@ -71,7 +71,7 @@
   branch = "master"
   name = "github.com/robertkrimen/otto"
   packages = [".","ast","dbg","file","parser","registry","token"]
-  revision = "a813c59b1b4471ff7ecd3b533bac2f7e7d178784"
+  revision = "68a29f5e29b18d7367e686c43cf74eba1900f548"
 
 [[projects]]
   branch = "master"
@@ -88,8 +88,8 @@
 [[projects]]
   name = "github.com/tidwall/gjson"
   packages = ["."]
-  revision = "be96719f990978a867f52c48f29d43f6b591da28"
-  version = "v1.0.0"
+  revision = "5a69e67cfd8f6f9b0044ed49f5079d0eeed28653"
+  version = "v1.0.1"
 
 [[projects]]
   branch = "master"
@@ -101,13 +101,13 @@
   branch = "master"
   name = "github.com/tidwall/match"
   packages = ["."]
-  revision = "173748da739a410c5b0b813b956f89ff94730b4c"
+  revision = "1731857f09b1f38450e2c12409748407822dc6be"
 
 [[projects]]
   branch = "master"
   name = "github.com/tidwall/redcon"
   packages = ["."]
-  revision = "e095da84ca2b75a8d6c6fe9fa5ad3cece7a60bbc"
+  revision = "3df12143a4fe57c9f0d7f0f37e29ad95bc37f9a7"
 
 [[projects]]
   branch = "master"
@@ -119,13 +119,13 @@
   branch = "master"
   name = "golang.org/x/crypto"
   packages = ["nacl/secretbox","poly1305","salsa20/salsa"]
-  revision = "81e90905daefcd6fd217b62423c0908922eadb30"
+  revision = "edd5e9b0879d13ee6970a50153d85b8fec9f7686"
 
 [[projects]]
   branch = "master"
   name = "golang.org/x/net"
   packages = ["context","webdav","webdav/internal/xml"]
-  revision = "a04bdaca5b32abe1c069418fb7088ae607de5bd0"
+  revision = "cd69bc3fc700721b709c3a59e16e24c67b58f6ff"
 
 [[projects]]
   name = "gopkg.in/sourcemap.v1"
