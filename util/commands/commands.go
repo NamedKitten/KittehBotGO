@@ -101,7 +101,7 @@ func OnMessageCreate(session *discordgo.Session, message *discordgo.MessageCreat
 
 	var err error
 
-	if message.Author.ID == session.State.User.ID {
+	if message.Author.ID == session.State.User.ID || message.Author.Bot {
 		return
 	}
 

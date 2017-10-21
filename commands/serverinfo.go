@@ -7,12 +7,12 @@ import (
 	//"github.com/dustin/go-humanize"
 	//"github.com/go-errors/errors"
 	//"github.com/NamedKitten/KittehBotGo/util/i18n"
-    //"strconv"
+	//"strconv"
 	//"time"
 	"sort"
 	"strings"
 )
- 
+
 func init() {
 	commands.RegisterCommand("serverinfo", ServerinfoCommand)
 }
@@ -26,11 +26,10 @@ func ServerinfoCommand(s *discordgo.Session, m *discordgo.MessageCreate, ctx *co
 	if err != nil {
 		return err
 	}
-	
 
 	verification := ""
 	switch guild.VerificationLevel {
-	case 0:         
+	case 0:
 		verification = "None"
 	case 1:
 		verification = "Low"
@@ -42,13 +41,32 @@ func ServerinfoCommand(s *discordgo.Session, m *discordgo.MessageCreate, ctx *co
 		verification = "┻━┻ミヽ(ಠ益ಠ)ﾉ彡┻━┻"
 	}
 
-	icon := ""    
-	description := fmt.Sprintf("**ID**: %s", ctx.GuildID )  
+	icon := ""
+	description := fmt.Sprintf("**ID**: %s", ctx.GuildID)
 	if guild.Icon != "" {
 		icon = fmt.Sprintf("https://cdn.discordapp.com/icons/%s/%s.jpg", ctx.GuildID, guild.Icon)
-		description =  description + fmt.Sprintf("\n[Icon](%s)", icon)
+		description = description + fmt.Sprintf("\n[Icon](%s)", icon)
 	}
-	} 
+
+	bots := 0
+	humans := 0
+
+	for _, member := range guild.Members {
+		if member.User.Bot {
+			bots += 1
+		} else {
+			humans += 1
+		}
+	}
+	var ratio string
+
+	if bots == 0 {
+		ratio = "**Bots to Humans ratio**: 1:∞"
+	} else if bots < humans {
+		ratio = fmt.Sprintf("**Bots to Humans ratio**: 1:%d", humans/bots)
+	} else {
+		ratio = fmt.Sprintf("**Humans to Bots ratio**: 1: %d", bots/humans)
+	}
 
 	fields := make([]*discordgo.MessageEmbedField, 0, 2)
 	fields = append(fields, &discordgo.MessageEmbedField{Name: "**Members**:", Value: fmt.Sprintf("%d", guild.MemberCount)})
@@ -64,30 +82,29 @@ func ServerinfoCommand(s *discordgo.Session, m *discordgo.MessageCreate, ctx *co
 				ratio,
 			),
 		},
-	 )
+	)
 	guildRoles := discordgo.Roles(guild.Roles)
 	sort.Sort(guildRoles)
-  	roles := []string{}
-   	for _, role := range guildRoles {
-		roles = append(roles, fmt.Sprintf("<@&%s>", role.ID))                
+	roles := []string{}
+	for _, role := range guildRoles {
+		roles = append(roles, fmt.Sprintf("<@&%s>", role.ID))
 	}
 	var roleList string
 	if guildRoles.Len() > 0 {
 		roleList = strings.Join(roles, ", ")
 		if len(roleList) <= 1024 {
-			fields = append(fields, &discordgo.MessageEmbedField{Name: "**Roles**:", Value: roleList})  
+			fields = append(fields, &discordgo.MessageEmbedField{Name: "**Roles**:", Value: roleList})
 		}
 	}
 
-	
 	//TODO: multilingual version of gohumanize
 	s.ChannelMessageSendEmbed(m.ChannelID, &discordgo.MessageEmbed{
-		Type: "rich",
+		Type:        "rich",
 		Description: description,
 		Thumbnail: &discordgo.MessageEmbedThumbnail{
 			URL: icon,
 		},
-		Fields: fields,                  		
+		Fields: fields,
 		Footer: &discordgo.MessageEmbedFooter{
 			Text: ctx.T("command_about_thanks"),
 		},
