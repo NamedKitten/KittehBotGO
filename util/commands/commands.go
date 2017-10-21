@@ -33,6 +33,7 @@ type Context struct {
 	Type       discordgo.ChannelType
 	HasPrefix  bool
 	HasMention bool
+	Language   string
 }
 
 func HelpCommand(session *discordgo.Session, message *discordgo.MessageCreate, ctx *Context) error {
@@ -146,6 +147,7 @@ func OnMessageCreate(session *discordgo.Session, message *discordgo.MessageCreat
 					HasPrefix: true,
 					Args:      args,
 					T:         T,
+					Language:  language,
 				}
 				if len(message.Mentions) > 0 {
 					ctx.HasMention = true
