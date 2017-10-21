@@ -17,9 +17,12 @@ We provide binary packages for these following systems:
     - arm6
     - arm7
     - arm64
-
-Please note that arm5 binaries and \*BSD binaries are on hold until the buildserver is setup.
-
+- Windows
+    - amd64
+    - i386
+- Darwin
+    - amd64
+    - i386
 
 The releases are located [here](https://github.com/NamedKitten/KittehBotGo/releases).
 
