@@ -11,10 +11,6 @@ import (
 	"time"
 )
 
-func init() {
-	commands.RegisterCommand("userinfo", UserinfoCommand)
-}
-
 func UserinfoCommand(s *discordgo.Session, m *discordgo.MessageCreate, ctx *commands.Context) error {
 	//channel, err := s.State.Channel(m.ChannelID)
 	//if err != nil {
@@ -33,23 +29,24 @@ func UserinfoCommand(s *discordgo.Session, m *discordgo.MessageCreate, ctx *comm
 		status = ctx.T("command_userinfo_offline")
 		game = ctx.T("command_userinfo_none")
 	} else {
-		if presence.Game == nil {
-			game = "None"
-		} else if presence.Game.Type == 0 {
+		switch {
+		case presence.Game == nil:
+			game = ctx.T("command_userinfo_none")
+		case presence.Game.Type == 0:
 			game = ctx.T("command_userinfo_playing", struct{ Game string }{Game: presence.Game.Name})
-		} else if presence.Game.Type == 1 {
+		case presence.Game.Type == 0:
 			game = ctx.T("command_userinfo_streaming", struct{ Game string }{Game: presence.Game.Name})
 		}
 
-		if presence.Status == "dnd" {
+		switch string(presence.Status) {
+		case "dnd":
 			status = ctx.T("command_userinfo_donotdisturb")
-		} else if presence.Status == discordgo.StatusOnline {
+		case "online":
 			status = ctx.T("command_userinfo_online")
-		} else if presence.Status == discordgo.StatusIdle {
+		case "idle":
 			status = ctx.T("command_userinfo_idle")
-		} // else {
-		//	status = "Offline"
-		//}
+		}
+
 		print(status)
 	}
 
