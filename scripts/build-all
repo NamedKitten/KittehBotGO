@@ -2,7 +2,7 @@
 
 export CGO_ENABLED=0
 
-PLATFORMS="linux/amd64 linux/386"
+PLATFORMS="linux/amd64 linux/386 windows/amd64 windows/386 darwin/386 darwin/amd64" #freebsd/amd64 freebsd/386 netbsd/amd64 netbsd/386 openbsd/amd64 openbsd/386
 PLATFORMS_ARM="linux"
 GO=go
 type setopt >/dev/null 2>&1
