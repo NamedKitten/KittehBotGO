@@ -74,7 +74,7 @@ func ServerinfoCommand(s *discordgo.Session, m *discordgo.MessageCreate, ctx *co
 		&discordgo.MessageEmbedField{
 			Name: "**Other info**:",
 			Value: fmt.Sprintf(
-				"**Owner**: %s\n**Region**: %s\n**Verification level**: %s\n**Language**: %s\n**Bots to Humans ratio**: %s",
+				"**Owner**: %s\n**Region**: %s\n**Verification level**: %s\n**Language**: %s\n%s",
 				owner.User.Mention(),
 				guild.Region,
 				verification,

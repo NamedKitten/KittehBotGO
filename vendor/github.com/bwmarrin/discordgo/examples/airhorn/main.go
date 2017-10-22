@@ -74,7 +74,7 @@ func main() {
 func ready(s *discordgo.Session, event *discordgo.Ready) {
 
 	// Set the playing status.
-	s.UpdateStatus(0, "!airhorn")
+	s.UpdateStatus(0, "owo!airhorn")
 }
 
 // This function will be called (due to AddHandler above) every time a new
@@ -88,7 +88,7 @@ func messageCreate(s *discordgo.Session, m *discordgo.MessageCreate) {
 	}
 
 	// check if the message is "!airhorn"
-	if strings.HasPrefix(m.Content, "!airhorn") {
+	if strings.HasPrefix(m.Content, "owo!airhorn") {
 
 		// Find the channel that the message came from.
 		c, err := s.State.Channel(m.ChannelID)

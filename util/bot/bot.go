@@ -10,13 +10,6 @@ import (
 func Start(redis *redis.Client) {
 	commands.Setup(redis)
 
-	commands.Discord.State.TrackEmojis = false
-	commands.Discord.State.TrackVoice = false
-	//commands.Discord.State.TrackChannels = false
-	commands.Discord.State.MaxMessageCount = 1
-	commands.Discord.LogLevel = 1
-	commands.Discord.SyncEvents = true
-	commands.Discord.Compress = true
 	fmt.Println("Getting token...")
 	token, err := commands.Redis.Get("token").Result()
 	if err != nil {

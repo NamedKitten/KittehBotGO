@@ -20,6 +20,11 @@
 #  name = "github.com/x/y"
 #  version = "2.4.0"
 
+
+[[constraint]]
+  branch = "master"
+  name = "github.com/Shopify/go-lua"
+
 [[constraint]]
   name = "github.com/bwmarrin/discordgo"
   branch = "develop"
@@ -34,4 +39,40 @@
 
 [[constraint]]
   name = "github.com/go-redis/redis"
+  version = "6.7.2"
+
+[[constraint]]
   branch = "master"
+  name = "github.com/googollee/go-socket.io"
+
+[[constraint]]
+  branch = "master"
+  name = "github.com/jonas747/dca"
+
+[[constraint]]
+  name = "github.com/nicksnyder/go-i18n"
+  version = "1.9.0"
+
+[[constraint]]
+  branch = "master"
+  name = "github.com/nishanths/go-xkcd"
+
+[[constraint]]
+  branch = "master"
+  name = "github.com/robertkrimen/otto"
+
+[[constraint]]
+  name = "github.com/rylio/ytdl"
+  version = "0.5.1"
+
+[[constraint]]
+  branch = "master"
+  name = "github.com/tidwall/buntdb"
+
+[[constraint]]
+  branch = "master"
+  name = "github.com/tidwall/redcon"
+
+[[constraint]]
+  branch = "master"
+  name = "golang.org/x/net"

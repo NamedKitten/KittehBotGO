@@ -2,16 +2,33 @@
 
 
 [[projects]]
+  name = "github.com/PuerkitoBio/goquery"
+  packages = ["."]
+  revision = "e1271ee34c6a305e38566ecd27ae374944907ee9"
+  version = "v1.1.0"
+
+[[projects]]
   branch = "master"
   name = "github.com/Shopify/go-lua"
   packages = ["."]
   revision = "88a6f168eee0ba102d7d20c5281056a5dd3d7550"
 
 [[projects]]
+  name = "github.com/Sirupsen/logrus"
+  packages = ["."]
+  revision = "f006c2ac4710855cf0f916dd6b77acf6b048dc6e"
+  version = "v1.0.3"
+
+[[projects]]
+  branch = "master"
+  name = "github.com/andybalholm/cascadia"
+  packages = ["."]
+  revision = "349dd0209470eabd9514242c688c403c0926d266"
+
+[[projects]]
   branch = "develop"
   name = "github.com/bwmarrin/discordgo"
   packages = ["."]
-  revision = "28dc6f6f338f2345b4534dbb2225f0955a4bdebc"
 
 [[projects]]
   branch = "master"
@@ -50,6 +67,18 @@
   version = "v1.2.0"
 
 [[projects]]
+  branch = "master"
+  name = "github.com/jonas747/dca"
+  packages = ["."]
+  revision = "01f9985f4a26c29c2b4f5a7c133395e1aa6fffca"
+
+[[projects]]
+  branch = "master"
+  name = "github.com/jonas747/ogg"
+  packages = ["."]
+  revision = "b4f6f4cf3757a3bf88eae9222045b99b9d76d8ca"
+
+[[projects]]
   name = "github.com/nicksnyder/go-i18n"
   packages = ["i18n","i18n/bundle","i18n/language","i18n/translation"]
   revision = "ca33e78c8a430e2df435b02f63a3944fa8e9ea11"
@@ -72,6 +101,12 @@
   name = "github.com/robertkrimen/otto"
   packages = [".","ast","dbg","file","parser","registry","token"]
   revision = "68a29f5e29b18d7367e686c43cf74eba1900f548"
+
+[[projects]]
+  name = "github.com/rylio/ytdl"
+  packages = ["."]
+  revision = "bd30f781270fa4d6df59e2a49948cd157030a2c6"
+  version = "v0.5.1"
 
 [[projects]]
   branch = "master"
@@ -118,14 +153,20 @@
 [[projects]]
   branch = "master"
   name = "golang.org/x/crypto"
-  packages = ["nacl/secretbox","poly1305","salsa20/salsa"]
+  packages = ["nacl/secretbox","poly1305","salsa20/salsa","ssh/terminal"]
   revision = "edd5e9b0879d13ee6970a50153d85b8fec9f7686"
 
 [[projects]]
   branch = "master"
   name = "golang.org/x/net"
-  packages = ["context","webdav","webdav/internal/xml"]
+  packages = ["context","html","html/atom","webdav","webdav/internal/xml"]
   revision = "cd69bc3fc700721b709c3a59e16e24c67b58f6ff"
+
+[[projects]]
+  branch = "master"
+  name = "golang.org/x/sys"
+  packages = ["unix","windows"]
+  revision = "8dbc5d05d6edcc104950cc299a1ce6641235bc86"
 
 [[projects]]
   name = "gopkg.in/sourcemap.v1"
@@ -142,6 +183,6 @@
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "88f1e94bcc56f937e506759e212b0965e419d3290884df2caebc99c06be52498"
+  inputs-digest = "0d9326f5f4a5939e28f2dbc729358cf92c050cbd1fc7732cc2bf5b6758d19c58"
   solver-name = "gps-cdcl"
   solver-version = 1
