@@ -3,9 +3,8 @@ package BotCommands
 import (
 	"fmt"
 	"github.com/NamedKitten/KittehBotGo/util/commands"
-	"github.com/bwmarrin/discordgo"
+	"github.com/jonas747/discordgo"
 	"github.com/dustin/go-humanize"
-	"strconv"
 	"time"
 )
 
@@ -50,7 +49,7 @@ func UserinfoCommand(s *discordgo.Session, m *discordgo.MessageCreate, ctx *comm
 	timenow := time.Now()
 	_, zone := timenow.Zone()
 	joined, _ := discordgo.Timestamp(member.JoinedAt).Parse()
-	userSnowflake, _ := strconv.ParseInt(member.User.ID, 10, 64)
+	userSnowflake := member.User.ID
 	joinedDiscord := time.Unix((((userSnowflake>>22)+1420070400000)/1000)+int64(zone), 0)
 	fields := make([]*discordgo.MessageEmbedField, 0, 2)
 	fields = append(fields, &discordgo.MessageEmbedField{Name: "**Joined At**:", Value: fmt.Sprintf("**%s**: %s\n**Discord**: %s",
@@ -64,13 +63,10 @@ func UserinfoCommand(s *discordgo.Session, m *discordgo.MessageCreate, ctx *comm
 			Name:    m.Author.Username,
 			IconURL: m.Author.AvatarURL("512"),
 		},
-		Description: fmt.Sprintf("**%s**: %s\n**ID**: %s\n[**%s**](%s)\n**%s**: %s",
-			"Display Name",
+		Description: fmt.Sprintf("**Display Name**: %s\n**ID**: %d\n[**Avatar URL**](%s)\n**Currently Playing**: %s",
 			member.User.Username,
 			member.User.ID,
-			"Avatar URL",
 			member.User.AvatarURL(""),
-			"Currently Playing",
 			game),
 		Thumbnail: &discordgo.MessageEmbedThumbnail{
 			URL: member.User.AvatarURL("512"),

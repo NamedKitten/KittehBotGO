@@ -3,7 +3,7 @@ package BotCommands
 import (
 	"fmt"
 	"github.com/NamedKitten/KittehBotGo/util/commands"
-	"github.com/bwmarrin/discordgo"
+	"github.com/jonas747/discordgo"
 	//"github.com/dustin/go-humanize"
 	//"github.com/go-errors/errors"
 	//"github.com/NamedKitten/KittehBotGo/util/i18n"
@@ -43,9 +43,9 @@ func ServerinfoCommand(s *discordgo.Session, m *discordgo.MessageCreate, ctx *co
 	}
 
 	icon := ""
-	description := fmt.Sprintf("**ID**: %s", ctx.GuildID)
+	description := fmt.Sprintf("**ID**: %d", ctx.GuildID)
 	if guild.Icon != "" {
-		icon = fmt.Sprintf("https://cdn.discordapp.com/icons/%s/%s.jpg", ctx.GuildID, guild.Icon)
+		icon = fmt.Sprintf("https://cdn.discordapp.com/icons/%d/%s.jpg", ctx.GuildID, guild.Icon)
 		description = description + fmt.Sprintf("\n[Icon](%s)", icon)
 	}
 
@@ -87,7 +87,7 @@ func ServerinfoCommand(s *discordgo.Session, m *discordgo.MessageCreate, ctx *co
 	sort.Sort(guildRoles)
 	roles := []string{}
 	for _, role := range guildRoles {
-		roles = append(roles, fmt.Sprintf("<@&%s>", role.ID))
+		roles = append(roles, fmt.Sprintf("<@&%d>", role.ID))
 	}
 	var roleList string
 	if guildRoles.Len() > 0 {

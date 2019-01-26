@@ -4,7 +4,7 @@ import (
 	"github.com/NamedKitten/KittehBotGo/util/commands"
 	"github.com/NamedKitten/KittehBotGo/util/music"
 
-	"github.com/bwmarrin/discordgo"
+	"github.com/jonas747/discordgo"
 	//"github.com/go-errors/errors"
 	"log"
 	//"io"

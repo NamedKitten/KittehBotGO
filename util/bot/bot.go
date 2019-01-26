@@ -3,7 +3,7 @@ package bot
 import (
 	"fmt"
 	"github.com/NamedKitten/KittehBotGo/util/commands"
-	//"github.com/bwmarrin/discordgo"
+	//"github.com/jonas747/discordgo"
 	"github.com/go-redis/redis"
 )
 

@@ -3,9 +3,8 @@ package music
 import (
 	"errors"
 	"github.com/NamedKitten/KittehBotGo/util/commands"
-
-	"github.com/bwmarrin/discordgo"
-	"github.com/jonas747/dca"
+	"github.com/jonas747/discordgo"
+	"github.com/NamedKitten/dca"
 	"github.com/rylio/ytdl"
 	"io"
 	"log"
@@ -16,7 +15,7 @@ import (
 )
 
 var (
-	players     = make(map[string]*Player)
+	players     = make(map[int64]*Player)
 	playersLock sync.Mutex
 
 	encodeOptions *dca.EncodeOptions
@@ -30,7 +29,7 @@ func init() {
 	encodeOptions.RawOutput = true
 }
 
-func GetPlayer(guildID string) *Player {
+func GetPlayer(guildID int64) *Player {
 	playersLock.Lock()
 	p := players[guildID]
 	playersLock.Unlock()
@@ -39,7 +38,7 @@ func GetPlayer(guildID string) *Player {
 
 type Player struct {
 	sync.Mutex
-	guildID string
+	guildID int64
 	vc      *discordgo.VoiceConnection
 
 	queue          []*ytdl.VideoInfo
@@ -55,7 +54,7 @@ type Player struct {
 	EvtChan chan interface{}
 }
 
-func CreatePlayer(guildID string, channelID string) (*Player, error) {
+func CreatePlayer(guildID int64, channelID int64) (*Player, error) {
 	// THERE CAN ONLY BE ONE FOR EACH GUILD OR ELSE WHO KNOWS WHAT WILL HAPPEN, I CERTAINLY DO NOT
 	playersLock.Lock()
 	if p, ok := players[guildID]; ok {
@@ -69,7 +68,7 @@ func CreatePlayer(guildID string, channelID string) (*Player, error) {
 		EvtChan: make(chan interface{}),
 	}
 
-	vc, err := commands.Discord.ChannelVoiceJoin(guildID, channelID, false, true)
+	vc, err := commands.Discord.GatewayManager.ChannelVoiceJoin(guildID, channelID, false, true)
 	if err != nil {
 		return nil, err
 	}

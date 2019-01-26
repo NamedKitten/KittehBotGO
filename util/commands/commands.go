@@ -2,11 +2,13 @@ package commands
 
 import (
 	"fmt"
-	"github.com/bwmarrin/discordgo"
+	"github.com/jonas747/discordgo"
 	"github.com/go-redis/redis"
+	"github.com/jonas747/dstate"
 	"log"
 	"runtime/debug"
 	"strings"
+	"time"
 )
 
 type CommandFunction func(*discordgo.Session, *discordgo.MessageCreate, *Context) error
@@ -18,21 +20,31 @@ var HelpStrings map[string]string
 var HelpCache string
 var Discord *discordgo.Session
 
+var State *dstate.State
+
 func init() {
 	Commands = make(map[string]CommandFunction)
 	HelpStrings = make(map[string]string)
 	Discord, _ = discordgo.New()
+	State := dstate.NewState()
+	Discord.StateEnabled = false
+	Discord.SyncEvents = true
+	State.MaxChannelMessages = 1000
+	State.MaxMessageAge = time.Hour
+	State.ThrowAwayDMMessages = true
+	State.TrackPrivateChannels = true
+	State.CacheExpirey = time.Minute * 10
+	Discord.AddHandler(State.HandleEvent)
 	Discord.AddHandler(OnMessageCreate)
 	RegisterCommand("help", HelpCommand)
 	RegisterHelp("help", "Shows you all the commands this bot has.")
-
 }
 
 type Context struct {
 	Args       []string
 	Content    string
-	ChannelID  string
-	GuildID    string
+	ChannelID  int64
+	GuildID    int64
 	Type       discordgo.ChannelType
 	HasPrefix  bool
 	HasMention bool
@@ -95,18 +107,11 @@ func GetCommand(msg string) (CommandFunction, string, []string) {
 func OnMessageCreate(session *discordgo.Session, message *discordgo.MessageCreate) {
 	var err error
 
-	var channel *discordgo.Channel
-	channel, err = session.State.Channel(message.ChannelID)
+	var channel *dstate.ChannelState
+	channel = State.Channel(false, message.ChannelID)
 	if err != nil {
-		channel, err = session.Channel(message.ChannelID)
-		if err != nil {
-			log.Printf("Can't fetch channel.")
-			return
-		}
-		err = session.State.ChannelAdd(channel)
-		if err != nil {
-			log.Printf("Can't add channel to state.")
-		}
+		log.Printf("Can't fetch channel.")
+		return
 	}
 
 	prefix, _ := Redis.Get("prefix").Result()
@@ -123,7 +128,7 @@ func OnMessageCreate(session *discordgo.Session, message *discordgo.MessageCreat
 				ctx := &Context{
 					Content:   strings.TrimPrefix(message.Content, prefix+name),
 					ChannelID: message.ChannelID,
-					GuildID:   channel.GuildID,
+					GuildID:   channel.Guild.ID,
 					Type:      channel.Type,
 					HasPrefix: true,
 					Args:      args,

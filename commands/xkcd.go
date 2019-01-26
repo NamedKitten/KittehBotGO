@@ -3,7 +3,7 @@ package BotCommands
 import (
 	"fmt"
 	"github.com/NamedKitten/KittehBotGo/util/commands"
-	"github.com/bwmarrin/discordgo"
+	"github.com/jonas747/discordgo"
 	"github.com/go-errors/errors"
 	"github.com/nishanths/go-xkcd"
 	"runtime/debug"
