@@ -19,7 +19,7 @@ func init() {
 func MotdCommand(s *discordgo.Session, m *discordgo.MessageCreate, ctx *commands.Context) error {
 	defer debug.FreeOSMemory()
 
-	guild, _ := s.State.Guild(ctx.GuildID)
+	guild := commands.State.Guild(false, ctx.GuildID).Guild
 	if len(ctx.Args) > 1 {
 		if ctx.Args[0] == "set" {
 			if guild.OwnerID != m.Author.ID {

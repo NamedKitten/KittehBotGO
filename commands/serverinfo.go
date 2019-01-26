@@ -4,11 +4,6 @@ import (
 	"fmt"
 	"github.com/NamedKitten/KittehBotGo/util/commands"
 	"github.com/jonas747/discordgo"
-	//"github.com/dustin/go-humanize"
-	//"github.com/go-errors/errors"
-	//"github.com/NamedKitten/KittehBotGo/util/i18n"
-	//"strconv"
-	//"time"
 	"sort"
 	"strings"
 )
@@ -19,14 +14,10 @@ func init() {
 }
 
 func ServerinfoCommand(s *discordgo.Session, m *discordgo.MessageCreate, ctx *commands.Context) error {
-	guild, err := s.State.Guild(ctx.GuildID)
-	if err != nil {
-		return err
-	}
-	owner, err := s.State.Member(ctx.GuildID, guild.OwnerID)
-	if err != nil {
-		return err
-	}
+	guildState := commands.State.Guild(false, ctx.GuildID)
+	guild := guildState.Guild
+	ownerState := guildState.Member(false, guild.OwnerID)
+	owner := ownerState.DGoCopy()
 
 	verification := ""
 	switch guild.VerificationLevel {

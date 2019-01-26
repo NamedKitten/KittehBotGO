@@ -22,11 +22,9 @@ func init() {
 }
 
 func MusicCommand(s *discordgo.Session, m *discordgo.MessageCreate, ctx *commands.Context) error {
-	guild, err := s.State.Guild(ctx.GuildID)
-	if err != nil {
-		log.Println("Failed finding guild:", err)
-		return nil
-	}
+	var err error
+	guild := commands.State.Guild(false, ctx.GuildID).Guild
+
 
 	var vs *discordgo.VoiceState
 

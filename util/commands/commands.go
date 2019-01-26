@@ -23,10 +23,14 @@ var Discord *discordgo.Session
 var State *dstate.State
 
 func init() {
+	var err error
 	Commands = make(map[string]CommandFunction)
 	HelpStrings = make(map[string]string)
-	Discord, _ = discordgo.New()
-	State := dstate.NewState()
+	Discord, err= discordgo.New()
+	if (err != nil) {
+		log.Fatal(err)
+	}
+	State = dstate.NewState()
 	Discord.StateEnabled = false
 	Discord.SyncEvents = true
 	State.MaxChannelMessages = 1000

@@ -5,6 +5,7 @@ import (
 	"github.com/NamedKitten/KittehBotGo/util/commands"
 	"github.com/jonas747/discordgo"
 	"github.com/dustin/go-humanize"
+	"github.com/jonas747/dstate"
 	"time"
 )
 
@@ -14,37 +15,42 @@ func init() {
 
 func UserinfoCommand(s *discordgo.Session, m *discordgo.MessageCreate, ctx *commands.Context) error {
 	var member *discordgo.Member
+	var memberState *dstate.MemberState
+
+	guildState := commands.State.Guild(false, ctx.GuildID)
+
 	if ctx.HasMention {
-		member, _ = s.State.Member(ctx.GuildID, m.Mentions[0].ID)
+		memberState = guildState.Member(false,  m.Mentions[0].ID)
 	} else {
-		member, _ = s.State.Member(ctx.GuildID, m.Author.ID)
+		memberState = guildState.Member(false, m.Author.ID)
 	}
+	member = memberState.DGoCopy()
+
 	var game string
 	var status string
-	presence, error := s.State.Presence(ctx.GuildID, m.Author.ID)
-	if error != nil {
-		status = "Offline"
-		game = "None"
-	} else {
+
+	presenceStatus := memberState.PresenceStatus
+	presenceGame := memberState.PresenceGame
 		switch {
-		case presence.Game == nil:
+		case presenceGame == nil:
 			game = "None"
-		case presence.Game.Type == 0:
-			game = "Playing " + presence.Game.Name
-		case presence.Game.Type == 0:
-			game = "Streaming " + presence.Game.Name
+		case presenceGame.Type == 0:
+			game = "Playing " + presenceGame.Name
+		case presenceGame.Type == 1:
+			game = "Streaming " + presenceGame.Name
 		}
 
-		switch string(presence.Status) {
-		case "dnd":
-			status ="Do Not Disturb"
-		case "online":
+		switch presenceStatus {
+		default:
 			status = "Offline"
-		case "idle":
+		case 1:
+			status = "Online"
+		case 2:
 			status = "Idle"
+		case 3:
+			status ="Do Not Disturb"
 		}
-	}
-	print(status)
+	
 
 	timenow := time.Now()
 	_, zone := timenow.Zone()
@@ -52,8 +58,7 @@ func UserinfoCommand(s *discordgo.Session, m *discordgo.MessageCreate, ctx *comm
 	userSnowflake := member.User.ID
 	joinedDiscord := time.Unix((((userSnowflake>>22)+1420070400000)/1000)+int64(zone), 0)
 	fields := make([]*discordgo.MessageEmbedField, 0, 2)
-	fields = append(fields, &discordgo.MessageEmbedField{Name: "**Joined At**:", Value: fmt.Sprintf("**%s**: %s\n**Discord**: %s",
-		"This Server",
+	fields = append(fields, &discordgo.MessageEmbedField{Name: "**Joined At**:", Value: fmt.Sprintf("**This Server**: %s\n**Discord**: %s",
 		humanize.Time(joined),
 		humanize.Time(joinedDiscord),
 	)})
@@ -63,11 +68,11 @@ func UserinfoCommand(s *discordgo.Session, m *discordgo.MessageCreate, ctx *comm
 			Name:    m.Author.Username,
 			IconURL: m.Author.AvatarURL("512"),
 		},
-		Description: fmt.Sprintf("**Display Name**: %s\n**ID**: %d\n[**Avatar URL**](%s)\n**Currently Playing**: %s",
+		Description: fmt.Sprintf("**Display Name**: %s\n**ID**: %d\n[**Avatar URL**](%s)\n**Currently Playing**: %s\n**Status**: %s",
 			member.User.Username,
 			member.User.ID,
 			member.User.AvatarURL(""),
-			game),
+			game, status),
 		Thumbnail: &discordgo.MessageEmbedThumbnail{
 			URL: member.User.AvatarURL("512"),
 		},
