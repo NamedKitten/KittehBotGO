@@ -13,14 +13,19 @@ type CommandFunction func(*discordgo.Session, *discordgo.MessageCreate, *Context
 
 var Redis *redis.Client
 var Commands map[string]CommandFunction
+var HelpStrings map[string]string
+
 var HelpCache string
 var Discord *discordgo.Session
 
 func init() {
 	Commands = make(map[string]CommandFunction)
+	HelpStrings = make(map[string]string)
 	Discord, _ = discordgo.New()
 	Discord.AddHandler(OnMessageCreate)
 	RegisterCommand("help", HelpCommand)
+	RegisterHelp("help", "Shows you all the commands this bot has.")
+
 }
 
 type Context struct {
@@ -53,7 +58,7 @@ func HelpCommand(session *discordgo.Session, message *discordgo.MessageCreate, c
 		resp += header + "\n" + strings.Repeat("-", len(header)) + "\n\n"
 
 		for name := range com {
-			resp += fmt.Sprintf("<%s>\n", prefix+name+strings.Repeat(" ", maxlen+1-len(name))+"Help Soon:tm:")
+			resp += fmt.Sprintf("<%s>\n", prefix+name+strings.Repeat(" ", maxlen+2-len(name))+HelpStrings[name])
 		}
 
 		resp += "```\n"
@@ -71,6 +76,10 @@ func Setup(r *redis.Client) {
 
 func RegisterCommand(Name string, Function CommandFunction) {
 	Commands[Name] = Function
+}
+
+func RegisterHelp(Name string, Help string) {
+	HelpStrings[Name] = Help
 }
 
 func GetCommand(msg string) (CommandFunction, string, []string) {

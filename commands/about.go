@@ -12,6 +12,7 @@ import (
 
 func init() {
 	commands.RegisterCommand("about", AboutCommand)
+	commands.RegisterHelp("about", "Tells you about the bot.")
 }
 
 var startTime = time.Now()

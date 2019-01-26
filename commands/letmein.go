@@ -10,6 +10,7 @@ import (
 
 func init() {
 	commands.RegisterCommand("letmein", LetMeInCommand)
+	commands.RegisterHelp("letmein", "Allows me to generate a invite link for any server bot is in.")
 }
 
 func waitForMessage(s *discordgo.Session) chan *discordgo.MessageCreate {

@@ -17,6 +17,7 @@ import (
 
 func init() {
 	commands.RegisterCommand("music", MusicCommand)
+	commands.RegisterHelp("music", "Music commands.")
 	commands.Discord.LogLevel = 0  
 }
 

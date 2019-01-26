@@ -10,7 +10,9 @@ import (
 
 func init() {
 	commands.RegisterCommand("motd", MotdCommand)
+	commands.RegisterHelp("motd", "Message of the day related commands.")
 	commands.Discord.AddHandler(MotdEvent)
+
 }
 
 func MotdCommand(s *discordgo.Session, m *discordgo.MessageCreate, ctx *commands.Context) error {

@@ -15,6 +15,7 @@ import (
 
 func init() {
 	commands.RegisterCommand("serverinfo", ServerinfoCommand)
+	commands.RegisterHelp("serverinfo", "Shows info on this server.")
 }
 
 func ServerinfoCommand(s *discordgo.Session, m *discordgo.MessageCreate, ctx *commands.Context) error {

@@ -11,6 +11,7 @@ import (
 
 func init() {
 	commands.RegisterCommand("echo", EchoCommand)
+	commands.RegisterHelp("echo", "Echos what you say.")
 }
 
 func EchoCommand(s *discordgo.Session, m *discordgo.MessageCreate, ctx *commands.Context) error {

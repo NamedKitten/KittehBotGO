@@ -11,6 +11,7 @@ import (
 
 func init() {
 	commands.RegisterCommand("kick", KickCommand)
+	commands.RegisterHelp("kick", "Kicks a member..")
 }
 
 func KickCommand(s *discordgo.Session, m *discordgo.MessageCreate, ctx *commands.Context) error {
