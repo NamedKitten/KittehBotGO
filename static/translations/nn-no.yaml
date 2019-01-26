@@ -1,0 +1,136 @@
+- id: command_about_about
+  translation: "Om {{.Person}}"
+
+- id: command_about_dversion
+  translation: "DiscordGo-versjon"
+
+- id: command_about_gversion
+  translation: "Go-versjon"
+
+- id: command_about_kversion
+  translation: "KittehBotGo-versjon"
+
+- id: command_about_memused
+  translation: "Minne som brukast"
+
+- id: command_about_servers
+  translation: "Serverar"
+
+- id: command_about_thanks
+  translation: "Takk for at du bruker KittehBotGo!"
+
+- id: command_about_uptime
+  translation: "Oppetid"
+
+- id: command_about_help
+  translation: "Gir informasjon om boten"
+
+- id: command_help_help
+  translation: "Gir hjelp med kommandoar"
+
+- id: command_language_help
+  translation: "Brukast for å endre språket til boten"
+
+- id: command_language_success
+  translation: "Språket har blitt sett"
+
+- id: command_about_garbage
+  translation: "søppel samlet inn"
+
+- id: command_echo_help
+  translation: "Gjentek det du seier"
+
+- id: command_userinfo_help
+  translation: "Gir info om ein brukar"
+
+- id: command_userinfo_none
+  translation: "Ingen"
+
+- id: command_userinfo_offline
+  translation: "Logga av"
+
+- id: command_userinfo_online
+  translation: "Logga på"
+
+- id: command_userinfo_idle
+  translation: "Ledig"
+
+- id: command_userinfo_donotdisturb
+  translation: "Ikkje forstyrr"
+
+- id: command_userinfo_playing
+  translation: "Spelar {{.Game}}"
+
+- id: command_userinfo_streaming
+  translation: "Strøymer {{.Game}}"
+
+- id: command_userinfo_joindates
+  translation: "Datoar blitt med"
+
+- id: command_userinfo_thisserver
+  translation: "Denne serveren"
+
+- id: command_userinfo_displayname
+  translation: "Visningsnamn"
+
+- id: command_userinfo_avatar
+  translation: "Avatar"
+
+- id: command_userinfo_game
+  translation: "Spel"
+
+- id: command_motd_help
+  translation: "Dagens melding"
+
+- id: command_motd_ownererror
+  translation: "Du må vere eigaren for å bruke denne kommandoen."
+
+- id: command_motd_channel
+  translation: "Kanalen for dagens melding vart sett til <#{{.ChannelID}}>."
+
+- id: command_motd_set
+  translation: "Dagens melding vart sett."
+
+- id: command_motd_unsetwarning
+  translation: "Dagens melding er ikkje sett. Bruk `{{.Prefix}}motd set` for å set han."
+
+- id: command_ping_help
+  translation: "Berekner tiden det tek å sende ein melding"
+
+- id: command_ping_result
+  translation: "Ping! Tiden det tok for å sende melding: `{{.Elapsed}}`."
+
+- id: command_goodbot_help
+  translation: "Kall meg ein god bot"
+
+- id: command_goodbot_thanks
+  translation:
+    one: "Takk! {{.Count}} person har kalla meg ein god bot."
+    other: "Takk! {{.Count}} personar har kalla meg ein god bot."
+
+- id: command_jseval_help
+  translation: "Evaluerer JavaScript"
+
+- id: command_jseval_input
+  translation: "Input"
+
+- id: command_jseval_output
+  translation: "Output"
+
+- id: command_jseval_ownererror
+  translation: "Du må vere eigaren for å bruke denne kommandoen."
+
+- id: command_luaeval_help
+  translation: "Evaluerer Lua"
+
+- id: command_luaeval_input
+  translation: "Input"
+
+- id: command_luaeval_output
+  translation: "Output"
+
+- id: command_luaeval_done
+  translation: "Ferdig!"
+
+- id: command_xkcd_help
+  translation: "Hent den nyaste xkcd-teikneserien"

@@ -1,0 +1,6 @@
+main
+KittehBotGo
+build
+gopath/pkg
+gopath/bin
+static.go
