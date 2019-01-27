@@ -34,7 +34,7 @@ func init() {
 	}
 	State = dstate.NewState()
 	Discord.StateEnabled = false
-	Discord.SyncEvents = true
+	Discord.SyncEvents = false
 	State.MaxChannelMessages = 1000
 	State.MaxMessageAge = time.Hour
 	State.ThrowAwayDMMessages = true

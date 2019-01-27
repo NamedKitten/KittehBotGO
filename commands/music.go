@@ -57,19 +57,13 @@ func MusicCommand(s *discordgo.Session, m *discordgo.MessageCreate, ctx *command
 			player.EvtChan <- &music.PlayerEvtKill{}
 			s.ChannelMessageSend(m.ChannelID, "Leaving voice channel...")
 
-		////////////////////
-		// PLAYBACK CONTROL
-		////////////////////
 		case "play", "resume":
-			// Resumes/plays
 			player.EvtChan <- &music.PlayerEvtResume{}
 			s.ChannelMessageSend(m.ChannelID, "Playing.")
 		case "pause", "stop":
-			// Pauses the playback
 			player.EvtChan <- &music.PlayerEvtPause{}
 			s.ChannelMessageSend(m.ChannelID, "Paused.")
 		case "add":
-			// Adds another element to the queue
 			if len(ctx.Args) < 2 {
 				err = errors.New("Nothing song specified to add.")
 				break
@@ -81,15 +75,12 @@ func MusicCommand(s *discordgo.Session, m *discordgo.MessageCreate, ctx *command
 				s.ChannelMessageSend(m.ChannelID, "Song added.")
 			}
 		case "next", "skip":
-			// Skips to the next one
 			player.EvtChan <- &music.PlayerEvtNext{Index: -1}
 			s.ChannelMessageSend(m.ChannelID, "Song skpped.")
 		case "randnext", "r next":
-			// Skips to a random item in the playlist
 			player.EvtChan <- &music.PlayerEvtNext{Index: -1, Random: true}
 			s.ChannelMessageSend(m.ChannelID, "Playing random song from queue.")
 		case "goto", "item":
-			// Skips to a specific item in the playlist
 			if len(ctx.Args) < 2 {
 				err = errors.New("No queue number specified.")
 				break
@@ -108,11 +99,7 @@ func MusicCommand(s *discordgo.Session, m *discordgo.MessageCreate, ctx *command
 			player.EvtChan <- &music.PlayerEvtNext{Index: index}
 			s.ChannelMessageSend(m.ChannelID, "Skiping to track.")
 
-		//////////////////
-		// UTILIITIES
-		//////////////////
 		case "status", "stats":
-			// Prints player status
 			status := player.Status()
 
 			itemDuration := "None"
@@ -135,7 +122,6 @@ func MusicCommand(s *discordgo.Session, m *discordgo.MessageCreate, ctx *command
 			s.ChannelMessageSend(m.ChannelID, out)
 
 		case "shuffle":
-			// Enters shuffle mode where the next item is picked randomly
 			shuffle := player.ToggleShuffle()
 			s.ChannelMessageSend(m.ChannelID, fmt.Sprintf("Shuffle: %v", shuffle))
 		case "remove":
@@ -157,8 +143,24 @@ func MusicCommand(s *discordgo.Session, m *discordgo.MessageCreate, ctx *command
 			log.Println("Error occured:", err)
 			s.ChannelMessageSend(m.ChannelID, "Error occured: " + err.Error())
 		}
+		
 
+	}  else {
+		helpMsg := "```md\n"
+		helpMsg += "# Music Command Help\n"
+		helpMsg += "[music join](Joins the voice channel you are currently in)\n"
+		helpMsg += "[music leave](Leaves the voice channel the bot is in)\n"
+		helpMsg += "[music play/resume](Plays or Resumes playback of the currently playing track)\n"
+		helpMsg += "[music pause/stop](Pauses playback of the currently playing track)\n"
+		helpMsg += "[music status/stats](Shows stats for the current session)\n"
+		helpMsg += "[music next/skip](Skips a track)\n"
+		helpMsg += "[music rnext](Skips to a random item in the playlist)\n"
+		helpMsg += "[music goto](Skips to a specified item by position in the playlist)\n"
+		helpMsg += "[music shuffle](Enter shuffle mode)\n"
+		helpMsg += "[music remove](Removes a item by position in playlist.)\n"
+		helpMsg += "```"
+		s.ChannelMessageSend(m.ChannelID, helpMsg)
 	}
-
+	
 	return nil
 }
