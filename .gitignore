@@ -4,3 +4,4 @@ build
 gopath/pkg
 gopath/bin
 static.go
+priv*.go

@@ -43,12 +43,14 @@ func AboutCommand(s *discordgo.Session, m *discordgo.MessageCreate, ctx *command
 		fmt.Println(server.Guild.Name)
 	}
 
+	selfUserState := commands.State.User(false)
 	s.ChannelMessageSendEmbed(m.ChannelID, &discordgo.MessageEmbed{
 		Type: "rich",
 		Author: &discordgo.MessageEmbedAuthor{
 			Name:    "About KittehBotGo",
-			IconURL: fmt.Sprintf("https://cdn.discordapp.com/avatars/%v/%s.jpg", s.State.User.ID, s.State.User.Avatar),
+			IconURL: fmt.Sprintf("https://cdn.discordapp.com/avatars/%v/%s.jpg", selfUserState.User.ID, selfUserState.User.Avatar),
 		},
+		Description: "```go\nfmt.Println('OwO')\n```",
 		Fields: fields,
 		Footer: &discordgo.MessageEmbedFooter{
 			Text: "Thanks for using KittehBotGO!",

@@ -9,13 +9,8 @@ import (
 	_ "github.com/NamedKitten/KittehBotGo/commands"
 	"github.com/NamedKitten/KittehBotGo/util/bot"
 	"github.com/NamedKitten/KittehBotGo/util/commands"
-	"github.com/NamedKitten/KittehBotGo/util/internaldb"
 	"github.com/NamedKitten/KittehBotGo/util/static"
-	//"github.com/elazarl/go-bindata-assetfs"
-	"github.com/go-redis/redis"
-	// _ "net/http/pprof"
-	//_ "golang.org/x/mobile/app"
-	_ "github.com/NamedKitten/KittehBotGo/util/i18n"
+	"github.com/xuyu/goredis"
 	"github.com/googollee/go-socket.io"
 	"log"
 	"net/http"
@@ -30,7 +25,7 @@ import (
 	//"github.com/pkg/profile"
 )
 
-var RedisClient *redis.Client
+var RedisClient *goredis.Redis
 var UpdateInterval int
 var connected int = 0
 
@@ -55,8 +50,8 @@ func setup() {
 		panic(tokenErr)
 	}
 
-	RedisClient.Set("prefix", strings.TrimSpace(prefix), 0)
-	RedisClient.Set("token", strings.TrimSpace(token), 0)
+	RedisClient.Set("prefix", strings.TrimSpace(prefix), 0, 0, false, false)
+	RedisClient.Set("token", strings.TrimSpace(token), 0, 0, false, false)
 	fmt.Println("The bot is now setup.")
 }
 
@@ -70,33 +65,22 @@ func init() {
 	redisPassword := flag.String("redisPassword", "", "Password for redis server.")
 	redisDB := flag.Int("redisDB", 0, "DB ID for redis server.")
 	runSetup := flag.Bool("runSetup", false, "Run setup?")
-	internalDBFile := flag.String("internalDBFile", "", "File to save data to for internal redis server.")
 	flag.Bool("runDashboard", true, "Run dashboard?")
 
 	flag.Parse()
 	redisPass := *redisPassword
 	UpdateInterval = *updateInterval
+	var err error
 
-
-	if *internalDBFile != "" {
-		database.Password = redisPass
-		go database.Start(*internalDBFile, *redisPort)
-		time.Sleep(time.Second)
-	}
-
-	RedisClient = redis.NewClient(&redis.Options{
-		Addr:         fmt.Sprintf("%s:%d", *redisIP, *redisPort),
+	RedisClient, err = goredis.Dial(&goredis.DialConfig{
+		Network: "tcp",
+		Address:         fmt.Sprintf("%s:%d", *redisIP, *redisPort),
 		Password:     redisPass,
-		DB:           *redisDB,
-		DialTimeout:  10 * time.Second,
-		ReadTimeout:  30 * time.Second,
-		WriteTimeout: 30 * time.Second,
-		PoolSize:     10,
-		PoolTimeout:  30 * time.Second,
+		Database:           *redisDB,
+		Timeout:  10 * time.Second,
+		MaxIdle:  10,
 	})
-	pong, err := RedisClient.Ping().Result()
-	if pong != "PONG" {
-		print(pong)
+	if err != nil {
 		fmt.Println("Couldn't connect to redis...")
 		panic(err)
 	}

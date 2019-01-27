@@ -3,7 +3,9 @@ package commands
 import (
 	"fmt"
 	"github.com/jonas747/discordgo"
-	"github.com/go-redis/redis"
+	"github.com/xuyu/goredis"
+	"go/build"
+	"github.com/go-errors/errors"
 	"github.com/jonas747/dstate"
 	"log"
 	"runtime/debug"
@@ -13,7 +15,7 @@ import (
 
 type CommandFunction func(*discordgo.Session, *discordgo.MessageCreate, *Context) error
 
-var Redis *redis.Client
+var Redis *goredis.Redis
 var Commands map[string]CommandFunction
 var HelpStrings map[string]string
 
@@ -59,7 +61,9 @@ func HelpCommand(session *discordgo.Session, message *discordgo.MessageCreate, c
 
 	com := Commands
 	if true {
-		prefix, _ := Redis.Get("prefix").Result()
+		pre, _ := Redis.Get("prefix")
+		prefix := string(pre[:])
+		
 
 		maxlen := 0
 
@@ -86,7 +90,7 @@ func HelpCommand(session *discordgo.Session, message *discordgo.MessageCreate, c
 	return nil
 }
 
-func Setup(r *redis.Client) {             
+func Setup(r *goredis.Redis) {             
 	Redis = r
 }
 
@@ -118,8 +122,9 @@ func OnMessageCreate(session *discordgo.Session, message *discordgo.MessageCreat
 		return
 	}
 
-	prefix, _ := Redis.Get("prefix").Result()
-
+	pre, _ := Redis.Get("prefix")
+	prefix := string(pre[:])
+	
 	if len(prefix) > 0 {
 
 		if strings.HasPrefix(message.Content, prefix) {
@@ -140,7 +145,36 @@ func OnMessageCreate(session *discordgo.Session, message *discordgo.MessageCreat
 				if len(message.Mentions) > 0 {
 					ctx.HasMention = true
 				}
-				command(session, message, ctx)
+				err = command(session, message, ctx)
+
+				if err != nil {
+					betterErr := errors.Wrap(err, 1)
+					errStr := ""
+					for _, frame := range betterErr.StackFrames() {
+						line := fmt.Sprintf("[%s](%d)\n", frame.File, frame.LineNumber)
+						source, err := frame.SourceLine()
+						if err != nil {
+							errStr += line
+						} else {
+							errStr += line + fmt.Sprintf(" %s: %s\n", frame.Name, source)
+						}
+						errStr = strings.Replace(errStr, build.Default.GOPATH + "/src/", "", -1)
+						errStr = strings.Replace(errStr, "/usr/lib/", "", -1)
+
+					}
+
+					selfUserState := State.User(false)
+					Discord.ChannelMessageSendEmbed(message.ChannelID, &discordgo.MessageEmbed{
+						Type: "rich",
+						Title: "An error occured...",
+						Author: &discordgo.MessageEmbedAuthor{
+							Name:    "KittehBotGo",
+							IconURL: fmt.Sprintf("https://cdn.discordapp.com/avatars/%v/%s.jpg", selfUserState.User.ID, selfUserState.User.Avatar),
+						},
+						Description:  "```md\n" + errStr + "\n```",
+					})
+				}
+
 				return
 			}
 		}
