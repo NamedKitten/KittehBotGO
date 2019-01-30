@@ -90,11 +90,8 @@ func init() {
 	}
 }
 
-func main() {
-   // p := profile.Start(profile.MemProfile, profile.ProfilePath("."), profile.NoShutdownHook)
-	
+func main() {	
 	bot.Start(RedisClient)
-	//log.Println(bot)
 	if flag.Lookup("runDashboard").Value.(flag.Getter).Get().(bool) {
 		go func() {
 			server, sockerr := socketio.NewServer(nil)
@@ -164,7 +161,7 @@ func main() {
 	// Wait here until CTRL-C or other term signal is received.
 	fmt.Println("Bot is now running.  Press CTRL-C to exit.")
 	sc := make(chan os.Signal, 1)
-	signal.Notify(sc, syscall.SIGINT, syscall.SIGTERM, os.Interrupt, os.Kill)
+	signal.Notify(sc, syscall.SIGINT,  os.Interrupt, os.Kill)
 	<-sc
 
 	//saveMemMap()

@@ -2,8 +2,8 @@
 
 export CGO_ENABLED=0
 
-PLATFORMS="linux/amd64 linux/386 windows/amd64 windows/386 darwin/386 darwin/amd64" #freebsd/amd64 freebsd/386 netbsd/amd64 netbsd/386 openbsd/amd64 openbsd/386
-PLATFORMS_ARM="linux"
+PLATFORMS="darwin/386 darwin/amd64 darwin/arm64 dragonfly/amd64 freebsd/386 js/wasm linux/386 linux/amd64 linux/arm64 linux/mips linux/mips64 linux/mips64le linux/mipsle linux/ppc64 linux/ppc64le linux/riscv64 linux/s390x nacl/386 nacl/amd64p32 netbsd/386 netbsd/amd64  openbsd/386 openbsd/amd64 plan9/386 plan9/amd64 solaris/amd64 windows/386 windows/amd64"
+PLATFORMS_ARM="linux darwin freebsd openbsd netbsd nacl plan9"
 GO=go
 type setopt >/dev/null 2>&1
 
@@ -20,7 +20,8 @@ for PLATFORM in $PLATFORMS; do
   GOARCH=${PLATFORM#*/}
   BIN_FILENAME="${OUTPUT}-${GOOS}-${GOARCH}"
   if [[ "${GOOS}" == "windows" ]]; then BIN_FILENAME="${BIN_FILENAME}.exe"; fi
-  CMD="GOOS=${GOOS} GOARCH=${GOARCH} ${GO} build -p 7 -v -ldflags '-s -w -extldflags \"-static\"' -o ${BIN_FILENAME} $@"
+  if [[ "${GOOS}" == "js" ]]; then BIN_FILENAME="${BIN_FILENAME}.wasm"; fi
+  CMD="GOOS=${GOOS} GOARCH=${GOARCH} ${GO} build -p 7 -v -ldflags '-s -w -extldflags \"-static\"' -o ${BIN_FILENAME} $@ && upx --lzma --best ${BIN_FILENAME}"
   echo "${CMD}"
   eval $CMD || FAILURES="${FAILURES} ${PLATFORM}"
 done
@@ -29,7 +30,7 @@ done
 
 # ARM builds
 if [[ $PLATFORMS_ARM == *"linux"* ]]; then
-  CMD="GOOS=linux GOARCH=arm64 ${GO} build -p 7 -v -ldflags '-s -w -extldflags \"-static\"' -o ${OUTPUT}-linux-arm64 $@"
+  CMD="GOOS=linux GOARCH=arm64 ${GO} build -p 7 -v -ldflags '-s -w -extldflags \"-static\"' -o ${OUTPUT}-linux-arm64 $@ && upx --lzma --best ${BIN_FILENAME}"
   echo "${CMD}"
   eval $CMD || FAILURES="${FAILURES} ${PLATFORM}"
 fi
@@ -42,7 +43,7 @@ for GOOS in $PLATFORMS_ARM; do
   # build for each ARM version
   for GOARM in 7 6; do
     BIN_FILENAME="${OUTPUT}-${GOOS}-${GOARCH}${GOARM}"
-    CMD="GOARM=${GOARM} GOOS=${GOOS} GOARCH=${GOARCH} ${GO} build -p 7 -v -ldflags '-s -w -extldflags \"-static\"' -o ${BIN_FILENAME} $@"
+    CMD="GOARM=${GOARM} GOOS=${GOOS} GOARCH=${GOARCH} ${GO} build -p 7 -v -ldflags '-s -w -extldflags \"-static\"' -o ${BIN_FILENAME} $@ && upx --lzma --best ${BIN_FILENAME}"
     echo "${CMD}"
     eval "${CMD}" || FAILURES="${FAILURES} ${GOOS}/${GOARCH}${GOARM}"
   done
