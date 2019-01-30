@@ -20,7 +20,6 @@ import (
 	"runtime/debug"
 	"strings"
 	"sync"
-	"syscall"
 	"time"
 	//"github.com/pkg/profile"
 )
@@ -160,9 +159,16 @@ func main() {
 
 	// Wait here until CTRL-C or other term signal is received.
 	fmt.Println("Bot is now running.  Press CTRL-C to exit.")
-	sc := make(chan os.Signal, 1)
-	signal.Notify(sc, syscall.SIGINT,  os.Interrupt, os.Kill)
-	<-sc
+    var wG sync.WaitGroup
+    wG.Add(1)
+    var sc chan os.Signal
+    sc = make(chan os.Signal, 1)
+    signal.Notify(sc, os.Interrupt)
+    go func() {
+        <-sc
+        wG.Done()
+    }()
+    wG.Wait()
 
 	//saveMemMap()
 
