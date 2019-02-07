@@ -1,12 +1,8 @@
 package BotCommands
 
 import (
-	//"fmt"
 	"github.com/NamedKitten/KittehBotGo/util/commands"
 	"github.com/jonas747/discordgo"
-	//"runtime/debug"
-	//"strings"
-	//"github.com/go-errors/errors"
 )
 
 func init() {

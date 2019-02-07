@@ -4,7 +4,7 @@ fmt: false
 tags: ""
 
 compression:
-  compress: true
+  compress: false
   method: "BestCompression"
   keep: false
 

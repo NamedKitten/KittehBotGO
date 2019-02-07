@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"github.com/NamedKitten/KittehBotGo/util/commands"
 	"github.com/jonas747/discordgo"
-	"runtime/debug"
 	"strings"
 	//"github.com/go-errors/errors"
 )
@@ -15,7 +14,6 @@ func init() {
 }
 
 func EchoCommand(s *discordgo.Session, m *discordgo.MessageCreate, ctx *commands.Context) error {
-	defer debug.FreeOSMemory()
 	go s.ChannelMessageSendEmbed(m.ChannelID, &discordgo.MessageEmbed{
 		Type: "rich",
 		Author: &discordgo.MessageEmbedAuthor{

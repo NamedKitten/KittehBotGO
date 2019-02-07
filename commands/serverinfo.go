@@ -88,7 +88,6 @@ func ServerinfoCommand(s *discordgo.Session, m *discordgo.MessageCreate, ctx *co
 		}
 	}
 
-	//TODO: multilingual version of gohumanize
 	s.ChannelMessageSendEmbed(m.ChannelID, &discordgo.MessageEmbed{
 		Type:        "rich",
 		Description: description,

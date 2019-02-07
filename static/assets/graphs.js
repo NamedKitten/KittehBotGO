@@ -1,20 +1,42 @@
+function addServersHTML(guilds) {
+  var htmlString = `
+  
+      ${guilds.map(guild => `	<li><div class="media">
+      <img src="${guild.icon}" height="64px" width="64px" class=mr-3>
+      <div class="media-body">
+        <h5 class="mt-0">${guild.name}</h5>
+        ${guild.members} members
+      </div></li>`)}
+  `;
+  document.getElementById("guilds-list").innerHTML = htmlString;
+}
+
+function addPlayersHTML(players) {
+  var htmlString = `
+  
+      ${players.map(player => `	<li><div class="media">
+      <img src="${player.thumbnail}" height="64px" width="64px" class=mr-3>
+      <div class="media-body">
+        <h5 class="mt-0">${player.title}</h5>
+        Playing in ${player.guildName}
+      </div></li>`)}
+  `;
+  document.getElementById("music-players-list").innerHTML = htmlString;
+}
+
+function compareGuilds(a, b){
+  if (a.members < b.members) return 1;
+  if (b.members < a.members) return -1;
+
+  return 0;
+}
+ 
 $(function () {
   window.dps = [];
-  window.xVal = 1;
-  window.yVal = 0;
-  window.updateInterval = 0;
-
-  $.ajax({
-    type: 'GET',
-    url: '/interval',
-    complete: function (responseText) {
-      console.log(responseText)
-      window.updateInterval = parseFloat(responseText.responseText)
-    }
-  });
 
   window.memdps = [{ x: 0, y: 0 }];
   var socket = io();
+  window.connectionTime = 0;
 
   CanvasJS.addColorSet("customColorSet", [
     "#393f63",
@@ -50,7 +72,6 @@ $(function () {
   });
   window.memUsage.render();
   window.memStats = new CanvasJS.Chart("memStats", {
-    animationDuration: window.updateInterval,
     animationEnabled: true,
     backgroundColor: "transparent",
     colorSet: "customColorSet",
@@ -73,7 +94,7 @@ $(function () {
     data: [
       {
         indexLabelFontColor: "#717171",
-        indexLabelFontFamily: "calibri",
+        indexLabelFontFamily: "Lato",
         indexLabelFontSize: 18,
         indexLabelPlacement: "outside",
         indexLabelFormatter: function (e) {
@@ -85,40 +106,47 @@ $(function () {
     ]
   });
   window.memStats.render();
-  /*
-  var updateChart = function() {
-    $.ajax({
-      url: "getdata",
-      type: "GET",
-      success: function(data) {()*/
+  socket.on('connect', function (msg) {
+    console.log("connected")
+    window.connectionTime = Date.now()
+  });
   window.setTimeout(function () {
 
     socket.on('mem stats', function (msg) {
-      console.log("stuff!")
-      var stuff = msg.split("\n");
-      window.yVal = parseFloat(stuff[0]);
-      dps.push({ x: xVal, y: yVal });
-      if (window.xVal > 20) {
+      var jsonMsg = JSON.parse(msg)
+      timeElapsed = (Date.now() - window.connectionTime) / 1000;
+
+      dps.push({ x: timeElapsed, y: jsonMsg["using"] });
+      if (timeElapsed > 20) {
         window.dps.shift();
       }
       window.memdps.splice(0, memdps.length);
       window.memdps.push(
-        { y: parseFloat(stuff[0]), label: "Using" },
-        { y: parseFloat(stuff[1]), label: "Allocated" },
-        { y: parseFloat(stuff[2]), label: "Cleaned" }
+        { y: jsonMsg["using"], label: "Using" },
+        { y: jsonMsg["allocated"], label: "Allocated" },
+        { y: jsonMsg["cleaned"], label: "Cleaned" }
       );
       window.memUsage.render();
       window.memStats.render();
 
-      window.xVal += window.updateInterval / 1000;
     });
+
+    socket.on('guilds stats', function (msg) {
+      var jsonMsg = JSON.parse(msg)
+      jsonMsg.sort(compareGuilds);
+
+      addServersHTML(jsonMsg)
+    });
+
+    socket.on('music stats', function (msg) {
+      var jsonMsg = JSON.parse(msg)
+      addPlayersHTML(jsonMsg)
+    });
+
+    socket.on('disconnect', function (msg) {
+      window.dps = [];
+    });
+
   }, 1000);
-  //}
-  /*});
-};*/
-  /*
-  setInterval(function() {
-    socket.emit('mem get', "get");
-  }, window.updateInterval);
-  */
+
 });

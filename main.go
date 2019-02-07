@@ -9,24 +9,18 @@ import (
 	_ "github.com/NamedKitten/KittehBotGo/commands"
 	"github.com/NamedKitten/KittehBotGo/util/bot"
 	"github.com/NamedKitten/KittehBotGo/util/commands"
-	"github.com/NamedKitten/KittehBotGo/util/static"
+	"github.com/NamedKitten/KittehBotGo/util/webdashboard"
+	log "github.com/sirupsen/logrus"
 	"github.com/xuyu/goredis"
-	"github.com/googollee/go-socket.io"
-	"log"
-	"net/http"
+	_ "net/http/pprof"
 	"os"
 	"os/signal"
-	"runtime"
-	"runtime/debug"
 	"strings"
 	"sync"
 	"time"
-	//"github.com/pkg/profile"
 )
 
 var RedisClient *goredis.Redis
-var UpdateInterval int
-var connected int = 0
 
 //var dg, _ = discordgo.New()
 
@@ -64,18 +58,19 @@ func init() {
 	redisPassword := flag.String("redisPassword", "", "Password for redis server.")
 	redisDB := flag.Int("redisDB", 0, "DB ID for redis server.")
 	runSetup := flag.Bool("runSetup", false, "Run setup?")
-	flag.Bool("runDashboard", true, "Run dashboard?")
 
+	flag.Bool("runDashboard", true, "Run dashboard?")
 	flag.Parse()
+
 	redisPass := *redisPassword
-	UpdateInterval = *updateInterval
+	webdashboard.UpdateInterval = *updateInterval
 	var err error
 
 	RedisClient, err = goredis.Dial(&goredis.DialConfig{
-		Network: "tcp",
-		Address:         fmt.Sprintf("%s:%d", *redisIP, *redisPort),
-		Password:     redisPass,
-		Database:           *redisDB,
+		Network:  "tcp",
+		Address:  fmt.Sprintf("%s:%d", *redisIP, *redisPort),
+		Password: redisPass,
+		Database: *redisDB,
 		Timeout:  10 * time.Second,
 		MaxIdle:  10,
 	})
@@ -89,86 +84,24 @@ func init() {
 	}
 }
 
-func main() {	
+func main() {
+	//defer profile.Start().Stop()
+
 	bot.Start(RedisClient)
-	if flag.Lookup("runDashboard").Value.(flag.Getter).Get().(bool) {
-		go func() {
-			server, sockerr := socketio.NewServer(nil)
-			if sockerr != nil {
-				log.Fatal(sockerr)
-			}
-			server.On("connection", func(so socketio.Socket) {
-				so.Join("mem")
-				log.Println("on connection")
-				connected = connected + 1
-				so.On("disconnection", func() {
-					connected = connected - 1
-					log.Println("on disconnect")
-				})
-			})
-			//so.On("mem get", func(msg string) {
-			go func() {
-				var lock sync.RWMutex
-
-				for {
-					lock.Lock()
-					go func() {
-						go debug.FreeOSMemory()
-
-						time.Sleep(time.Millisecond * time.Duration(UpdateInterval))
-
-						if connected > 0 {
-							//debug.FreeOSMemory()
-							stats := runtime.MemStats{}
-							runtime.ReadMemStats(&stats)
-							using := float64(stats.Alloc) / 1024 / 1024
-							alloc := float64(stats.Sys) / 1024 / 1024
-							cleaned := float64(stats.TotalAlloc) / 1024 / 1024
-							server.BroadcastTo("mem", "mem stats", fmt.Sprintf("%g\n%g\n%g", using, alloc, cleaned))
-							go debug.FreeOSMemory()
-							//})
-						}
-						debug.FreeOSMemory()
-						lock.Unlock()
-					}()
-				}
-
-			}()
-
-			//})
-			server.On("error", func(so socketio.Socket, err error) {
-				log.Println("error:", err)
-			})
-
-			http.Handle("/socket.io/", server)
-
-			http.Handle("/", http.FileServer(static.HTTP))
-
-			http.HandleFunc("/interval", func(w http.ResponseWriter, r *http.Request) {
-				debug.FreeOSMemory()
-				fmt.Fprintf(w, "%d.0", 100)
-				debug.FreeOSMemory()
-			})
-			err := http.ListenAndServe("0.0.0.0:9000", nil)
-			if err != nil {
-				fmt.Println("Error starting http server:", err)
-				os.Exit(1)
-			}
-		}()
-	}
+	go webdashboard.StartDashboard()
 
 	// Wait here until CTRL-C or other term signal is received.
-	fmt.Println("Bot is now running.  Press CTRL-C to exit.")
-    var wG sync.WaitGroup
-    wG.Add(1)
-    var sc chan os.Signal
-    sc = make(chan os.Signal, 1)
-    signal.Notify(sc, os.Interrupt)
-    go func() {
-        <-sc
-        wG.Done()
-    }()
-    wG.Wait()
+	log.Info("Bot is now running..")
+	var wG sync.WaitGroup
+	wG.Add(1)
+	var sc chan os.Signal
+	sc = make(chan os.Signal, 1)
+	signal.Notify(sc, os.Interrupt)
+	go func() {
+		<-sc
+		wG.Done()
+	}()
+	wG.Wait()
 
 	//saveMemMap()
 

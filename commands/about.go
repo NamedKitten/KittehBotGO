@@ -3,10 +3,9 @@ package BotCommands
 import (
 	"fmt"
 	"github.com/NamedKitten/KittehBotGo/util/commands"
-	"github.com/jonas747/discordgo"
 	"github.com/dustin/go-humanize"
+	"github.com/jonas747/discordgo"
 	"runtime"
-	"runtime/debug"
 	"time"
 )
 
@@ -27,7 +26,6 @@ func getDurationString(duration time.Duration) string {
 }
 
 func AboutCommand(s *discordgo.Session, m *discordgo.MessageCreate, ctx *commands.Context) error {
-	defer debug.FreeOSMemory()
 
 	stats := runtime.MemStats{}
 	runtime.ReadMemStats(&stats)
@@ -39,10 +37,6 @@ func AboutCommand(s *discordgo.Session, m *discordgo.MessageCreate, ctx *command
 	fields = append(fields, &discordgo.MessageEmbedField{Name: "**Uptime**:", Value: getDurationString(time.Now().Sub(startTime)), Inline: true})
 	fields = append(fields, &discordgo.MessageEmbedField{Name: "**Goroutines**:", Value: fmt.Sprintf("%d", runtime.NumGoroutine()), Inline: true})
 	fields = append(fields, &discordgo.MessageEmbedField{Name: "**Servers In**:", Value: fmt.Sprintf("%d", len(commands.State.Guilds)), Inline: true})
-	for _, server := range commands.State.Guilds {
-		fmt.Println(server.Guild.Name)
-	}
-
 	selfUserState := commands.State.User(false)
 	s.ChannelMessageSendEmbed(m.ChannelID, &discordgo.MessageEmbed{
 		Type: "rich",
@@ -50,7 +44,6 @@ func AboutCommand(s *discordgo.Session, m *discordgo.MessageCreate, ctx *command
 			Name:    "About KittehBotGo",
 			IconURL: fmt.Sprintf("https://cdn.discordapp.com/avatars/%v/%s.jpg", selfUserState.User.ID, selfUserState.User.Avatar),
 		},
-		Description: "```go\nfmt.Println('OwO')\n```",
 		Fields: fields,
 		Footer: &discordgo.MessageEmbedFooter{
 			Text: "Thanks for using KittehBotGO!",

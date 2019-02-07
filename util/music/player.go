@@ -2,25 +2,25 @@ package music
 
 import (
 	"errors"
+	"fmt"
 	"github.com/NamedKitten/KittehBotGo/util/commands"
-	"github.com/jonas747/discordgo"
 	"github.com/NamedKitten/dca"
+	"github.com/jonas747/discordgo"
 	"github.com/rylio/ytdl"
 	"io"
 	"log"
 	"math/rand"
 	"sync"
 	"time"
-	"fmt"
 )
 
 var (
-	players     = make(map[int64]*Player)
+	Players     = make(map[int64]*Player)
 	playersLock sync.Mutex
 
 	encodeOptions *dca.EncodeOptions
 )
-//
+
 func init() {
 	encodeOptions = &dca.EncodeOptions{}
 	*encodeOptions = *dca.StdEncodeOptions
@@ -31,14 +31,14 @@ func init() {
 
 func GetPlayer(guildID int64) *Player {
 	playersLock.Lock()
-	p := players[guildID]
+	p := Players[guildID]
 	playersLock.Unlock()
 	return p
 }
 
 type Player struct {
 	sync.Mutex
-	guildID int64
+	GuildID int64
 	vc      *discordgo.VoiceConnection
 
 	queue          []*ytdl.VideoInfo
@@ -47,7 +47,7 @@ type Player struct {
 
 	currentEncodeSession *dca.EncodeSession
 	currentStream        *dca.StreamingSession
-	currentlyPlaying     *ytdl.VideoInfo
+	CurrentlyPlaying     *ytdl.VideoInfo
 	downloadWriter       io.Closer
 
 	running bool
@@ -55,16 +55,15 @@ type Player struct {
 }
 
 func CreatePlayer(guildID int64, channelID int64) (*Player, error) {
-	// THERE CAN ONLY BE ONE FOR EACH GUILD OR ELSE WHO KNOWS WHAT WILL HAPPEN, I CERTAINLY DO NOT
 	playersLock.Lock()
-	if p, ok := players[guildID]; ok {
+	if p, ok := Players[guildID]; ok {
 		playersLock.Unlock()
 		return p, nil
 	}
 	defer playersLock.Unlock()
 
 	player := &Player{
-		guildID: guildID,
+		GuildID: guildID,
 		EvtChan: make(chan interface{}),
 	}
 
@@ -77,7 +76,7 @@ func CreatePlayer(guildID int64, channelID int64) (*Player, error) {
 	player.running = true
 	go player.run()
 
-	players[guildID] = player
+	Players[guildID] = player
 	return player, nil
 }
 
@@ -161,7 +160,7 @@ func (p *Player) handleEvent(evt interface{}) {
 		}
 
 		playersLock.Lock()
-		delete(players, p.guildID)
+		delete(Players, p.GuildID)
 		playersLock.Unlock()
 	case *PlayerEvtNext:
 
@@ -212,7 +211,7 @@ func (p *Player) playNext() {
 	if len(p.queue) < 1 {
 		p.currentStream = nil
 		p.currentEncodeSession = nil
-		p.currentlyPlaying = nil
+		p.CurrentlyPlaying = nil
 		p.downloadWriter = nil
 		return
 	}
@@ -256,7 +255,7 @@ func (p *Player) playNext() {
 
 	p.currentStream = stream
 	p.currentEncodeSession = encodeSession
-	p.currentlyPlaying = next
+	p.CurrentlyPlaying = next
 	fmt.Println(encodeSession.FFMPEGMessages())
 
 }
@@ -315,7 +314,7 @@ func (p *Player) Status() *PlayerStatus {
 	status := &PlayerStatus{
 		Paused:   paused,
 		Position: position,
-		Current:  p.currentlyPlaying,
+		Current:  p.CurrentlyPlaying,
 		Queue:    p.queue,
 		Shuffle:  p.shuffle,
 	}

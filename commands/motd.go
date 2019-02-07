@@ -1,12 +1,12 @@
 package BotCommands
 
 import (
+	"fmt"
 	"github.com/NamedKitten/KittehBotGo/util/commands"
-    "github.com/jonas747/discordgo"
-    "fmt"
+	"github.com/jonas747/discordgo"
 	"runtime/debug"
-	"strings"
 	"strconv"
+	"strings"
 )
 
 func init() {
@@ -46,11 +46,11 @@ func MotdCommand(s *discordgo.Session, m *discordgo.MessageCreate, ctx *commands
 }
 
 func MotdEvent(s *discordgo.Session, m *discordgo.GuildMemberAdd) {
-    motdR, err := commands.Redis.Get("motd_" + string(m.GuildID))
-    motd := string(motdR[:])
-    
+	motdR, err := commands.Redis.Get("motd_" + string(m.GuildID))
+	motd := string(motdR[:])
+
 	motdchannelR, channelerr := commands.Redis.Get("motd_" + string(m.GuildID) + "_channel")
-    motdchannel := string(motdchannelR[:])
+	motdchannel := string(motdchannelR[:])
 	if err != nil || channelerr != nil {
 		return
 	} else {

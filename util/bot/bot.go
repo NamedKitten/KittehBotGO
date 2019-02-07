@@ -1,19 +1,17 @@
 package bot
 
 import (
-	"fmt"
 	"github.com/NamedKitten/KittehBotGo/util/commands"
-	//"github.com/jonas747/discordgo"
+	log "github.com/sirupsen/logrus"
 	"github.com/xuyu/goredis"
 )
 
 func Start(redis *goredis.Redis) {
 	commands.Setup(redis)
 
-	fmt.Println("Getting token...")
 	token, err := commands.Redis.Get("token")
 	if err != nil {
-		fmt.Println("Token not found, please run with -runSetup to enter setup.")
+		log.Fatal("Token not found, please run with -runSetup to enter setup.")
 		panic(err)
 	}
 	commands.Discord.Token = "Bot " + string(token[:])

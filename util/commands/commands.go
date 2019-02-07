@@ -2,12 +2,12 @@ package commands
 
 import (
 	"fmt"
+	"github.com/go-errors/errors"
 	"github.com/jonas747/discordgo"
+	"github.com/jonas747/dstate"
+	log "github.com/sirupsen/logrus"
 	"github.com/xuyu/goredis"
 	"go/build"
-	"github.com/go-errors/errors"
-	"github.com/jonas747/dstate"
-	"log"
 	"runtime/debug"
 	"strings"
 	"time"
@@ -28,8 +28,8 @@ func init() {
 	var err error
 	Commands = make(map[string]CommandFunction)
 	HelpStrings = make(map[string]string)
-	Discord, err= discordgo.New()
-	if (err != nil) {
+	Discord, err = discordgo.New()
+	if err != nil {
 		log.Fatal(err)
 	}
 	State = dstate.NewState()
@@ -63,7 +63,6 @@ func HelpCommand(session *discordgo.Session, message *discordgo.MessageCreate, c
 	if true {
 		pre, _ := Redis.Get("prefix")
 		prefix := string(pre[:])
-		
 
 		maxlen := 0
 
@@ -90,7 +89,7 @@ func HelpCommand(session *discordgo.Session, message *discordgo.MessageCreate, c
 	return nil
 }
 
-func Setup(r *goredis.Redis) {             
+func Setup(r *goredis.Redis) {
 	Redis = r
 }
 
@@ -103,8 +102,38 @@ func RegisterHelp(Name string, Help string) {
 }
 
 func GetCommand(msg string) (CommandFunction, string, []string) {
+	var args []string
+	oldArgs := strings.Fields(msg)
+	if strings.Count(msg, "=") != 0 {
 
-	args := strings.Fields(msg)
+		tmpStr := ""
+		insideQuote := false
+		for _, arg := range oldArgs {
+			count := strings.Count(arg, "=")
+			if insideQuote {
+				tmpStr += strings.Replace(arg, "\"", "", -1) + " "
+			}
+			if count == 1 {
+				if insideQuote {
+					insideQuote = false
+					args = append(args, tmpStr)
+					tmpStr = ""
+				} else {
+					insideQuote = true
+					tmpStr += strings.Replace(arg, "\"", "", -1) + " "
+				}
+			}
+			if !insideQuote && count != 1 {
+				args = append(args, arg)
+			}
+		}
+		if insideQuote {
+			args = append(args, tmpStr)
+		}
+	} else {
+		args = oldArgs
+	}
+
 	if len(args) == 0 {
 		return nil, "", nil
 	}
@@ -114,6 +143,7 @@ func GetCommand(msg string) (CommandFunction, string, []string) {
 
 func OnMessageCreate(session *discordgo.Session, message *discordgo.MessageCreate) {
 	var err error
+	defer debug.FreeOSMemory()
 
 	var channel *dstate.ChannelState
 	channel = State.Channel(false, message.ChannelID)
@@ -124,7 +154,7 @@ func OnMessageCreate(session *discordgo.Session, message *discordgo.MessageCreat
 
 	pre, _ := Redis.Get("prefix")
 	prefix := string(pre[:])
-	
+
 	if len(prefix) > 0 {
 
 		if strings.HasPrefix(message.Content, prefix) {
@@ -158,20 +188,20 @@ func OnMessageCreate(session *discordgo.Session, message *discordgo.MessageCreat
 						} else {
 							errStr += line + fmt.Sprintf(" %s: %s\n", frame.Name, source)
 						}
-						errStr = strings.Replace(errStr, build.Default.GOPATH + "/src/", "", -1)
+						errStr = strings.Replace(errStr, build.Default.GOPATH+"/src/", "", -1)
 						errStr = strings.Replace(errStr, "/usr/lib/", "", -1)
 
 					}
 
 					selfUserState := State.User(false)
 					Discord.ChannelMessageSendEmbed(message.ChannelID, &discordgo.MessageEmbed{
-						Type: "rich",
+						Type:  "rich",
 						Title: "An error occured...",
 						Author: &discordgo.MessageEmbedAuthor{
 							Name:    "KittehBotGo",
 							IconURL: fmt.Sprintf("https://cdn.discordapp.com/avatars/%v/%s.jpg", selfUserState.User.ID, selfUserState.User.Avatar),
 						},
-						Description:  "```md\n" + errStr + "\n```",
+						Description: "```md\n" + errStr + "\n```",
 					})
 				}
 

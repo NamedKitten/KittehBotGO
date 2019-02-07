@@ -3,8 +3,8 @@ package BotCommands
 import (
 	"fmt"
 	"github.com/NamedKitten/KittehBotGo/util/commands"
-	"github.com/jonas747/discordgo"
 	"github.com/dustin/go-humanize"
+	"github.com/jonas747/discordgo"
 	"github.com/jonas747/dstate"
 	"time"
 )
@@ -20,7 +20,7 @@ func UserinfoCommand(s *discordgo.Session, m *discordgo.MessageCreate, ctx *comm
 	guildState := commands.State.Guild(false, ctx.GuildID)
 
 	if ctx.HasMention {
-		memberState = guildState.Member(false,  m.Mentions[0].ID)
+		memberState = guildState.Member(false, m.Mentions[0].ID)
 	} else {
 		memberState = guildState.Member(false, m.Author.ID)
 	}
@@ -31,26 +31,25 @@ func UserinfoCommand(s *discordgo.Session, m *discordgo.MessageCreate, ctx *comm
 
 	presenceStatus := memberState.PresenceStatus
 	presenceGame := memberState.PresenceGame
-		switch {
-		case presenceGame == nil:
-			game = "None"
-		case presenceGame.Type == 0:
-			game = "Playing " + presenceGame.Name
-		case presenceGame.Type == 1:
-			game = "Streaming " + presenceGame.Name
-		}
+	switch {
+	case presenceGame == nil:
+		game = "None"
+	case presenceGame.Type == 0:
+		game = "Playing " + presenceGame.Name
+	case presenceGame.Type == 1:
+		game = "Streaming " + presenceGame.Name
+	}
 
-		switch presenceStatus {
-		default:
-			status = "Offline"
-		case 1:
-			status = "Online"
-		case 2:
-			status = "Idle"
-		case 3:
-			status ="Do Not Disturb"
-		}
-	
+	switch presenceStatus {
+	default:
+		status = "Offline"
+	case 1:
+		status = "Online"
+	case 2:
+		status = "Idle"
+	case 3:
+		status = "Do Not Disturb"
+	}
 
 	timenow := time.Now()
 	_, zone := timenow.Zone()

@@ -1,30 +1,24 @@
 package BotCommands
 
 import (
-	"github.com/NamedKitten/KittehBotGo/util/commands"
-	"github.com/NamedKitten/KittehBotGo/util/music"
-
-	"github.com/jonas747/discordgo"
-	//"github.com/go-errors/errors"
-	"log"
-	//"io"
-	//"time"
-	//"os"
 	"errors"
 	"fmt"
+	"github.com/NamedKitten/KittehBotGo/util/commands"
+	"github.com/NamedKitten/KittehBotGo/util/music"
+	"github.com/jonas747/discordgo"
+	"log"
 	"strconv"
 )
 
 func init() {
 	commands.RegisterCommand("music", MusicCommand)
 	commands.RegisterHelp("music", "Music commands.")
-	commands.Discord.LogLevel = 0  
+	commands.Discord.LogLevel = 0
 }
 
 func MusicCommand(s *discordgo.Session, m *discordgo.MessageCreate, ctx *commands.Context) error {
 	var err error
 	guild := commands.State.Guild(false, ctx.GuildID).Guild
-
 
 	var vs *discordgo.VoiceState
 
@@ -141,11 +135,10 @@ func MusicCommand(s *discordgo.Session, m *discordgo.MessageCreate, ctx *command
 
 		if err != nil {
 			log.Println("Error occured:", err)
-			s.ChannelMessageSend(m.ChannelID, "Error occured: " + err.Error())
+			s.ChannelMessageSend(m.ChannelID, "Error occured: "+err.Error())
 		}
-		
 
-	}  else {
+	} else {
 		helpMsg := "```md\n"
 		helpMsg += "# Music Command Help\n"
 		helpMsg += "[music join](Joins the voice channel you are currently in)\n"
@@ -161,6 +154,6 @@ func MusicCommand(s *discordgo.Session, m *discordgo.MessageCreate, ctx *command
 		helpMsg += "```"
 		s.ChannelMessageSend(m.ChannelID, helpMsg)
 	}
-	
+
 	return nil
 }
