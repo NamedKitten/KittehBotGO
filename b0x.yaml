@@ -10,7 +10,7 @@ compression:
 
 clean: false
 output: "static.go"
-unexporTed: true
+unexporTed: false
 spread: false
 debug: false
 

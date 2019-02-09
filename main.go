@@ -12,7 +12,6 @@ import (
 	"github.com/NamedKitten/KittehBotGo/util/webdashboard"
 	log "github.com/sirupsen/logrus"
 	"github.com/xuyu/goredis"
-	_ "net/http/pprof"
 	"os"
 	"os/signal"
 	"strings"
@@ -21,8 +20,6 @@ import (
 )
 
 var RedisClient *goredis.Redis
-
-//var dg, _ = discordgo.New()
 
 func setup() {
 	reader := bufio.NewReader(os.Stdin)
@@ -49,9 +46,6 @@ func setup() {
 }
 
 func init() {
-	//runtime.GOMAXPROCS(runtime.NumCPU() + 4)
-	//debug.SetGCPercent(1)
-
 	updateInterval := flag.Int("updateInterval", 100, "How often the dashboard gets updated in miliseconds.")
 	redisIP := flag.String("redisIP", "localhost", "IP for redis server.")
 	redisPort := flag.Int("redisPort", 6379, "Port for redis server.")
@@ -85,12 +79,9 @@ func init() {
 }
 
 func main() {
-	//defer profile.Start().Stop()
-
 	bot.Start(RedisClient)
 	go webdashboard.StartDashboard()
 
-	// Wait here until CTRL-C or other term signal is received.
 	log.Info("Bot is now running..")
 	var wG sync.WaitGroup
 	wG.Add(1)
@@ -103,9 +94,8 @@ func main() {
 	}()
 	wG.Wait()
 
-	//saveMemMap()
+	log.Info("Closing Discord Connection...")
 
 	// Cleanly close down the Discord session.
 	commands.Discord.Close()
-	//p.Stop()
 }
