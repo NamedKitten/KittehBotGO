@@ -1,7 +1,6 @@
 package BotCommands
 
 import (
-	"errors"
 	"flag"
 	"fmt"
 	"github.com/NamedKitten/KittehBotGo/util/commands"
@@ -13,6 +12,7 @@ import (
 	"os"
 	"path/filepath"
 	"strings"
+	"errors"
 )
 
 func getTLDR(name string, language string, variant string) string {
@@ -38,7 +38,7 @@ func getTLDR(name string, language string, variant string) string {
 		if strings.Index(path, "/"+safeName+".md") != -1 {
 			str, _ := ioutil.ReadFile(path)
 			tldrString = string(str)
-			return
+			return errors.New("found")
 		}
 		return nil
 	})
