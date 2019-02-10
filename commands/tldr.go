@@ -7,7 +7,7 @@ import (
 	"github.com/jonas747/discordgo"
 	"github.com/kennygrant/sanitize"
 	log "github.com/sirupsen/logrus"
-	"gopkg.in/src-d/go-git.v4"
+	"os/exec"
 	"io/ioutil"
 	"os"
 	"path/filepath"
@@ -49,20 +49,12 @@ func getTLDR(name string, language string, variant string) string {
 func updateCache() {
 	if _, err := os.Stat("/tmp/tldr"); os.IsNotExist(err) {
 		log.Info("Cloning tldr repo.")
-		_, err := git.PlainClone("/tmp/tldr", false, &git.CloneOptions{
-			URL:      "https://github.com/tldr-pages/tldr",
-			Progress: os.Stdout,
-		})
-		if err != nil {
-			log.Info("Failed to clone repo.")
-		}
+		out, _ := exec.Command("git", "-C", "/tmp/", "clone", "https://github.com/tldr-pages/tldr", "--depth=1").Output()
+		log.Info(out)
 	} else {
-		r, err := git.PlainOpen("/tmp/tldr")
-		if err != nil {
-			log.Info("Failed to open repo")
-		}
-		w, _ := r.Worktree()
-		w.Pull(&git.PullOptions{RemoteName: "origin"})
+		out, _ := exec.Command("git", "-C", "/tmp/tldr/", "pull").Output()
+		log.Info(out)
+
 	}
 }
 

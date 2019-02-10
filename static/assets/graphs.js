@@ -38,25 +38,34 @@ document.addEventListener('DOMContentLoaded', function() {
       x: 0,
       y: 0
   }];
-  var socket = io();
+  const socket = io('http://localhost:9000', {transports: ['websocket']});
   window.connectionTime = 0;
 
   CanvasJS.addColorSet("customColorSet", [
-      "#393f63",
+      /*"#393f63",
       "#e5d8B0",
       "#ffb367",
       "#f98461",
       "#d9695f",
-      "#e05850"
+      "#e05850"*/
+      'rgb(255, 99, 132)',
+      'rgb(255, 159, 64)',
+      'rgb(255, 205, 86)',
+      'rgb(75, 192, 192)',
+       'rgb(54, 162, 235)',
+      'rgb(153, 102, 255)',
+      'rgb(231,233,237)'
   ]);
+
 
   window.memUsage = new CanvasJS.Chart("memUsage", {
       animationEnabled: true,
       animation: true,
       responsive: true,
       backgroundColor: "transparent",
+      colorSet: "customColorSet",
       axisX: {
-          labelFontColor: "#717171",
+          labelFontColor: "white",
           lineColor: "#a2a2a2",
           tickColor: "transparent",
           title: "Time (seconds?)"
@@ -64,9 +73,9 @@ document.addEventListener('DOMContentLoaded', function() {
       },
       axisY: {
           gridThickness: 0,
-          labelFontColor: "#717171",
-          lineColor: "#a2a2a2",
-          tickColor: "#a2a2a2",
+          labelFontColor: "white",
+          lineColor: "white",
+          tickColor: "white",
           minimum: 2,
           title: "Memory Used (MB)"
       },
@@ -86,11 +95,10 @@ document.addEventListener('DOMContentLoaded', function() {
       backgroundColor: "transparent",
       colorSet: "customColorSet",
       axisX: {
-          labelFontColor: "#717171",
+          labelFontColor: "white",
           labelFontSize: 18,
           lineThickness: 0,
           tickThickness: 0,
-          lineColor: "#a2a2a2",
           tickColor: "transparent"
       },
       axisY: {

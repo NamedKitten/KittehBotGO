@@ -7,7 +7,9 @@ import (
 	"github.com/NamedKitten/KittehBotGo/util/commands"
 	"github.com/NamedKitten/KittehBotGo/util/music"
 	"github.com/NamedKitten/KittehBotGo/util/static"
-	"github.com/googollee/go-socket.io"
+	"github.com/graarh/golang-socketio"
+	"github.com/graarh/golang-socketio/transport"
+	"strings"
 	log "github.com/sirupsen/logrus"
 	"net/http"
 	"runtime"
@@ -20,7 +22,7 @@ var UpdateInterval int
 
 // connected is the amount of clients connected to the websocket.
 var connected int
-var server *socketio.Server
+var server *gosocketio.Server
 
 type guildInfo struct {
 	Icon    string `json:"icon"`
@@ -49,7 +51,7 @@ func musicPlayerInfoUpdater() {
 				if player.CurrentlyPlaying != nil {
 					guildName := commands.State.Guild(false, gid).Guild.Name
 					playerStatus := player.Status()
-					thumbnail := player.CurrentlyPlaying.GetThumbnailURL("best").String()
+					thumbnail := strings.Replace(player.CurrentlyPlaying.GetThumbnailURL("default").String(), "%20", "", -1)
 					title := playerStatus.Current.Title
 					musicPlayerInfoList = append(musicPlayerInfoList, musicPlayerInfo{guildName, thumbnail, title})
 				}
@@ -101,37 +103,30 @@ func memStatsUpdater() {
 // StartDashboard starts the web dashboard.
 func StartDashboard() {
 	if flag.Lookup("runDashboard").Value.(flag.Getter).Get().(bool) {
-		socketServer, sockerr := socketio.NewServer(nil)
-		if sockerr != nil {
-			log.WithFields(log.Fields{
-				"err": sockerr,
-			}).Error("A error occurred creating the socket server.")
-		}
+		socketServer := gosocketio.NewServer(transport.GetDefaultWebsocketTransport())
+
 		server = socketServer
-		server.On("connection", func(so socketio.Socket) {
-			so.Join("mem")
-			so.Join("music")
-			so.Join("guilds")
+		server.On(gosocketio.OnConnection, func(c *gosocketio.Channel) {
+			c.Join("mem")
+			c.Join("music")
+			c.Join("guilds")
 			connected = connected + 1
-			so.On("disconnection", func() {
-				connected = connected - 1
-			})
 		})
+		server.On(gosocketio.OnDisconnection, func(c *gosocketio.Channel) {
+			connected = connected - 1
+		})
+	
 		go memStatsUpdater()
 		go guildsListUpdater()
 		go musicPlayerInfoUpdater()
 
-		server.On("error", func(so socketio.Socket, err error) {
-			log.WithFields(log.Fields{
-				"err": err,
-			}).Error("A error occurred in the socket.")
-		})
+		serveMux := http.NewServeMux()
 
-		http.Handle("/socket.io/", server)
+		serveMux.Handle("/socket.io/", server)
 
-		http.Handle("/", http.FileServer(static.HTTP))
+		serveMux.Handle("/", http.FileServer(static.HTTP))
 
-		err := http.ListenAndServe("0.0.0.0:9000", nil)
+		err := http.ListenAndServe("0.0.0.0:9000", serveMux)
 		if err != nil {
 			log.WithFields(log.Fields{
 				"err": err,
