@@ -119,7 +119,7 @@ func (p *Player) run() {
 					p.vc.Disconnect()
 				}
 
-				log.Println("An error occured:", err)
+				log.Println("An error occurred:", err)
 				p.Unlock()
 				return
 			}

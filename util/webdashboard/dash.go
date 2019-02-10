@@ -105,7 +105,7 @@ func StartDashboard() {
 		if sockerr != nil {
 			log.WithFields(log.Fields{
 				"err": sockerr,
-			}).Error("A error occured creating the socket server.")
+			}).Error("A error occurred creating the socket server.")
 		}
 		server = socketServer
 		server.On("connection", func(so socketio.Socket) {
@@ -124,7 +124,7 @@ func StartDashboard() {
 		server.On("error", func(so socketio.Socket, err error) {
 			log.WithFields(log.Fields{
 				"err": err,
-			}).Error("A error occured in the socket.")
+			}).Error("A error occurred in the socket.")
 		})
 
 		http.Handle("/socket.io/", server)

@@ -211,7 +211,7 @@ func onMessageCreate(session *discordgo.Session, message *discordgo.MessageCreat
 					selfUserState := State.User(false)
 					Discord.ChannelMessageSendEmbed(message.ChannelID, &discordgo.MessageEmbed{
 						Type:  "rich",
-						Title: "An error occured...",
+						Title: "An error occurred...",
 						Author: &discordgo.MessageEmbedAuthor{
 							Name:    "KittehBotGo",
 							IconURL: fmt.Sprintf("https://cdn.discordapp.com/avatars/%v/%s.jpg", selfUserState.User.ID, selfUserState.User.Avatar),

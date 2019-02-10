@@ -134,8 +134,8 @@ func musicCommand(s *discordgo.Session, m *discordgo.MessageCreate, ctx *command
 		}
 
 		if err != nil {
-			log.Println("Error occured:", err)
-			s.ChannelMessageSend(m.ChannelID, "Error occured: "+err.Error())
+			log.Println("Error occurred:", err)
+			s.ChannelMessageSend(m.ChannelID, "Error occurred: "+err.Error())
 		}
 
 	} else {
