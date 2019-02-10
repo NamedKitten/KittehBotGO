@@ -8,11 +8,11 @@ import (
 )
 
 func init() {
-	commands.RegisterCommand("ping", PingCommand)
+	commands.RegisterCommand("ping", pingCommand)
 	commands.RegisterHelp("ping", "Shows latency for sending a message.")
 }
 
-func PingCommand(s *discordgo.Session, m *discordgo.MessageCreate, ctx *commands.Context) error {
+func pingCommand(s *discordgo.Session, m *discordgo.MessageCreate, ctx *commands.Context) error {
 	start := time.Now()
 	message, err := s.ChannelMessageSend(m.ChannelID, "...")
 	elapsed := time.Since(start)

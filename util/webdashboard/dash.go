@@ -15,23 +15,26 @@ import (
 	"time"
 )
 
+// UpdateInterval is how often in milliseconds the web dashboard is updated.
 var UpdateInterval int
-var connected int = 0
+
+// connected is the amount of clients connected to the websocket.
+var connected int
 var server *socketio.Server
 
-type GuildInfo struct {
+type guildInfo struct {
 	Icon    string `json:"icon"`
 	Name    string `json:"name"`
 	Members int    `json:"members"`
 }
 
-type MemoryStatsInfo struct {
+type memoryStatsInfo struct {
 	Using     float64 `json:"using"`
 	Allocated float64 `json:"allocated"`
 	Cleaned   float64 `json:"cleaned"`
 }
 
-type MusicPlayerInfo struct {
+type musicPlayerInfo struct {
 	GuildName string `json:"guildName"`
 	Thumbnail string `json:"thumbnail"`
 	Title     string `json:"title"`
@@ -41,14 +44,14 @@ func musicPlayerInfoUpdater() {
 
 	for {
 		if connected > 0 {
-			var musicPlayerInfoList []MusicPlayerInfo
+			var musicPlayerInfoList []musicPlayerInfo
 			for gid, player := range music.Players {
 				if player.CurrentlyPlaying != nil {
 					guildName := commands.State.Guild(false, gid).Guild.Name
 					playerStatus := player.Status()
 					thumbnail := player.CurrentlyPlaying.GetThumbnailURL("best").String()
 					title := playerStatus.Current.Title
-					musicPlayerInfoList = append(musicPlayerInfoList, MusicPlayerInfo{guildName, thumbnail, title})
+					musicPlayerInfoList = append(musicPlayerInfoList, musicPlayerInfo{guildName, thumbnail, title})
 				}
 			}
 			jsonMusicPlayersInfo, _ := json.Marshal(musicPlayerInfoList)
@@ -62,10 +65,10 @@ func guildsListUpdater() {
 
 	for {
 		if connected > 0 {
-			var guildsInfoList []GuildInfo
+			var guildsInfoList []guildInfo
 			for _, guild := range commands.State.Guilds {
 				guildIcon := fmt.Sprintf("https://cdn.discordapp.com/icons/%d/%s.jpg", guild.ID, guild.Guild.Icon)
-				guildsInfoList = append(guildsInfoList, GuildInfo{guildIcon, guild.Guild.Name, guild.Guild.MemberCount})
+				guildsInfoList = append(guildsInfoList, guildInfo{guildIcon, guild.Guild.Name, guild.Guild.MemberCount})
 			}
 			jsonGuildInfo, _ := json.Marshal(guildsInfoList)
 			server.BroadcastTo("guilds", "guilds stats", string(jsonGuildInfo))
@@ -81,7 +84,7 @@ func memStatsUpdater() {
 		if connected > 0 {
 			stats := runtime.MemStats{}
 			runtime.ReadMemStats(&stats)
-			memStatsInfo := MemoryStatsInfo{
+			memStatsInfo := memoryStatsInfo{
 				float64(stats.Alloc) / 1024 / 1024,
 				float64(stats.Sys) / 1024 / 1024,
 				float64(stats.TotalAlloc) / 1024 / 1024,
@@ -95,6 +98,7 @@ func memStatsUpdater() {
 	}
 }
 
+// StartDashboard starts the web dashboard.
 func StartDashboard() {
 	if flag.Lookup("runDashboard").Value.(flag.Getter).Get().(bool) {
 		socketServer, sockerr := socketio.NewServer(nil)

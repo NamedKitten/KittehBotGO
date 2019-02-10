@@ -10,13 +10,13 @@ import (
 )
 
 func init() {
-	commands.RegisterCommand("motd", MotdCommand)
+	commands.RegisterCommand("motd", motdCommand)
 	commands.RegisterHelp("motd", "Message of the day related commands.")
-	commands.Discord.AddHandler(MotdEvent)
+	commands.Discord.AddHandler(motdEvent)
 
 }
 
-func MotdCommand(s *discordgo.Session, m *discordgo.MessageCreate, ctx *commands.Context) error {
+func motdCommand(s *discordgo.Session, m *discordgo.MessageCreate, ctx *commands.Context) error {
 	defer debug.FreeOSMemory()
 
 	guild := commands.State.Guild(false, ctx.GuildID).Guild
@@ -45,7 +45,7 @@ func MotdCommand(s *discordgo.Session, m *discordgo.MessageCreate, ctx *commands
 	return nil
 }
 
-func MotdEvent(s *discordgo.Session, m *discordgo.GuildMemberAdd) {
+func motdEvent(s *discordgo.Session, m *discordgo.GuildMemberAdd) {
 	motdR, err := commands.Redis.Get("motd_" + string(m.GuildID))
 	motd := string(motdR[:])
 
@@ -53,8 +53,7 @@ func MotdEvent(s *discordgo.Session, m *discordgo.GuildMemberAdd) {
 	motdchannel := string(motdchannelR[:])
 	if err != nil || channelerr != nil {
 		return
-	} else {
-		i, _ := strconv.ParseInt(motdchannel, 10, 64)
-		go s.ChannelMessageSend(i, motd)
 	}
+	i, _ := strconv.ParseInt(motdchannel, 10, 64)
+	go s.ChannelMessageSend(i, motd)
 }

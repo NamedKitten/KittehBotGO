@@ -10,10 +10,11 @@ import (
 )
 
 func init() {
-	commands.RegisterCommand("userinfo", UserinfoCommand)
+	commands.RegisterCommand("userinfo", userinfoCommand)
+	commands.RegisterHelp("userinfo", "Shows info on a user.")
 }
 
-func UserinfoCommand(s *discordgo.Session, m *discordgo.MessageCreate, ctx *commands.Context) error {
+func userinfoCommand(s *discordgo.Session, m *discordgo.MessageCreate, ctx *commands.Context) error {
 	var member *discordgo.Member
 	var memberState *dstate.MemberState
 

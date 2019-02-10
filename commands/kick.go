@@ -6,11 +6,11 @@ import (
 )
 
 func init() {
-	commands.RegisterCommand("kick", KickCommand)
+	commands.RegisterCommand("kick", kickCommand)
 	commands.RegisterHelp("kick", "Kicks a member..")
 }
 
-func KickCommand(s *discordgo.Session, m *discordgo.MessageCreate, ctx *commands.Context) error {
+func kickCommand(s *discordgo.Session, m *discordgo.MessageCreate, ctx *commands.Context) error {
 
 	// Also define the string that we will return that lists all kicked and not kicked users (pulled from above slices)
 	kickedUsersStr := "Kicked successfully: "

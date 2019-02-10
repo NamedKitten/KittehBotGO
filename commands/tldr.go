@@ -38,7 +38,7 @@ func getTLDR(name string, language string, variant string) string {
 		if strings.Index(path, "/"+safeName+".md") != -1 {
 			str, _ := ioutil.ReadFile(path)
 			tldrString = string(str)
-			return errors.New("Found!")
+			return
 		}
 		return nil
 	})
@@ -68,10 +68,11 @@ func updateCache() {
 
 func init() {
 	go updateCache()
-	commands.RegisterCommand("tldr", TldrCommand)
+	commands.RegisterCommand("tldr", tldrCommand)
+	commands.RegisterHelp("tldr", "Shows simple usage for a command line command.")
 }
 
-func TldrCommand(s *discordgo.Session, m *discordgo.MessageCreate, ctx *commands.Context) error {
+func tldrCommand(s *discordgo.Session, m *discordgo.MessageCreate, ctx *commands.Context) error {
 	flagSet := flag.NewFlagSet("tldr", flag.ContinueOnError)
 
 	flagSet.Usage = func() {

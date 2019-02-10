@@ -19,7 +19,7 @@ import (
 	"time"
 )
 
-var RedisClient *goredis.Redis
+var redisClient *goredis.Redis
 
 func setup() {
 	reader := bufio.NewReader(os.Stdin)
@@ -40,8 +40,8 @@ func setup() {
 		panic(tokenErr)
 	}
 
-	RedisClient.Set("prefix", strings.TrimSpace(prefix), 0, 0, false, false)
-	RedisClient.Set("token", strings.TrimSpace(token), 0, 0, false, false)
+	redisClient.Set("prefix", strings.TrimSpace(prefix), 0, 0, false, false)
+	redisClient.Set("token", strings.TrimSpace(token), 0, 0, false, false)
 	fmt.Println("The bot is now setup.")
 }
 
@@ -60,7 +60,7 @@ func init() {
 	webdashboard.UpdateInterval = *updateInterval
 	var err error
 
-	RedisClient, err = goredis.Dial(&goredis.DialConfig{
+	redisClient, err = goredis.Dial(&goredis.DialConfig{
 		Network:  "tcp",
 		Address:  fmt.Sprintf("%s:%d", *redisIP, *redisPort),
 		Password: redisPass,
@@ -79,7 +79,7 @@ func init() {
 }
 
 func main() {
-	bot.Start(RedisClient)
+	bot.Start(redisClient)
 	go webdashboard.StartDashboard()
 
 	log.Info("Bot is now running..")

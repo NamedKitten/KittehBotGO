@@ -13,15 +13,24 @@ import (
 	"time"
 )
 
+// CommandFunction is a type which commands should follow.
 type CommandFunction func(*discordgo.Session, *discordgo.MessageCreate, *Context) error
 
+// Redis connection.
 var Redis *goredis.Redis
+
+// Commands is a map of strings to CommandFunctions which contains all the registered commands.
 var Commands map[string]CommandFunction
+
+// HelpStrings is a map of command names to the string used in the help command.
 var HelpStrings map[string]string
 
-var HelpCache string
+var helpCache string
+
+// Discord session,
 var Discord *discordgo.Session
 
+// State is a alternative state which is much better then discordgo's defaults.
 var State *dstate.State
 
 func init() {
@@ -41,11 +50,12 @@ func init() {
 	State.TrackPrivateChannels = true
 	State.CacheExpirey = time.Minute * 10
 	Discord.AddHandler(State.HandleEvent)
-	Discord.AddHandler(OnMessageCreate)
-	RegisterCommand("help", HelpCommand)
+	Discord.AddHandler(onMessageCreate)
+	RegisterCommand("help", helpCommand)
 	RegisterHelp("help", "Shows you all the commands this bot has.")
 }
 
+// Context given to commands and contains useful information that commands often require.
 type Context struct {
 	Args       []string
 	Content    string
@@ -56,7 +66,7 @@ type Context struct {
 	HasMention bool
 }
 
-func HelpCommand(session *discordgo.Session, message *discordgo.MessageCreate, ctx *Context) error {
+func helpCommand(session *discordgo.Session, message *discordgo.MessageCreate, ctx *Context) error {
 	defer debug.FreeOSMemory()
 
 	com := Commands
@@ -81,26 +91,31 @@ func HelpCommand(session *discordgo.Session, message *discordgo.MessageCreate, c
 		}
 
 		resp += "```\n"
-		HelpCache = resp
+		helpCache = resp
 	}
 
-	session.ChannelMessageSend(message.ChannelID, HelpCache)
+	session.ChannelMessageSend(message.ChannelID, helpCache)
 
 	return nil
 }
 
+// Setup sets the redis session to be used.
 func Setup(r *goredis.Redis) {
 	Redis = r
 }
 
+// RegisterCommand registers a bot command.
 func RegisterCommand(Name string, Function CommandFunction) {
 	Commands[Name] = Function
 }
 
+// RegisterHelp registers a command help string.
 func RegisterHelp(Name string, Help string) {
 	HelpStrings[Name] = Help
 }
 
+// GetCommand returns a command, command name and arguments from a message string.
+// It also splits the args to account for Unix style command line arguments.
 func GetCommand(msg string) (CommandFunction, string, []string) {
 	var args []string
 	oldArgs := strings.Fields(msg)
@@ -141,7 +156,7 @@ func GetCommand(msg string) (CommandFunction, string, []string) {
 
 }
 
-func OnMessageCreate(session *discordgo.Session, message *discordgo.MessageCreate) {
+func onMessageCreate(session *discordgo.Session, message *discordgo.MessageCreate) {
 	var err error
 	defer debug.FreeOSMemory()
 

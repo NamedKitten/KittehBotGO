@@ -9,11 +9,11 @@ import (
 )
 
 func init() {
-	commands.RegisterCommand("serverinfo", ServerinfoCommand)
+	commands.RegisterCommand("serverinfo", serverinfoCommand)
 	commands.RegisterHelp("serverinfo", "Shows info on this server.")
 }
 
-func ServerinfoCommand(s *discordgo.Session, m *discordgo.MessageCreate, ctx *commands.Context) error {
+func serverinfoCommand(s *discordgo.Session, m *discordgo.MessageCreate, ctx *commands.Context) error {
 	guildState := commands.State.Guild(false, ctx.GuildID)
 	guild := guildState.Guild
 	ownerState := guildState.Member(false, guild.OwnerID)
@@ -45,9 +45,9 @@ func ServerinfoCommand(s *discordgo.Session, m *discordgo.MessageCreate, ctx *co
 
 	for _, member := range guild.Members {
 		if member.User.Bot {
-			bots += 1
+			bots++
 		} else {
-			humans += 1
+			humans++
 		}
 	}
 	var ratio string

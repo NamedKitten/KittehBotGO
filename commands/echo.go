@@ -9,11 +9,11 @@ import (
 )
 
 func init() {
-	commands.RegisterCommand("echo", EchoCommand)
+	commands.RegisterCommand("echo", echoCommand)
 	commands.RegisterHelp("echo", "Echos what you say.")
 }
 
-func EchoCommand(s *discordgo.Session, m *discordgo.MessageCreate, ctx *commands.Context) error {
+func echoCommand(s *discordgo.Session, m *discordgo.MessageCreate, ctx *commands.Context) error {
 	go s.ChannelMessageSendEmbed(m.ChannelID, &discordgo.MessageEmbed{
 		Type: "rich",
 		Author: &discordgo.MessageEmbedAuthor{

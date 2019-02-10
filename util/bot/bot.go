@@ -6,6 +6,7 @@ import (
 	"github.com/xuyu/goredis"
 )
 
+// Start sets up and starts the discord connection.
 func Start(redis *goredis.Redis) {
 	commands.Setup(redis)
 

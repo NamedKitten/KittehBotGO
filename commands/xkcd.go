@@ -13,9 +13,11 @@ import (
 var client = xkcd.NewClient()
 
 func init() {
-	commands.RegisterCommand("xkcd", XkcdCommand)
+	commands.RegisterCommand("xkcd", xkcdCommand)
+	commands.RegisterHelp("xkcd", "Shows the latest xkcd comic.")
 }
-func XkcdCommand(s *discordgo.Session, m *discordgo.MessageCreate, ctx *commands.Context) error {
+
+func xkcdCommand(s *discordgo.Session, m *discordgo.MessageCreate, ctx *commands.Context) error {
 	defer debug.FreeOSMemory()
 
 	var comic xkcd.Comic

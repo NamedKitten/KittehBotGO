@@ -11,12 +11,12 @@ import (
 )
 
 func init() {
-	commands.RegisterCommand("music", MusicCommand)
+	commands.RegisterCommand("music", musicCommand)
 	commands.RegisterHelp("music", "Music commands.")
 	commands.Discord.LogLevel = 0
 }
 
-func MusicCommand(s *discordgo.Session, m *discordgo.MessageCreate, ctx *commands.Context) error {
+func musicCommand(s *discordgo.Session, m *discordgo.MessageCreate, ctx *commands.Context) error {
 	var err error
 	guild := commands.State.Guild(false, ctx.GuildID).Guild
 
@@ -59,7 +59,7 @@ func MusicCommand(s *discordgo.Session, m *discordgo.MessageCreate, ctx *command
 			s.ChannelMessageSend(m.ChannelID, "Paused.")
 		case "add":
 			if len(ctx.Args) < 2 {
-				err = errors.New("Nothing song specified to add.")
+				err = errors.New("no song specified")
 				break
 			}
 
@@ -76,7 +76,7 @@ func MusicCommand(s *discordgo.Session, m *discordgo.MessageCreate, ctx *command
 			s.ChannelMessageSend(m.ChannelID, "Playing random song from queue.")
 		case "goto", "item":
 			if len(ctx.Args) < 2 {
-				err = errors.New("No queue number specified.")
+				err = errors.New("queue number not specified")
 				break
 			}
 
@@ -86,7 +86,7 @@ func MusicCommand(s *discordgo.Session, m *discordgo.MessageCreate, ctx *command
 			}
 
 			if index < 0 {
-				err = errors.New("No.")
+				err = errors.New("no item to skip to")
 				break
 			}
 
@@ -127,7 +127,7 @@ func MusicCommand(s *discordgo.Session, m *discordgo.MessageCreate, ctx *command
 			}
 
 			if index < 0 {
-				err = errors.New("No songs left in queue to remove.")
+				err = errors.New("no songs in queue to remove")
 				break
 			}
 			player.EvtChan <- &music.PlayerEvtRemove{Index: index}

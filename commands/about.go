@@ -10,7 +10,7 @@ import (
 )
 
 func init() {
-	commands.RegisterCommand("about", AboutCommand)
+	commands.RegisterCommand("about", aboutCommand)
 	commands.RegisterHelp("about", "Tells you about the bot.")
 }
 
@@ -25,7 +25,7 @@ func getDurationString(duration time.Duration) string {
 	)
 }
 
-func AboutCommand(s *discordgo.Session, m *discordgo.MessageCreate, ctx *commands.Context) error {
+func aboutCommand(s *discordgo.Session, m *discordgo.MessageCreate, ctx *commands.Context) error {
 
 	stats := runtime.MemStats{}
 	runtime.ReadMemStats(&stats)

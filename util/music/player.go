@@ -15,6 +15,7 @@ import (
 )
 
 var (
+	// Players is a map of guild IDs to their music player.
 	Players     = make(map[int64]*Player)
 	playersLock sync.Mutex
 
@@ -29,6 +30,7 @@ func init() {
 	encodeOptions.RawOutput = true
 }
 
+// GetPlayer returns a Player from Players.
 func GetPlayer(guildID int64) *Player {
 	playersLock.Lock()
 	p := Players[guildID]
@@ -36,6 +38,7 @@ func GetPlayer(guildID int64) *Player {
 	return p
 }
 
+// Player is a instance of a music player for a discord server.
 type Player struct {
 	sync.Mutex
 	GuildID int64
@@ -54,6 +57,7 @@ type Player struct {
 	EvtChan chan interface{}
 }
 
+// CreatePlayer creates a player from a guild and channel ID.
 func CreatePlayer(guildID int64, channelID int64) (*Player, error) {
 	playersLock.Lock()
 	if p, ok := Players[guildID]; ok {
@@ -260,6 +264,7 @@ func (p *Player) playNext() {
 
 }
 
+// QueueUp adds a youtube URL to the queue.
 func (p *Player) QueueUp(url string) error {
 	if !p.running {
 		return errors.New("Player is not running.  ")
@@ -280,6 +285,7 @@ func (p *Player) QueueUp(url string) error {
 	return nil
 }
 
+// ToggleShuffle toggles between shuffling tracks in the playlist or not shuffling.
 func (p *Player) ToggleShuffle() bool {
 	p.Lock()
 	defer p.Unlock()
@@ -292,6 +298,7 @@ func (p *Player) ToggleShuffle() bool {
 	return p.shuffle
 }
 
+// PlayerStatus is the current status of a player.
 type PlayerStatus struct {
 	Paused   bool
 	Position time.Duration
@@ -300,7 +307,7 @@ type PlayerStatus struct {
 	Shuffle  bool
 }
 
-// Return all the elemns in the queue
+// Status returns the status of a player.
 func (p *Player) Status() *PlayerStatus {
 	p.Lock()
 	paused := true
@@ -323,17 +330,27 @@ func (p *Player) Status() *PlayerStatus {
 	return status
 }
 
+// PlayerEvtQeue is used to queue up a new song.
 type PlayerEvtQeue struct {
 	Info *ytdl.VideoInfo
 }
 
+// PlayerEvtPause pauses playback.
 type PlayerEvtPause struct{}
+
+// PlayerEvtResume resumes playback.
 type PlayerEvtResume struct{}
+
+// PlayerEvtKill stops the player and disconnects it from the voice channel.
 type PlayerEvtKill struct{}
+
+// PlayerEvtNext moves to the next element in the queue.
 type PlayerEvtNext struct {
 	Index  int  // Jumps to specified index if > -1
 	Random bool // Jumps to a random element
 }
+
+// PlayerEvtRemove removes a item from the queue.
 type PlayerEvtRemove struct {
 	Index int // What to remove
 }
