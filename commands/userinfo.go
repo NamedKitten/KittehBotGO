@@ -5,7 +5,7 @@ import (
 	"github.com/NamedKitten/KittehBotGo/util/commands"
 	"github.com/dustin/go-humanize"
 	"github.com/NamedKitten/discordgo"
-	"github.com/jonas747/dstate"
+	"github.com/NamedKitten/dstate"
 	"time"
 )
 

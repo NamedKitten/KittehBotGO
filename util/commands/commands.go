@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"github.com/go-errors/errors"
 	"github.com/NamedKitten/discordgo"
-	"github.com/jonas747/dstate"
+	"github.com/NamedKitten/dstate"
 	"github.com/NamedKitten/KittehBotGo/util/database"
 	log "github.com/sirupsen/logrus"
 	"go/build"
