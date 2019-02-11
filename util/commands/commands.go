@@ -3,10 +3,10 @@ package commands
 import (
 	"fmt"
 	"github.com/go-errors/errors"
-	"github.com/jonas747/discordgo"
+	"github.com/NamedKitten/discordgo"
 	"github.com/jonas747/dstate"
+	"github.com/NamedKitten/KittehBotGo/util/database"
 	log "github.com/sirupsen/logrus"
-	"github.com/xuyu/goredis"
 	"go/build"
 	"runtime/debug"
 	"strings"
@@ -15,9 +15,6 @@ import (
 
 // CommandFunction is a type which commands should follow.
 type CommandFunction func(*discordgo.Session, *discordgo.MessageCreate, *Context) error
-
-// Redis connection.
-var Redis *goredis.Redis
 
 // Commands is a map of strings to CommandFunctions which contains all the registered commands.
 var Commands map[string]CommandFunction
@@ -71,8 +68,7 @@ func helpCommand(session *discordgo.Session, message *discordgo.MessageCreate, c
 
 	com := Commands
 	if true {
-		pre, _ := Redis.Get("prefix")
-		prefix := string(pre[:])
+		prefix := database.Get("prefix")
 
 		maxlen := 0
 
@@ -97,11 +93,6 @@ func helpCommand(session *discordgo.Session, message *discordgo.MessageCreate, c
 	session.ChannelMessageSend(message.ChannelID, helpCache)
 
 	return nil
-}
-
-// Setup sets the redis session to be used.
-func Setup(r *goredis.Redis) {
-	Redis = r
 }
 
 // RegisterCommand registers a bot command.
@@ -167,8 +158,7 @@ func onMessageCreate(session *discordgo.Session, message *discordgo.MessageCreat
 		return
 	}
 
-	pre, _ := Redis.Get("prefix")
-	prefix := string(pre[:])
+	prefix := database.Get("prefix")
 
 	if len(prefix) > 0 {
 

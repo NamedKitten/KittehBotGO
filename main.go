@@ -7,19 +7,17 @@ import (
 	"flag"
 	"fmt"
 	_ "github.com/NamedKitten/KittehBotGo/commands"
+	"github.com/NamedKitten/KittehBotGo/util/database"
 	"github.com/NamedKitten/KittehBotGo/util/bot"
 	"github.com/NamedKitten/KittehBotGo/util/commands"
 	"github.com/NamedKitten/KittehBotGo/util/webdashboard"
 	log "github.com/sirupsen/logrus"
-	"github.com/xuyu/goredis"
 	"os"
 	"os/signal"
 	"strings"
 	"sync"
-	"time"
 )
 
-var redisClient *goredis.Redis
 
 func setup() {
 	reader := bufio.NewReader(os.Stdin)
@@ -40,38 +38,18 @@ func setup() {
 		panic(tokenErr)
 	}
 
-	redisClient.Set("prefix", strings.TrimSpace(prefix), 0, 0, false, false)
-	redisClient.Set("token", strings.TrimSpace(token), 0, 0, false, false)
+	database.Set("prefix", strings.TrimSpace(prefix))
+	database.Set("token", strings.TrimSpace(token))
 	fmt.Println("The bot is now setup.")
 }
 
 func init() {
 	updateInterval := flag.Int("updateInterval", 100, "How often the dashboard gets updated in miliseconds.")
-	redisIP := flag.String("redisIP", "localhost", "IP for redis server.")
-	redisPort := flag.Int("redisPort", 6379, "Port for redis server.")
-	redisPassword := flag.String("redisPassword", "", "Password for redis server.")
-	redisDB := flag.Int("redisDB", 0, "DB ID for redis server.")
 	runSetup := flag.Bool("runSetup", false, "Run setup?")
-
 	flag.Bool("runDashboard", true, "Run dashboard?")
 	flag.Parse()
 
-	redisPass := *redisPassword
 	webdashboard.UpdateInterval = *updateInterval
-	var err error
-
-	redisClient, err = goredis.Dial(&goredis.DialConfig{
-		Network:  "tcp",
-		Address:  fmt.Sprintf("%s:%d", *redisIP, *redisPort),
-		Password: redisPass,
-		Database: *redisDB,
-		Timeout:  10 * time.Second,
-		MaxIdle:  10,
-	})
-	if err != nil {
-		fmt.Println("Couldn't connect to redis...")
-		panic(err)
-	}
 
 	if *runSetup {
 		setup()
@@ -79,7 +57,7 @@ func init() {
 }
 
 func main() {
-	bot.Start(redisClient)
+	bot.Start()
 	go webdashboard.StartDashboard()
 
 	log.Info("Bot is now running..")

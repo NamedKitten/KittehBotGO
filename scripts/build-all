@@ -2,8 +2,8 @@
 
 export CGO_ENABLED=0
 
-PLATFORMS="darwin/386 darwin/amd64 darwin/arm64 dragonfly/amd64 freebsd/386 js/wasm linux/386 linux/amd64 linux/arm64 linux/mips linux/mips64 linux/mips64le linux/mipsle linux/ppc64 linux/ppc64le linux/riscv64 linux/s390x nacl/386 nacl/amd64p32 netbsd/386 netbsd/amd64  openbsd/386 openbsd/amd64 plan9/386 plan9/amd64 solaris/amd64 windows/386 windows/amd64"
-PLATFORMS_ARM="linux darwin freebsd openbsd netbsd nacl plan9"
+PLATFORMS="linux/amd64"
+PLATFORMS_ARM=""
 GO=go
 type setopt >/dev/null 2>&1
 

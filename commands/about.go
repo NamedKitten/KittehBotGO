@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"github.com/NamedKitten/KittehBotGo/util/commands"
 	"github.com/dustin/go-humanize"
-	"github.com/jonas747/discordgo"
+	"github.com/NamedKitten/discordgo"
 	"runtime"
 	"time"
 )

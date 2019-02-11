@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"github.com/NamedKitten/KittehBotGo/util/commands"
 	"github.com/NamedKitten/KittehBotGo/util/music"
-	"github.com/jonas747/discordgo"
+	"github.com/NamedKitten/discordgo"
 	"log"
 	"strconv"
 )

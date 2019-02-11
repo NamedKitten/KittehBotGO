@@ -3,7 +3,7 @@ package BotCommands
 import (
 	"github.com/NamedKitten/KittehBotGo/util/commands"
 	"github.com/go-errors/errors"
-	"github.com/jonas747/discordgo"
+	"github.com/NamedKitten/discordgo"
 	"time"
 )
 

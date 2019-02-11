@@ -1,3 +1,5 @@
+// +build !nodashboard
+
 package webdashboard
 
 import (

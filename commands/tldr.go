@@ -4,7 +4,7 @@ import (
 	"flag"
 	"fmt"
 	"github.com/NamedKitten/KittehBotGo/util/commands"
-	"github.com/jonas747/discordgo"
+	"github.com/NamedKitten/discordgo"
 	"github.com/kennygrant/sanitize"
 	log "github.com/sirupsen/logrus"
 	"os/exec"
@@ -21,7 +21,6 @@ func getTLDR(name string, language string, variant string) string {
 	safeName := sanitize.Path(name)
 	safeLanguage := sanitize.Path(language)
 	safeVariant := sanitize.Path(variant)
-	log.Info(safeName, safeLanguage, safeVariant)
 
 	pagesPath := "/tmp/tldr/pages"
 
@@ -31,7 +30,6 @@ func getTLDR(name string, language string, variant string) string {
 	if len(safeVariant) > 0 && safeVariant != "." {
 		pagesPath += "/" + safeVariant
 	}
-	log.Info(pagesPath)
 
 	filepath.Walk(pagesPath, func(path string, f os.FileInfo, err error) error {
 
@@ -49,12 +47,9 @@ func getTLDR(name string, language string, variant string) string {
 func updateCache() {
 	if _, err := os.Stat("/tmp/tldr"); os.IsNotExist(err) {
 		log.Info("Cloning tldr repo.")
-		out, _ := exec.Command("git", "-C", "/tmp/", "clone", "https://github.com/tldr-pages/tldr", "--depth=1").Output()
-		log.Info(out)
+		exec.Command("git", "-C", "/tmp/", "clone", "https://github.com/tldr-pages/tldr", "--depth=1").Output()
 	} else {
-		out, _ := exec.Command("git", "-C", "/tmp/tldr/", "pull").Output()
-		log.Info(out)
-
+		exec.Command("git", "-C", "/tmp/tldr/", "pull").Output()
 	}
 }
 
@@ -84,7 +79,6 @@ func tldrCommand(s *discordgo.Session, m *discordgo.MessageCreate, ctx *commands
 	command := flagSet.Arg(0)
 	variant := flagSet.Lookup("variant").Value.(flag.Getter).Get().(string)
 	language := flagSet.Lookup("language").Value.(flag.Getter).Get().(string)
-	log.Error(variant)
 	s.ChannelMessageSend(m.ChannelID, "```md\n"+getTLDR(command, language, variant)+"\n```")
 	return nil
 

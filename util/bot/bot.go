@@ -2,22 +2,21 @@ package bot
 
 import (
 	"github.com/NamedKitten/KittehBotGo/util/commands"
+	"github.com/NamedKitten/KittehBotGo/util/database"
 	log "github.com/sirupsen/logrus"
-	"github.com/xuyu/goredis"
 )
 
 // Start sets up and starts the discord connection.
-func Start(redis *goredis.Redis) {
-	commands.Setup(redis)
-
-	token, err := commands.Redis.Get("token")
-	if err != nil {
+func Start() {
+	token := database.Get("token")
+	log.Error(token)
+	if len(token) <= 0 {
 		log.Fatal("Token not found, please run with -runSetup to enter setup.")
-		panic(err)
+		panic("")
 	}
-	commands.Discord.Token = "Bot " + string(token[:])
+	commands.Discord.Token = "Bot " + token
 
-	err = commands.Discord.Open()
+	err := commands.Discord.Open()
 	if err != nil {
 		panic(err)
 	}

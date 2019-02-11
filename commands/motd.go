@@ -3,7 +3,8 @@ package BotCommands
 import (
 	"fmt"
 	"github.com/NamedKitten/KittehBotGo/util/commands"
-	"github.com/jonas747/discordgo"
+	"github.com/NamedKitten/KittehBotGo/util/database"
+	"github.com/NamedKitten/discordgo"
 	"runtime/debug"
 	"strconv"
 	"strings"
@@ -27,18 +28,18 @@ func motdCommand(s *discordgo.Session, m *discordgo.MessageCreate, ctx *commands
 				return nil
 			}
 			if ctx.Args[1] == "channel" {
-				go commands.Redis.Set("motd_"+string(ctx.GuildID)+"_channel", fmt.Sprintf("%v", ctx.ChannelID), 0, 0, false, false)
+				go database.Set("motd_"+string(ctx.GuildID)+"_channel", fmt.Sprintf("%v", ctx.ChannelID))
 				s.ChannelMessageSend(m.ChannelID, "Channel set.")
 			} else {
-				go commands.Redis.Set("motd_"+string(ctx.GuildID), strings.Join(ctx.Args[1:], " "), 0, 0, false, false)
+				go database.Set("motd_"+string(ctx.GuildID), strings.Join(ctx.Args[1:], " "))
 				s.ChannelMessageSend(m.ChannelID, "MOTD set.")
 			}
 		} else {
-			motd, err := commands.Redis.Get("motd_" + string(ctx.GuildID))
-			if err != nil {
+			motd := database.Get("motd_" + string(ctx.GuildID))
+			if len(motd) == 0 {
 				s.ChannelMessageSend(m.ChannelID, "Please set the MOTD.")
 			} else {
-				s.ChannelMessageSend(m.ChannelID, string(motd[:]))
+				s.ChannelMessageSend(m.ChannelID, motd)
 			}
 		}
 	}
@@ -46,14 +47,9 @@ func motdCommand(s *discordgo.Session, m *discordgo.MessageCreate, ctx *commands
 }
 
 func motdEvent(s *discordgo.Session, m *discordgo.GuildMemberAdd) {
-	motdR, err := commands.Redis.Get("motd_" + string(m.GuildID))
-	motd := string(motdR[:])
+	motd := database.Get("motd_" + string(m.GuildID))
 
-	motdchannelR, channelerr := commands.Redis.Get("motd_" + string(m.GuildID) + "_channel")
-	motdchannel := string(motdchannelR[:])
-	if err != nil || channelerr != nil {
-		return
-	}
+	motdchannel := database.Get("motd_" + string(m.GuildID) + "_channel")
 	i, _ := strconv.ParseInt(motdchannel, 10, 64)
 	go s.ChannelMessageSend(i, motd)
 }
